@@ -158,7 +158,9 @@ describe("ShadowDomFocusHealerService", () => {
       focusHandler({ composedPath: () => [input, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).not.toHaveBeenCalled();
-      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true, {
+        fromFocus: true,
+      });
     });
 
     it("should not trigger a rescan when the focused light-DOM input is already tracked", () => {
@@ -202,7 +204,9 @@ describe("ShadowDomFocusHealerService", () => {
 
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledTimes(1);
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
-      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true, {
+        fromFocus: true,
+      });
     });
 
     it("should invalidate the parent scope when the shadow root in the path is not an instance of ShadowRoot (cross-realm/isolated world)", () => {
@@ -220,7 +224,9 @@ describe("ShadowDomFocusHealerService", () => {
       focusHandler({ composedPath: () => [input, crossRealmShadowRoot, host, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
-      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true, {
+        fromFocus: true,
+      });
     });
 
     it("should invalidate the parent scopes of late-attached nested roots", () => {
@@ -243,7 +249,9 @@ describe("ShadowDomFocusHealerService", () => {
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(outerRoot);
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
       expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledTimes(1);
-      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true, {
+        fromFocus: true,
+      });
     });
 
     it("should not invalidate when the focused field is inside a known shadow root", () => {
@@ -280,7 +288,9 @@ describe("ShadowDomFocusHealerService", () => {
       focusHandler({ composedPath: () => [input, shadowRoot, host, document.body, document] });
 
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(document);
-      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true, {
+        fromFocus: true,
+      });
     });
 
     it("should invalidate only the scope of the unknown root when its parent root is already known", () => {
@@ -306,7 +316,9 @@ describe("ShadowDomFocusHealerService", () => {
 
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledTimes(1);
       expect(ShadowRootCacheService.invalidate).toHaveBeenCalledWith(outerRoot);
-      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true);
+      expect(ShadowMutationObserverService.notifyShadowMutationSubscribers).toHaveBeenCalledWith(document, [], true, {
+        fromFocus: true,
+      });
     });
   });
 });

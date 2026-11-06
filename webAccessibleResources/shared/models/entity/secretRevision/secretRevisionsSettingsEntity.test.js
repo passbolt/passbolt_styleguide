@@ -111,7 +111,7 @@ describe("SecretRevisionsSettings", () => {
       expect.assertions(2);
       let entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto());
       expect(entity.isFeatureEnabled).toBeTruthy();
-      entity = new SecretRevisionsSettingsEntity.createFromDefault();
+      entity = SecretRevisionsSettingsEntity.createFromDefault();
       expect(entity.isFeatureEnabled).toBeFalsy();
     });
   });

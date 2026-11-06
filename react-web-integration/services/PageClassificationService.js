@@ -93,6 +93,7 @@ class PageClassificationService {
     const classification = ClassificationService.classify(page);
 
     const resolved = PageClassificationService.resolve(page, classification);
+
     return resolved;
   }
 
@@ -121,6 +122,7 @@ class PageClassificationService {
       .map((field) => ({
         fieldId: field.fieldId,
         formId: field.formId,
+        tier: field.tier,
         role: classification.fields[field.fieldId],
         element: ScrapingIdentityService.elementFor(field.fieldId),
       }))

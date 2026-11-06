@@ -27,16 +27,24 @@ class DuoSetupError extends Component {
   get errorLabels() {
     return {
       [DuoSetupErrors.SUBSCRIBER_MISMATCH]: {
-        title: this.translate("Sorry, Duo could not be enabled"),
-        description: this.translate(
-          "Your Duo username does not match your Passbolt username. Please contact your administrator to fix this issue.",
-        ),
+        title: this.translate("Your organisation requires your Duo username to match your Passbolt username."),
+        description: this.translate("Contact your administrator to update your Duo username, then try again."),
       },
       [DuoSetupErrors.SETUP_FAILED]: {
         title: this.translate("Duo could not be enabled"),
         description: this.translate("Could not verify your Duo authentication. Please try again."),
       },
     };
+  }
+
+  /**
+   * Check if the error is the default (SETUP_FAILED) error.
+   * @returns {boolean} `true` if the error is the default one.
+   */
+  isDefaultError() {
+    return Object.keys(this.errorLabels).includes(this.props.errorCode)
+      ? this.props.errorCode === DuoSetupErrors.SETUP_FAILED
+      : true; // We display the default error if the error code is not found
   }
 
   /**
@@ -81,9 +89,11 @@ class DuoSetupError extends Component {
               <div className="additional-information">
                 <p>
                   {this.description}{" "}
-                  <a target="_blank" rel="noopener noreferrer" href={DUO_DOCUMENTATION_URL}>
-                    <Trans>Learn more</Trans>
-                  </a>
+                  {this.isDefaultError() && (
+                    <a target="_blank" rel="noopener noreferrer" href={DUO_DOCUMENTATION_URL}>
+                      <Trans>Learn more</Trans>
+                    </a>
+                  )}
                 </p>
               </div>
             </div>

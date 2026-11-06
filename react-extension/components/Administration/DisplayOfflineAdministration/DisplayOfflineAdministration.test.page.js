@@ -126,6 +126,16 @@ export default class DisplayOfflineAdministrationPage {
   }
 
   /**
+   * Returns the pro teasing tooltips displayed next to the settings labels
+   * @returns {HTMLElement[]}
+   */
+  get proTeasingTooltips() {
+    return [...this._page.container.querySelectorAll("#offline-settings .label-inline .tooltip")].filter((tooltip) =>
+      tooltip.querySelector(".pro-teasing-icon"),
+    );
+  }
+
+  /**
    * Returns the session duration error element
    * @returns {HTMLElement}
    */

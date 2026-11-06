@@ -180,7 +180,7 @@ class DisplayUsers extends React.Component {
       this.defaultColumns.push(
         new ColumnUserAccountRecoveryModel({
           cellRenderer: { component: CellUserAccountRecovery },
-          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Account recovery") } },
+          headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Recovery enrollment") } },
         }),
       );
     }

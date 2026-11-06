@@ -306,22 +306,26 @@ class DisplayResourceDetailsCustomFields extends React.Component {
                 })}
               </div>
             </div>
-            {!this.showAll && canPreviewSecret ? (
-              <button
-                className={`button ${this.state.isSecretsDecrypting ? "processing" : ""}`}
-                disabled={this.state.isSecretsDecrypting}
-                onClick={this.handleShowAllEvent}
-                id="show-all-button"
-              >
-                <EyeOpenSVG />
-                <Trans>Show all</Trans>
-                {this.state.isSecretsDecrypting && <SpinnerSVG />}
-              </button>
-            ) : (
-              <button type="button" onClick={this.handleShowAllEvent} id="hide-all-button">
-                <EyeCloseSVG />
-                <Trans>Hide all</Trans>
-              </button>
+            {canPreviewSecret && (
+              <>
+                {!this.showAll ? (
+                  <button
+                    className={`button ${this.state.isSecretsDecrypting ? "processing" : ""}`}
+                    disabled={this.state.isSecretsDecrypting}
+                    onClick={this.handleShowAllEvent}
+                    id="show-all-button"
+                  >
+                    <EyeOpenSVG />
+                    <Trans>Show all</Trans>
+                    {this.state.isSecretsDecrypting && <SpinnerSVG />}
+                  </button>
+                ) : (
+                  <button type="button" onClick={this.handleShowAllEvent} id="hide-all-button">
+                    <EyeCloseSVG />
+                    <Trans>Hide all</Trans>
+                  </button>
+                )}
+              </>
             )}
           </div>
         )}

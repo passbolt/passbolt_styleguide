@@ -178,7 +178,7 @@ describe("AdminAccountRecoveryContext", () => {
       const newPrivateKey = "new private key";
 
       // Mock the background page download private key request.
-      props.context.port.request = jest.fn();
+      props.context.port.request = jest.fn(() => ({}));
 
       expect.assertions(1);
       await adminAccountRecoveryContext.downloadPrivateKey(newPrivateKey);
@@ -201,7 +201,7 @@ describe("AdminAccountRecoveryContext", () => {
       };
 
       // Mock the background page save request.
-      props.context.port.request = jest.fn();
+      props.context.port.request = jest.fn(() => ({}));
 
       expect.assertions(1);
       adminAccountRecoveryContext.changePolicy(newPolicy);
@@ -229,7 +229,7 @@ describe("AdminAccountRecoveryContext", () => {
       };
 
       // Mock the background page save request.
-      props.context.port.request = jest.fn();
+      props.context.port.request = jest.fn(() => ({}));
 
       expect.assertions(1);
       adminAccountRecoveryContext.changePolicy(newPolicy);
@@ -240,6 +240,47 @@ describe("AdminAccountRecoveryContext", () => {
         expectedSaveDto,
         currentPrivateKey,
       );
+    });
+
+    it("it should refresh the logged-in user and its account recovery status after saving", async () => {
+      const loggedInUser = { id: "user-id", account_recovery_user_setting: { status: "approved" } };
+
+      // Mock the background page save and find logged-in user requests.
+      props.context.port.request = jest.fn((event) =>
+        event === "passbolt.users.find-logged-in-user" ? loggedInUser : {},
+      );
+      props.context.setContext = jest.fn();
+      props.accountRecoveryContext.setUserAccountRecoveryStatus = jest.fn();
+
+      expect.assertions(3);
+      adminAccountRecoveryContext.changePolicy("mandatory");
+      await adminAccountRecoveryContext.save();
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.users.find-logged-in-user",
+        true,
+      );
+      expect(adminAccountRecoveryContext.props.context.setContext).toHaveBeenCalledWith({ loggedInUser });
+      expect(
+        adminAccountRecoveryContext.props.accountRecoveryContext.setUserAccountRecoveryStatus,
+      ).toHaveBeenCalledWith("approved");
+    });
+
+    it("it should set the account recovery status to pending if the logged-in user has no account recovery setting", async () => {
+      const loggedInUser = { id: "user-id", account_recovery_user_setting: null };
+
+      // Mock the background page save and find logged-in user requests.
+      props.context.port.request = jest.fn((event) =>
+        event === "passbolt.users.find-logged-in-user" ? loggedInUser : {},
+      );
+      props.context.setContext = jest.fn();
+      props.accountRecoveryContext.setUserAccountRecoveryStatus = jest.fn();
+
+      expect.assertions(1);
+      adminAccountRecoveryContext.changePolicy("disabled");
+      await adminAccountRecoveryContext.save();
+      expect(
+        adminAccountRecoveryContext.props.accountRecoveryContext.setUserAccountRecoveryStatus,
+      ).toHaveBeenCalledWith("pending");
     });
   });
 });

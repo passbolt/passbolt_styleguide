@@ -19,6 +19,7 @@ import {
   offlineModeDetailsWithoutDataProps,
 } from "./OfflineFooterDetailsPage.test.data";
 import OfflineFooterDetailsPageTestPage from "./OfflineFooterDetailsPage.test.page";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -52,6 +53,8 @@ describe("OfflineFooterDetailsPage", () => {
     const props = offlineModeDetailsProps();
     let page;
     await act(async () => (page = new OfflineFooterDetailsPageTestPage(props)));
+    // The session timestamps are requested from the background page once mounted.
+    await waitForTrue(() => page.propertyValue("last-sync").textContent !== "Not available");
 
     expect(page.propertyName("last-sync").textContent).toStrictEqual("Last sync");
     expect(page.propertyValue("last-sync").textContent).toStrictEqual("1 hour ago");
@@ -68,6 +71,8 @@ describe("OfflineFooterDetailsPage", () => {
     const props = offlineModeDetailsExpiredProps();
     let page;
     await act(async () => (page = new OfflineFooterDetailsPageTestPage(props)));
+    // The session timestamps are requested from the background page once mounted.
+    await waitForTrue(() => page.propertyValue("last-sync").textContent !== "Not available");
 
     expect(page.propertyValue("session-duration").textContent).toStrictEqual("Expired");
     expect(page.propertyValue("data-retention").textContent).toStrictEqual("Expired");

@@ -13,7 +13,7 @@
  */
 
 import FieldsRationalizationService from "./FieldsRationalizationService";
-import { FieldRole, FormRole } from "./Taxonomy";
+import { FieldRole, FormRole, Tier } from "./Taxonomy";
 import { defaultScope } from "./FieldsRationalizationService.test.data";
 
 describe("FieldsRationalizationService", () => {
@@ -286,6 +286,88 @@ describe("FieldsRationalizationService", () => {
 
       expect(roles.get("currentPassword1")).toBe(FieldRole.CURRENT_PASSWORD);
       expect(roles.get("currentPassword2")).toBe(FieldRole.OTHER);
+    });
+
+    it("should keep the username with the strongest tier even when it comes later in DOM order", () => {
+      expect.assertions(2);
+
+      const roles = FieldsRationalizationService.rationalize(
+        defaultScope(FormRole.OTHER, [
+          { id: "username1", role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD },
+          { id: "username2", role: FieldRole.USERNAME, tier: Tier.AUTOCOMPLETE },
+        ]),
+      );
+
+      expect(roles.get("username1")).toBe(FieldRole.OTHER);
+      expect(roles.get("username2")).toBe(FieldRole.USERNAME);
+    });
+
+    it("should keep the first username in DOM order when both share the same tier", () => {
+      expect.assertions(2);
+
+      const roles = FieldsRationalizationService.rationalize(
+        defaultScope(FormRole.OTHER, [
+          { id: "username1", role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD },
+          { id: "username2", role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD },
+        ]),
+      );
+
+      expect(roles.get("username1")).toBe(FieldRole.USERNAME);
+      expect(roles.get("username2")).toBe(FieldRole.OTHER);
+    });
+  });
+
+  describe("FieldsRationalizationService::rescueAccountNumber", () => {
+    const accountNumberScope = (formRole, extraSpecs = []) => {
+      const scope = defaultScope(formRole, [{ id: "a", role: FieldRole.OTHER }, ...extraSpecs]);
+      scope.fields[0].attributes = { name: "account_number" };
+      return scope;
+    };
+
+    it("should promote the account number field to USERNAME on a login form without identifier nor password", () => {
+      expect.assertions(1);
+
+      const scope = accountNumberScope(FormRole.LOGIN);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.USERNAME);
+    });
+
+    it("should promote an account id field to USERNAME on a login form without identifier nor password", () => {
+      expect.assertions(1);
+
+      const scope = defaultScope(FormRole.LOGIN, [{ id: "a", role: FieldRole.OTHER }]);
+      scope.fields[0].attributes = { name: "account_id" };
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.USERNAME);
+    });
+
+    it("should not promote the account number field outside a login form", () => {
+      expect.assertions(1);
+
+      const scope = accountNumberScope(FormRole.OTHER);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.OTHER);
+    });
+
+    it("should not promote the account number field when the form already has an identifier", () => {
+      expect.assertions(1);
+
+      const scope = accountNumberScope(FormRole.LOGIN, [{ id: "e", role: FieldRole.EMAIL }]);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.OTHER);
+    });
+
+    it("should not promote a field which is not an account number", () => {
+      expect.assertions(1);
+
+      const scope = defaultScope(FormRole.LOGIN, [{ id: "a", role: FieldRole.OTHER }]);
+      FieldsRationalizationService.rescueAccountNumber(scope, scope.roles);
+
+      expect(scope.roles.get("a")).toBe(FieldRole.OTHER);
     });
   });
 

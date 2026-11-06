@@ -102,9 +102,24 @@ class DomUtils {
       const effectiveCellHeight = isLastRow ? lastRowHeight : cellHeight;
 
       const bufferIndex = i * 2;
+
+      /**
+       * The coordinates NEED to be rounded to avoid precision issues
+       * because the browser will round x and y when evaluating them with `elementFromPoint`.
+       * @see https://drafts.csswg.org/cssom/#serializing-css-values (<number> section).
+       *
+       * @example
+       * left = 91.5714340209961
+       * width = 370.0000305175781
+       * left + width = 461.5714645385742 // Rounded to 461.571
+       * x = 461.5714340209961 // Rounded to 461.571
+       *
+       * In that case, the point is considered _outside_ the bounds of the element, even though the originally computed point was inside.
+       * Therefore `elementFromPoint` would return another element than the one we expect.
+       */
       randomPoints[i] = {
-        x: cellX + (randomBuffer[bufferIndex] % effectiveCellWidth) + left,
-        y: cellY + (randomBuffer[bufferIndex + 1] % effectiveCellHeight) + top,
+        x: Number((cellX + (randomBuffer[bufferIndex] % effectiveCellWidth) + left).toPrecision(6)),
+        y: Number((cellY + (randomBuffer[bufferIndex + 1] % effectiveCellHeight) + top).toPrecision(6)),
       };
     }
     return randomPoints;

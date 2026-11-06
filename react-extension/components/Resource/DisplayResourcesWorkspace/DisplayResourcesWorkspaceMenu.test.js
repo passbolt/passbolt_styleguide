@@ -799,6 +799,8 @@ describe("See Workspace Menu", () => {
       { scenario: "password string", resourceTypeId: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING },
       { scenario: "password and totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP },
       { scenario: "standalone totp", resourceTypeId: TEST_RESOURCE_TYPE_V5_TOTP },
+      { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
+      { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
     ])(
       "As LU I should see the offline availability item when one v5 $scenario resource is selected",
       ({ resourceTypeId }) => {
@@ -809,22 +811,6 @@ describe("See Workspace Menu", () => {
         page.displayMenu.clickOnMoreMenu();
 
         expect(page.displayMenu.dropdownMenuOffline).not.toBeNull();
-      },
-    );
-
-    it.each([
-      { scenario: "custom fields", resourceTypeId: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS },
-      { scenario: "standalone note", resourceTypeId: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE },
-    ])(
-      "As LU I should not see the offline availability item when one v5 $scenario resource is selected, it is neither a password nor a totp",
-      ({ resourceTypeId }) => {
-        expect.assertions(1);
-        const props = defaultPropsOneResourceV5OfResourceType(resourceTypeId);
-        const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
-
-        page.displayMenu.clickOnMoreMenu();
-
-        expect(page.displayMenu.dropdownMenuOffline).toBeNull();
       },
     );
 

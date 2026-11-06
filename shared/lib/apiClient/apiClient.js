@@ -54,6 +54,21 @@ export class ApiClient {
   }
 
   /**
+   * Set the api version written in every url the client builds, defaults to "v2".
+   *
+   * @throws {TypeError} if apiVersion is not a string
+   * @param {string} apiVersion for example "v5"
+   * @returns {void}
+   * @public
+   */
+  setApiVersion(apiVersion) {
+    if (typeof apiVersion !== "string") {
+      throw new TypeError("ApiClient.setApiVersion error: apiVersion should be a string.");
+    }
+    this.apiVersion = `api-version=${apiVersion}`;
+  }
+
+  /**
    * @returns {Object} fetchOptions.headers
    * @private
    */

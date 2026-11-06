@@ -4,7 +4,7 @@ import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import LogoSVG from "../../../img/svg/logo.svg";
 import PowerSVG from "../../../img/svg/power.svg";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import { withRouter } from "react-router-dom";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 
@@ -100,4 +100,4 @@ Header.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActiveSessionLocalStorage(withAppContext(withRouter(withTranslation("common")(Header))));
+export default withActiveSessionSessionStorage(withAppContext(withRouter(withTranslation("common")(Header))));

@@ -167,9 +167,9 @@ export class AdminMfaContextProvider extends React.Component {
     const settings = this.state.settings;
     return Boolean(
       currentSettings?.duoToggle &&
-        !currentSettings.duoVerifySubscriber &&
-        settings.duoToggle &&
-        settings.duoVerifySubscriber,
+      !currentSettings.duoVerifySubscriber &&
+      settings.duoToggle &&
+      settings.duoVerifySubscriber,
     );
   }
 

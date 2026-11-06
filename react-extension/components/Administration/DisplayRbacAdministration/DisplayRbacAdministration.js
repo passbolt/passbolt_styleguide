@@ -577,7 +577,7 @@ class DisplayRbacAdministration extends React.Component {
                           )}
                         </DisplayRbacSection>
                       )}
-                      <DisplayRbacSection label={this.props.t("Password")} level={2} rolesCount={rolesCount}>
+                      <DisplayRbacSection label={this.props.t("Secret")} level={2} rolesCount={rolesCount}>
                         {this.canIUsePreviewPassword && (
                           <DisplayRbacItem
                             label={this.props.t("Can preview")}

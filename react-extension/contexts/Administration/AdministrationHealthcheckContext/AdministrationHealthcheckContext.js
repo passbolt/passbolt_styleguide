@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import HealthcheckService from "../../../../shared/services/api/healthcheck/HealthcheckService";
-import HealthcheckEntity from "../../../../shared/models/entity/healthcheck/healthcheckEntity";
+import HealthcheckChecksCollection from "../../../../shared/models/entity/healthcheck/healthcheckChecksCollection";
 import { withActionFeedback } from "../../ActionFeedbackContext";
 
 /**
@@ -24,7 +24,7 @@ import { withActionFeedback } from "../../ActionFeedbackContext";
  * @type{React.Context<Object>}
  */
 export const AdministrationHealthcheckContext = React.createContext({
-  healthcheckData: null, // The healthcheck data
+  healthcheckData: null, // The healthcheck checks collection
   endpointEnabled: true, // true if the endpoint is enabled
   setProcessing: () => {}, //Update processing object
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
@@ -85,9 +85,17 @@ export class AdministrationHealthcheckContextProvider extends React.Component {
     try {
       const result = await this.healthcheckService.fetchHealthcheck();
       if (result) {
-        const healthData = new HealthcheckEntity(result);
+        // An invalid check is skipped rather than thrown: the catch below would report the endpoint as disabled.
+        const healthData = new HealthcheckChecksCollection(Array.isArray(result) ? result : [], {
+          ignoreInvalidEntity: true,
+        });
         this.setState({ healthcheckData: healthData });
       } else {
+        /*
+         * An empty collection and not null: the component reads null as "the first load has not come back
+         * yet" and would spin for ever.
+         */
+        this.setState({ healthcheckData: new HealthcheckChecksCollection([]) });
         this.props.actionFeedbackContext.displayError("No data received from the server");
       }
     } catch (error) {

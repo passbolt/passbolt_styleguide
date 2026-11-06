@@ -672,6 +672,15 @@ describe("Display Resources", () => {
       expect(page.resource(2).offlineMode).toBe("No");
     });
 
+    it("As LU, I should see the offline mode availability for a note and a custom fields resource", async () => {
+      expect.assertions(2);
+      const props = propsWithFilteredResourcesAndOfflineEnabled();
+      const page = new DisplayResourcesListPage(props);
+      await screen.findByText("note-available-offline");
+      expect(page.resource(3).offlineMode).toBe("Yes");
+      expect(page.resource(4).offlineMode).toBe("No");
+    });
+
     it("As LU, I should not see the offline mode column when offline is enabled but denied by RBAC", async () => {
       expect.assertions(1);
       const props = propsWithFilteredResourcesAndOfflineEnabled({ rbacContext: denyRbacContext() });

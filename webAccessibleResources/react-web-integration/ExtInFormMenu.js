@@ -22,7 +22,7 @@ import ResourceTypesLocalStorageContextProvider from "../shared/context/Resource
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import AccountEntity from "../shared/models/entity/account/accountEntity";
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
-import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import ActiveSessionSessionStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 
 /**
  * Entry point of the in-form menu
@@ -94,7 +94,7 @@ class ExtInForm extends React.Component {
       this.isReady() && (
         <AppContext.Provider value={this.state}>
           <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-            <ActiveSessionLocalStorageContextProvider
+            <ActiveSessionSessionStorageContextProvider
               account={this.state.account}
               port={this.props.port}
               storage={this.props.storage}
@@ -110,7 +110,7 @@ class ExtInForm extends React.Component {
                   </MetadataKeysSettingsLocalStorageContextProvider>
                 </MetadataTypesSettingsLocalStorageContextProvider>
               </ResourceTypesLocalStorageContextProvider>
-            </ActiveSessionLocalStorageContextProvider>
+            </ActiveSessionSessionStorageContextProvider>
           </TranslationProvider>
         </AppContext.Provider>
       )

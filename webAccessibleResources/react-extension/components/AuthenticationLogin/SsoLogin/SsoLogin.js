@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
-import { withActiveSessionLocalStorage } from "../../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../../shared/models/entity/session/userActiveSessionEntity";
 
 /**
@@ -161,4 +161,4 @@ SsoLogin.propTypes = {
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   t: PropTypes.func, // The translation function
 };
-export default withActiveSessionLocalStorage(withAppContext(withTranslation("common")(SsoLogin)));
+export default withActiveSessionSessionStorage(withAppContext(withTranslation("common")(SsoLogin)));

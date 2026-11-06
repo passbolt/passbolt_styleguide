@@ -401,6 +401,46 @@ describe("FieldClassificationService", () => {
           tier: Tier.EXPLICIT_LABEL,
         });
       });
+
+      it("should classify a field as USERNAME when the label names both a login and a password", () => {
+        expect.assertions(1);
+
+        expect(
+          FieldClassificationService.classify(
+            defaultField({ labelText: "Please enter your login and password.", name: "user" }),
+          ),
+        ).toStrictEqual({ role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should classify a field as EMAIL when the label names both an email and a password and name is email", () => {
+        expect.assertions(1);
+
+        expect(
+          FieldClassificationService.classify(
+            defaultField({ labelText: "Please enter your email and password", name: "email" }),
+          ),
+        ).toStrictEqual({ role: FieldRole.EMAIL, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should classify a field as PASSWORD when the label names both an email and a password and name is pwd", () => {
+        expect.assertions(1);
+
+        expect(
+          FieldClassificationService.classify(
+            defaultField({ type: "text", labelText: "Please enter your email and password", name: "pwd" }),
+          ),
+        ).toStrictEqual({ role: FieldRole.PASSWORD, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should classify a field as PASSWORD when the label is 'Account password'", () => {
+        expect.assertions(1);
+
+        expect(
+          FieldClassificationService.classify(
+            defaultField({ type: "text", labelText: "Account password", name: "pwd" }),
+          ),
+        ).toStrictEqual({ role: FieldRole.PASSWORD, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
     });
 
     describe("Tier 5 — name / id / placeholder keyword (weak text)", () => {
@@ -475,6 +515,28 @@ describe("FieldClassificationService", () => {
         expect.assertions(1);
 
         const decision = FieldClassificationService.classify(defaultField({ name: "email_lastname" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify an account number lookup field as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(
+          defaultField({
+            name: "originatorAlias-inputEl",
+            id: "originatorAlias-inputEl",
+            placeholder: "Originator Alias, Account number, Name",
+          }),
+        );
+
+        expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+      });
+
+      it("should NOT classify a field with name 'account_no' as USERNAME (IDENTIFIER_EXCLUDE veto)", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "account_no" }));
 
         expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
       });

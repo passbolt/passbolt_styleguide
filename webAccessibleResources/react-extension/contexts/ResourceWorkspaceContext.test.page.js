@@ -303,6 +303,8 @@ export default class ResourceWorkspaceContextPage {
    * @param args the args
    */
   setup(context, props, args = {}) {
+    // A previous render left mounted would keep overwriting resourceWorkspaceContext with its own state.
+    this._page?.unmount();
     this._page = render(
       <AppContext.Provider value={context}>
         <Router

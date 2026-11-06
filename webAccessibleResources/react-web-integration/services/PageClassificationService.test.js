@@ -16,7 +16,7 @@ import PageClassificationService from "./PageClassificationService";
 import ElementVisibilityService from "./DomExtraction/ElementVisibilityService";
 import ScrapingIdentityService from "./Scraping/ScrapingIdentityService";
 import DomUtils from "../lib/Dom/DomUtils";
-import { FieldRole, FormRole } from "./classification/Taxonomy";
+import { FieldRole, FormRole, Tier } from "./classification/Taxonomy";
 
 describe("PageClassificationService", () => {
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe("PageClassificationService", () => {
 
   describe("PageClassificationService::classifyPage", () => {
     it("should classify a real login form end-to-end and resolve roles back to live elements", () => {
-      expect.assertions(4);
+      expect.assertions(6);
 
       document.body.innerHTML = `
         <form>
@@ -50,6 +50,8 @@ describe("PageClassificationService", () => {
       expect(password.role).toBe(FieldRole.CURRENT_PASSWORD);
       expect(username.formId).toBe(password.formId);
       expect(result.forms[username.formId].role).toBe(FormRole.LOGIN);
+      expect(username.tier).toBe(Tier.ATTRIBUTE_KEYWORD);
+      expect(password.tier).toBe(Tier.INPUT_TYPE);
     });
 
     it("should return empty results for a page with no form fields", () => {

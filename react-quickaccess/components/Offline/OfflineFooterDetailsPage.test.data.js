@@ -15,15 +15,23 @@
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import { createMemoryHistory } from "history";
 import { DateTime } from "luxon";
-import UserActiveSessionEntity, {
-  USER_ACTIVE_SESSION_OFFLINE,
-} from "../../../shared/models/entity/session/userActiveSessionEntity";
-import {
-  minimalUserActiveSessionDto,
-  offlineUserActiveSessionDto,
-} from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
+import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { offlineUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 import OfflineSettingsEntity from "../../../shared/models/entity/offline/offlineSettingsEntity";
 import { defaultOfflineSettingsDto } from "../../../shared/models/entity/offline/offlineSettingsEntity.test.data";
+import { defaultSessionTimestampsDto } from "../../../shared/models/entity/sessionTimestamps/sessionTimestampsEntity.test.data";
+import { SESSION_TIMESTAMPS_GET_EVENT } from "../../../shared/services/serviceWorker/sessionTimestamps/sessionTimestampsServiceWorkerService";
+
+/**
+ * Build an app context which background page returns the given session timestamps.
+ * @param {object|null} sessionTimestampsDto The session timestamps returned by the background page.
+ * @returns {object}
+ */
+function contextWithSessionTimestamps(sessionTimestampsDto) {
+  const context = defaultAppContext();
+  context.port.addRequestListener(SESSION_TIMESTAMPS_GET_EVENT, async () => sessionTimestampsDto);
+  return context;
+}
 
 /**
  * Props of an offline session signed in a minute ago and last synchronised an hour ago, with the
@@ -32,17 +40,17 @@ import { defaultOfflineSettingsDto } from "../../../shared/models/entity/offline
  * @returns {object}
  */
 export function offlineModeDetailsProps(data = {}) {
-  const activeSessionDto = offlineUserActiveSessionDto({
+  const sessionTimestampsDto = defaultSessionTimestampsDto({
     last_logged_in: DateTime.now().minus({ minutes: 1 }).toISO(),
     last_seen_online: DateTime.now().minus({ hours: 1 }).toISO(),
   });
   return {
-    context: defaultAppContext(),
+    context: contextWithSessionTimestamps(sessionTimestampsDto),
     history: createMemoryHistory({
       initialEntries: ["/webAccessibleResources/quickaccess/offline-footer-details"],
       initialIndex: 0,
     }),
-    activeSession: new UserActiveSessionEntity(activeSessionDto),
+    activeSession: new UserActiveSessionEntity(offlineUserActiveSessionDto()),
     offlineSettings: new OfflineSettingsEntity(defaultOfflineSettingsDto({ data_retention_period: 1 })),
     ...data,
   };
@@ -55,11 +63,7 @@ export function offlineModeDetailsProps(data = {}) {
  * @returns {object}
  */
 export function offlineModeDetailsServerReachableProps(data = {}) {
-  const activeSessionDto = offlineUserActiveSessionDto({
-    is_server_reachable: true,
-    last_logged_in: DateTime.now().minus({ minutes: 1 }).toISO(),
-    last_seen_online: DateTime.now().minus({ hours: 1 }).toISO(),
-  });
+  const activeSessionDto = offlineUserActiveSessionDto({ is_server_reachable: true });
   return offlineModeDetailsProps({ activeSession: new UserActiveSessionEntity(activeSessionDto), ...data });
 }
 
@@ -70,11 +74,11 @@ export function offlineModeDetailsServerReachableProps(data = {}) {
  * @returns {object}
  */
 export function offlineModeDetailsExpiredProps(data = {}) {
-  const activeSessionDto = offlineUserActiveSessionDto({
+  const sessionTimestampsDto = defaultSessionTimestampsDto({
     last_logged_in: DateTime.now().minus({ hours: 2 }).toISO(),
     last_seen_online: DateTime.now().minus({ days: 2 }).toISO(),
   });
-  return offlineModeDetailsProps({ activeSession: new UserActiveSessionEntity(activeSessionDto), ...data });
+  return offlineModeDetailsProps({ context: contextWithSessionTimestamps(sessionTimestampsDto), ...data });
 }
 
 /**
@@ -84,12 +88,8 @@ export function offlineModeDetailsExpiredProps(data = {}) {
  * @returns {object}
  */
 export function offlineModeDetailsWithoutDataProps(data = {}) {
-  const activeSessionDto = minimalUserActiveSessionDto({
-    type: USER_ACTIVE_SESSION_OFFLINE,
-    is_server_reachable: false,
-  });
   return offlineModeDetailsProps({
-    activeSession: new UserActiveSessionEntity(activeSessionDto),
+    context: contextWithSessionTimestamps(null),
     offlineSettings: null,
     ...data,
   });

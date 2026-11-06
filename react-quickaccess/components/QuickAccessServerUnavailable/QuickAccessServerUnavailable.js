@@ -18,7 +18,7 @@ import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { withOfflineSettingsLocalStorage } from "../../../shared/context/offline/OfflineSettingsLocalStorageContext";
 import OfflineSettingsEntity from "../../../shared/models/entity/offline/offlineSettingsEntity";
-import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
+import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import CanUse from "../../../shared/services/rbacs/canUseService";
 import { actions } from "../../../shared/services/rbacs/actionEnumeration";
@@ -101,7 +101,7 @@ QuickAccessServerUnavailable.propTypes = {
 };
 export default withAppContext(
   withRouter(
-    withActiveSessionLocalStorage(
+    withActiveSessionSessionStorage(
       withOfflineSettingsLocalStorage(withTranslation("common")(QuickAccessServerUnavailable)),
     ),
   ),

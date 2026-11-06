@@ -13,9 +13,10 @@
  */
 
 import ClassificationService from "./ClassificationService";
-import { FieldRole, FormRole } from "./Taxonomy";
+import { FieldRole, FormRole, Tier } from "./Taxonomy";
 import { MAX_CLASSIFIED_FIELDS } from "./KeywordsDictionary";
 import { defaultField, defaultForm, defaultPage } from "./ClassificationService.test.data";
+import FieldScraperService from "../Scraping/FieldScraperService";
 
 describe("ClassificationService", () => {
   describe("ClassificationService::consolidateDeclaredFormRole", () => {
@@ -107,7 +108,7 @@ describe("ClassificationService", () => {
 
   describe("ClassificationService::classifyFields", () => {
     it("should map a SAWF-declared field to its role and flag it as declared", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const field = defaultField("f0", { dataFormType: "username" });
 
@@ -115,10 +116,11 @@ describe("ClassificationService", () => {
 
       expect(perField.get("f0")).toBe(FieldRole.USERNAME);
       expect(field._byDeclared).toBe(true);
+      expect(field.tier).toBe(Tier.SAWF);
     });
 
     it("should map an autocomplete-declared field to its role and flag it as declared", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const field = defaultField("f0", { autoComplete: "username" });
 
@@ -126,10 +128,11 @@ describe("ClassificationService", () => {
 
       expect(perField.get("f0")).toBe(FieldRole.USERNAME);
       expect(field._byDeclared).toBe(true);
+      expect(field.tier).toBe(Tier.AUTOCOMPLETE);
     });
 
     it("should map an inferred field to its role and flag it as not declared", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const field = defaultField("f0", { type: "password" });
 
@@ -137,6 +140,7 @@ describe("ClassificationService", () => {
 
       expect(perField.get("f0")).toBe(FieldRole.PASSWORD);
       expect(field._byDeclared).toBe(false);
+      expect(field.tier).toBe(Tier.INPUT_TYPE);
     });
   });
 
@@ -327,6 +331,60 @@ describe("ClassificationService", () => {
       expect(result.fields.p1).toBe(FieldRole.CURRENT_PASSWORD);
       expect(result.fields.p2a).toBe(FieldRole.NEW_PASSWORD);
       expect(result.fields.p2b).toBe(FieldRole.PASSWORD_CONFIRMATION);
+    });
+
+    it("should classify a scraped account number lookup field as OTHER", () => {
+      expect.assertions(2);
+
+      document.body.innerHTML =
+        '<input id="originatorAlias-inputEl" type="text" class="x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus" autocomplete="off" name="originatorAlias-inputEl" placeholder="Originator Alias, Account number, Name" tabindex="210" style="width:100%;" aria-invalid="false">';
+      const field = FieldScraperService.scrape(document.getElementById("originatorAlias-inputEl"), "form");
+
+      const result = ClassificationService.classify(defaultPage([field], { form: defaultForm() }));
+
+      expect(result.fields[field.fieldId]).toBe(FieldRole.OTHER);
+      expect(result.forms.form.role).toBe(FormRole.OTHER);
+    });
+
+    it("should keep an account number field as USERNAME on a login form with a password", () => {
+      expect.assertions(3);
+
+      const page = defaultPage(
+        [
+          defaultField("u", { labelText: "Account number" }),
+          defaultField("p", { type: "password", labelText: "Password" }),
+        ],
+        { form: defaultForm() },
+      );
+      const result = ClassificationService.classify(page);
+
+      expect(result.forms.form.role).toBe(FormRole.LOGIN);
+      expect(result.fields.u).toBe(FieldRole.USERNAME);
+      expect(result.fields.p).toBe(FieldRole.CURRENT_PASSWORD);
+    });
+
+    it("should promote an account number field to USERNAME on the identifier-first step of a login", () => {
+      expect.assertions(2);
+
+      const page = defaultPage([defaultField("u", { labelText: "Account number" })], {
+        form: defaultForm({ buttonText: "Sign in" }),
+      });
+      const result = ClassificationService.classify(page);
+
+      expect(result.forms.form.role).toBe(FormRole.LOGIN);
+      expect(result.fields.u).toBe(FieldRole.USERNAME);
+    });
+
+    it("should keep an account number field as OTHER when nothing marks the form as a login", () => {
+      expect.assertions(2);
+
+      const page = defaultPage([defaultField("u", { labelText: "Account number" })], {
+        form: defaultForm({ buttonText: "Next" }),
+      });
+      const result = ClassificationService.classify(page);
+
+      expect(result.forms.form.role).toBe(FormRole.OTHER);
+      expect(result.fields.u).toBe(FieldRole.OTHER);
     });
   });
 });

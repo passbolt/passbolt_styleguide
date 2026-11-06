@@ -30,6 +30,8 @@ import Select from "../../Common/Select/Select";
 import { createSafePortal } from "../../../../shared/utils/portals";
 import DisplayOfflineAdministrationHelp from "./DisplayOfflineAdministrationHelp";
 import { formatSecondsDuration } from "../../../../shared/utils/dateUtils";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 const DEFAULT_OFFLINE_SETTINGS = {
   max_session_duration: SESSION_DURATION_ALLOWED[0],
@@ -282,6 +284,21 @@ class DisplayOfflineAdministration extends Component {
   }
 
   /**
+   * Render the pro teasing icon displayed next to the settings labels for the community edition.
+   * @returns {JSX|null}
+   */
+  renderProTeasingIcon() {
+    if (!this.isCommunityEdition) {
+      return null;
+    }
+    return (
+      <Tooltip message={this.props.t("Upgrade to Pro Edition to customise offline settings.")}>
+        <FrameSVG className="pro-teasing-icon" />
+      </Tooltip>
+    );
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -319,9 +336,12 @@ class DisplayOfflineAdministration extends Component {
               {this.state.enabled && this.state.settings && (
                 <>
                   <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-                    <label htmlFor="offline-settings-session-duration">
-                      <Trans>Session duration</Trans>
-                    </label>
+                    <div className="label-inline">
+                      <label htmlFor="offline-settings-session-duration">
+                        <Trans>Session duration</Trans>
+                      </label>
+                      {this.renderProTeasingIcon()}
+                    </div>
                     <Select
                       id="offline-settings-session-duration"
                       items={this.sessionDurationOptions}
@@ -342,9 +362,12 @@ class DisplayOfflineAdministration extends Component {
                     )}
                   </div>
                   <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-                    <label htmlFor="offline-settings-maximum-retention-period">
-                      <Trans>Maximum data retention period</Trans>
-                    </label>
+                    <div className="label-inline">
+                      <label htmlFor="offline-settings-maximum-retention-period">
+                        <Trans>Maximum data retention period</Trans>
+                      </label>
+                      {this.renderProTeasingIcon()}
+                    </div>
                     <Select
                       id="offline-settings-maximum-retention-period"
                       items={this.dataRetentionPeriodOptions}

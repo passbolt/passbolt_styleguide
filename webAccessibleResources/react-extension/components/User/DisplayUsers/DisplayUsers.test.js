@@ -216,7 +216,7 @@ describe("Display Users", () => {
       expect(page.column(3).name).toStrictEqual("Username");
       expect(page.column(4).name).toStrictEqual("Role");
       expect(page.column(5).name).toStrictEqual("Modified");
-      expect(page.column(6).name).toStrictEqual("Account recovery");
+      expect(page.column(6).name).toStrictEqual("Recovery enrollment");
     });
   });
 

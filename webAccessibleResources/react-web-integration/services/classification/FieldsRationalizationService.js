@@ -14,6 +14,9 @@
 
 import { FieldRole, FormRole } from "./Taxonomy";
 import { USERNAME_CANDIDATE_TYPES } from "../../lib/InForm/ScrapingDictionary";
+import { Keywords } from "./KeywordsDictionary";
+import KeywordMatchingService from "./KeywordMatchingService";
+import FieldFeatureService from "./FieldFeatureService";
 
 /**
  * Final pass fixing role inconsistencies across a whole scope.
@@ -29,6 +32,7 @@ class FieldsRationalizationService {
     // Order matters
     FieldsRationalizationService.rescueLoginPassword(scope, roles);
     FieldsRationalizationService.rescueUsername(scope, roles);
+    FieldsRationalizationService.rescueAccountNumber(scope, roles);
     FieldsRationalizationService.dedupeKeepFirst(scope, roles, FieldRole.USERNAME);
     FieldsRationalizationService.fixOrphanConfirmation(scope, roles);
     FieldsRationalizationService.enforceLoginConsistency(scope, roles);
@@ -49,14 +53,22 @@ class FieldsRationalizationService {
   }
 
   /**
-   * Keeps the first field (DOM order) with the given role and demotes the rest to OTHER.
+   * Keeps the first field (tier first, then DOM order) with the given role and demotes the rest to OTHER.
    * @param {{fields: FieldScraping[]}} scope The scope.
    * @param {Map<string, string>} roles The role map to update in place.
    * @param {string} role The role to deduplicate.
    */
   static dedupeKeepFirst(scope, roles, role) {
     const hits = scope.fields.filter((field) => roles.get(field.fieldId) === role);
-    hits.slice(1).forEach((field) => roles.set(field.fieldId, FieldRole.OTHER));
+
+    hits
+      // Sort by Tier first, DOM order is preserved otherwise
+      // i.e. if two fields have the same tier, the one that appears first in the DOM will be kept before the other
+      .sort((fieldA, fieldB) => fieldA.tier - fieldB.tier)
+      // Keep (skip) the first one
+      .slice(1)
+      // Demote the rest to OTHER
+      .forEach((field) => roles.set(field.fieldId, FieldRole.OTHER));
   }
 
   /**
@@ -105,6 +117,35 @@ class FieldsRationalizationService {
         roles.set(field.fieldId, field.type === "email" ? FieldRole.EMAIL : FieldRole.USERNAME);
         break;
       }
+    }
+  }
+
+  /**
+   * On a login form with neither identifier nor password (identifier-first step of a multi-step login),
+   * the first account number field, vetoed from USERNAME at the field level, becomes the USERNAME.
+   * @param {{formRole: string, fields: FieldScraping[]}} scope The scope.
+   * @param {Map<string, string>} roles The role map to update in place.
+   */
+  static rescueAccountNumber(scope, roles) {
+    if (
+      scope.formRole !== FormRole.LOGIN ||
+      FieldsRationalizationService.hasRolesField(
+        [FieldRole.USERNAME, FieldRole.EMAIL, FieldRole.CURRENT_PASSWORD, FieldRole.PASSWORD],
+        scope.fields,
+        roles,
+      )
+    ) {
+      return;
+    }
+    const candidate = scope.fields.find(
+      (field) =>
+        roles.get(field.fieldId) === FieldRole.OTHER &&
+        USERNAME_CANDIDATE_TYPES.includes(field.type) &&
+        field.tagName !== "BUTTON" &&
+        KeywordMatchingService.matchesAny(FieldFeatureService.fieldText(field), Keywords.ACCOUNT_NUMBER),
+    );
+    if (candidate) {
+      roles.set(candidate.fieldId, FieldRole.USERNAME);
     }
   }
 

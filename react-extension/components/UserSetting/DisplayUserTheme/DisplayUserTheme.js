@@ -24,6 +24,8 @@ import DefaultThemeSVG from "../../../../img/themes/default.svg";
 import MidgarThemeSVG from "../../../../img/themes/midgar.svg";
 import SolarizedLightThemeSVG from "../../../../img/themes/solarized_light.svg";
 import SolarizedDarkThemeSVG from "../../../../img/themes/solarized_dark.svg";
+import SakuraThemeSVG from "../../../../img/themes/sakura.svg";
+import LayetteThemeSVG from "../../../../img/themes/layette.svg";
 
 /**
  * This component displays the user profile theme
@@ -94,12 +96,13 @@ class DisplayUserTheme extends React.Component {
     if (this.state.selectedTheme === theme.name) {
       return;
     }
+    const previousTheme = this.state.selectedTheme;
     this.props.loadingContext.add();
     this.setState({ selectedTheme: theme.name });
     return this.props.context.port
       .request("passbolt.themes.change", theme.name)
       .then(this.onSelectSuccess)
-      .catch(this.onSelectFailure)
+      .catch((error) => this.onSelectFailure(error, previousTheme))
       .finally(this.onSelectFinally);
   }
 
@@ -112,10 +115,12 @@ class DisplayUserTheme extends React.Component {
   }
 
   /**
-   * Whenever the a new theme has been selected with failure
+   * Whenever the theme change failed, restore the previous tile and notify.
    * @param {object} error the error to display
+   * @param {string} previousTheme the theme to restore
    */
-  async onSelectFailure(error) {
+  async onSelectFailure(error, previousTheme) {
+    this.setState({ selectedTheme: previousTheme });
     const errorDialogProps = {
       error: error,
     };
@@ -140,6 +145,8 @@ class DisplayUserTheme extends React.Component {
       midgar: <MidgarThemeSVG />,
       solarized_light: <SolarizedLightThemeSVG />,
       solarized_dark: <SolarizedDarkThemeSVG />,
+      sakura: <SakuraThemeSVG />,
+      layette: <LayetteThemeSVG />,
     }[theme.name];
   }
 
@@ -154,6 +161,8 @@ class DisplayUserTheme extends React.Component {
       midgar: "Midgar",
       solarized_light: "Solarized Light",
       solarized_dark: "Solarized Dark",
+      sakura: "Sakura",
+      layette: "Layette",
     }[theme.name];
   }
 

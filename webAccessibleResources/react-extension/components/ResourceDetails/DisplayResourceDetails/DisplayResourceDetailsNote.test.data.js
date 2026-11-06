@@ -18,12 +18,14 @@ import { TEST_RESOURCE_TYPE_PASSWORD_STRING } from "../../../../shared/models/en
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
-import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext, defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserRbacContext, denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 export function defaultProps(props) {
   return {
     ...props,
     context: defaultAppContext(props.context),
+    rbacContext: defaultUserRbacContext(props.rbacContext),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(props.resourceWorkspaceContext),
   };
@@ -41,3 +43,34 @@ export const resourceWithDescriptionMock = defaultResourceDto({
   },
   permission: updatePermissionDto(),
 });
+
+/**
+ * Generates props with RBAC context set to deny UI action.
+ * @param {Object} data
+ * @param {Object} data.resource - The resource object.
+ * @returns {Object}
+ */
+export function propsWithDenyUiAction(data = {}) {
+  return defaultProps({
+    rbacContext: denyRbacContext(),
+    resourceWorkspaceContext: { details: { resource: data.resource } },
+  });
+}
+
+/**
+ * Generates props with the preview password API flag disabled.
+ * @param {Object} data
+ * @param {Object} data.resource - The resource object.
+ * @returns {Object}
+ */
+export function propsWithApiFlagDisabled(data = {}) {
+  return defaultProps({
+    context: defaultUserAppContext({
+      siteSettings: {
+        getServerTimezone: () => "",
+        canIUse: () => false,
+      },
+    }),
+    resourceWorkspaceContext: { details: { resource: data.resource } },
+  });
+}

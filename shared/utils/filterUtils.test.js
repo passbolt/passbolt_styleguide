@@ -14,14 +14,21 @@
 
 import {
   defaultResourceDto,
+  resourceStandaloneCustomFieldsDto,
+  resourceStandaloneNoteDto,
   resourceStandalonePinCodeDto,
   resourceStandaloneTotpDto,
+  resourceUnknownResourceTypeDto,
 } from "../models/entity/resource/resourceEntity.test.data";
 import { filterResourcesBySearch, filterResourcesSupportedByQuickAccess } from "./filterUtils";
 import { defaultResourceMetadataDto } from "../models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import {
+  customFieldWithAllInMetadata,
+  customFieldWithAllInSecret,
+} from "../models/entity/customField/customFieldEntity.test.data";
+import CustomFieldEntity from "../models/entity/customField/customFieldEntity";
 import ResourceTypesCollection from "../models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../models/entity/resourceType/resourceTypesCollection.test.data";
-import { TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE } from "../models/entity/resourceType/resourceTypeEntity.test.data";
 
 describe("filterUtils", () => {
   describe("::filterResourcesBySearch", () => {
@@ -80,21 +87,101 @@ describe("filterUtils", () => {
       expect(resources.length).toStrictEqual(1);
       expect(resources[0]).toStrictEqual(resource2);
     });
+
+    it("should filter the resources with the given keyword on the custom field labels", () => {
+      expect.assertions(2);
+      const resource1 = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "abc",
+          custom_fields: [
+            customFieldWithAllInMetadata({ metadata_key: "license" }),
+            customFieldWithAllInMetadata({ metadata_key: "serial" }),
+          ],
+        }),
+      });
+      const resource2 = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "def",
+          custom_fields: [customFieldWithAllInMetadata({ metadata_key: "token" })],
+        }),
+      });
+      const resource3 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "serial" }) });
+
+      const allResources = [resource1, resource2, resource3];
+
+      const resources = filterResourcesBySearch(allResources, "license");
+      expect(resources.length).toStrictEqual(1);
+      expect(resources[0]).toStrictEqual(resource1);
+    });
+
+    it("should never match the custom field values", () => {
+      expect.assertions(1);
+      const resource = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "abc",
+          custom_fields: [customFieldWithAllInMetadata({ metadata_key: "license", metadata_value: "XYZ-123" })],
+        }),
+      });
+
+      const resources = filterResourcesBySearch([resource], "XYZ-123");
+      expect(resources.length).toStrictEqual(0);
+    });
+
+    it("should never match a custom field label stored in the secret", () => {
+      expect.assertions(1);
+      const customField = new CustomFieldEntity(customFieldWithAllInSecret({ secret_key: "license" }));
+      const resource = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "abc",
+          custom_fields: [customField.toMetadataDto()],
+        }),
+      });
+
+      const resources = filterResourcesBySearch([resource], "license");
+      expect(resources.length).toStrictEqual(0);
+    });
+
+    it("should require all the searched words to match, across the name and the custom field labels", () => {
+      expect.assertions(2);
+      const resource1 = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "router",
+          custom_fields: [customFieldWithAllInMetadata({ metadata_key: "serial" })],
+        }),
+      });
+      const resource2 = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({
+          name: "router",
+          custom_fields: [customFieldWithAllInMetadata({ metadata_key: "license" })],
+        }),
+      });
+
+      const resources = filterResourcesBySearch([resource1, resource2], "router serial");
+      expect(resources.length).toStrictEqual(1);
+      expect(resources[0]).toStrictEqual(resource1);
+    });
   });
 
   describe("::filterResourcesSupportedByQuickAccess", () => {
-    it("should keep the password, totp and pin code resources and drop the others", () => {
-      expect.assertions(4);
+    it("should keep the password, totp, pin code, note and custom fields resources and drop the unknown types", () => {
+      expect.assertions(6);
       const resourceType = new ResourceTypesCollection(resourceTypesCollectionDto());
       const password = defaultResourceDto();
       const totp = resourceStandaloneTotpDto();
       const pinCode = resourceStandalonePinCodeDto();
-      const note = defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE });
-      const resources = filterResourcesSupportedByQuickAccess([password, totp, pinCode, note], resourceType);
-      expect(resources.length).toStrictEqual(3);
+      const note = resourceStandaloneNoteDto();
+      const customFields = resourceStandaloneCustomFieldsDto();
+      const unknown = resourceUnknownResourceTypeDto();
+      const resources = filterResourcesSupportedByQuickAccess(
+        [password, totp, pinCode, note, customFields, unknown],
+        resourceType,
+      );
+      expect(resources.length).toStrictEqual(5);
       expect(resources).toContain(password);
-      expect(resources).toContain(pinCode);
       expect(resources).toContain(totp);
+      expect(resources).toContain(pinCode);
+      expect(resources).toContain(note);
+      expect(resources).toContain(customFields);
     });
 
     it("should load nothing when resource types are not loaded", () => {
