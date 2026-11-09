@@ -1,19 +1,20 @@
-import React from 'react';
-import {fn} from 'storybook/test';
-import AppContext from '../src/shared/context/AppContext/AppContext';
+import React from "react";
+import { fn } from "storybook/test";
+import AppContext from "../src/shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../src/react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import themes from '../build/css/themes/themes.json';
+import themes from "../build/css/themes/themes.json";
 
 // Mock jest.fn to be able to use jest test data mock in storybook.
 // The benefit is to be able to keep consistent any changes on the Component props in order to keep the storybook stable.
 // Storybook's fn() is a jest-compatible spy: implementations passed to jest.fn(impl) are actually invoked,
 // and the mock API (mockImplementation, mock.calls, ...) is available.
-window.jest = {fn};
+window.jest = { fn };
 
-const withLocalProvider = (Story, context) =>
+const withLocalProvider = (Story, context) => (
   <MockTranslationProvider language={context.globals.locale}>
-    <Story/>
-  </MockTranslationProvider>;
+    <Story />
+  </MockTranslationProvider>
+);
 
 const defaultContext = {
   siteSettings: {
@@ -21,16 +22,17 @@ const defaultContext = {
     settings: {
       app: {
         url: process.env.ORIGIN_URL,
-      }
-    }
+      },
+    },
   },
   trustedDomain: process.env.ORIGIN_URL,
 };
 
-const withAppContextProvider = (Story) =>
+const withAppContextProvider = (Story) => (
   <AppContext.Provider value={defaultContext}>
-    <Story/>
-  </AppContext.Provider>;
+    <Story />
+  </AppContext.Provider>
+);
 
 function withStylesheet(Story, context) {
   const themeName = context.globals.themes || "default";
@@ -38,68 +40,69 @@ function withStylesheet(Story, context) {
 
   return (
     <>
-      <link rel="stylesheet" href={`css/themes/${themeName}/${css}.min.css`}/>
-      <Story/>
+      <link rel="stylesheet" href={`css/themes/${themeName}/${css}.min.css`} />
+      <Story />
     </>
   );
-};
+}
 
 const globalTypes = {
   locale: {
-    name: 'Locale',
-    description: 'Internationalization locale',
+    name: "Locale",
+    description: "Internationalization locale",
     toolbar: {
-      icon: 'globe',
+      icon: "globe",
       items: [
         //TODO: this might be improve to dynamically generate the language list
-        { value: 'de-DE', right: '🇩🇪', title: 'Deutsch' },
-        { value: 'en-GB', right: '🇬🇧', title: 'English' },
-        { value: 'es-ES', right: '🇪🇸', title: 'Español' },
-        { value: 'fr-FR', right: '🇫🇷', title: 'Français' },
-        { value: 'it-IT', right: '🇮🇹', title: 'Italiano (beta)' },
-        { value: 'ja-JP', right: '🇯🇵', title: '日本語' },
-        { value: 'ko-KR', right: '🇰🇷', title: '한국어 (beta)' },
-        { value: 'lt-LT', right: '🇱🇹', title: 'Lietuvių' },
-        { value: 'nl-NL', right: '🇳🇱', title: 'Nederlands' },
-        { value: 'pl-PL', right: '🇵🇱', title: 'Polski' },
-        { value: 'pt-BR', right: '🇧🇷', title: 'Português Brasil (beta)' },
-        { value: 'ro-RO', right: '🇷🇴', title: 'Română (beta)' },
-        { value: 'ru-RU', right: '🇷🇺', title: 'Pусский (beta)' },
-        { value: 'sl-SI', right: '🇸🇮', title: 'Slovenščina' },
-        { value: 'sv-SE', right: '🇸🇪', title: 'Svenska' },
-        { value: 'uk-UA', right: '🇺🇦', title: 'Українська (beta)' },
-        { value: 'cs-CZ', right: '🇨🇿', title: 'Čeština (beta)' },
+        { value: "de-DE", right: "🇩🇪", title: "Deutsch" },
+        { value: "en-GB", right: "🇬🇧", title: "English" },
+        { value: "es-ES", right: "🇪🇸", title: "Español" },
+        { value: "fr-FR", right: "🇫🇷", title: "Français" },
+        { value: "it-IT", right: "🇮🇹", title: "Italiano (beta)" },
+        { value: "ja-JP", right: "🇯🇵", title: "日本語" },
+        { value: "ko-KR", right: "🇰🇷", title: "한국어 (beta)" },
+        { value: "lt-LT", right: "🇱🇹", title: "Lietuvių" },
+        { value: "nl-NL", right: "🇳🇱", title: "Nederlands" },
+        { value: "pl-PL", right: "🇵🇱", title: "Polski" },
+        { value: "pt-BR", right: "🇧🇷", title: "Português Brasil (beta)" },
+        { value: "ro-RO", right: "🇷🇴", title: "Română (beta)" },
+        { value: "ru-RU", right: "🇷🇺", title: "Pусский (beta)" },
+        { value: "sl-SI", right: "🇸🇮", title: "Slovenščina" },
+        { value: "sv-SE", right: "🇸🇪", title: "Svenska" },
+        { value: "uk-UA", right: "🇺🇦", title: "Українська (beta)" },
+        { value: "cs-CZ", right: "🇨🇿", title: "Čeština (beta)" },
       ],
     },
   },
   themes: {
-    name: 'Theme',
-    description: 'Theme switcher',
+    name: "Theme",
+    description: "Theme switcher",
     toolbar: {
-      icon: 'photo',
+      icon: "photo",
       items: [
         // title from the name: underscore to space, each word capitalised
-        ...themes.map(name => ({ value: name, title: name.split('_').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')})),
-        ...(process.env.STORYBOOK_DEV ? [{ value: 'custom', title: 'Custom'}] : [])
+        ...themes.map((name) => ({
+          value: name,
+          title: name
+            .split("_")
+            .map((word) => word[0].toUpperCase() + word.slice(1))
+            .join(" "),
+        })),
       ],
     },
-  }
-}
+  },
+};
 
 const initialGlobals = {
-  locale: 'en-GB',
-  themes: 'default',
+  locale: "en-GB",
+  themes: "default",
 };
 
 const parameters = {
   options: {
     storySort: {
-      order: [
-        'Getting started',
-        'Foundations',
-        'Passbolt Components',
-      ],
-      method: "alphabetical"
+      order: ["Getting started", "Foundations", "Passbolt Components"],
+      method: "alphabetical",
     },
   },
   controls: {
@@ -108,9 +111,9 @@ const parameters = {
       color: /(background|color|border)$/i,
       date: /Date$/,
     },
-  }
+  },
 };
 
 const decorators = [withAppContextProvider, withLocalProvider, withStylesheet];
 
-export default {decorators, parameters, globalTypes, initialGlobals};
+export default { decorators, parameters, globalTypes, initialGlobals };

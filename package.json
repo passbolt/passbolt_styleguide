@@ -101,7 +101,7 @@
     "i18n:externalize": "i18next-cli extract --config ./i18next.config.js",
     "dev:storybook:build": "NODE_OPTIONS=--max_old_space_size=2048 storybook build",
     "dev:storybook:install": "playwright install chromium",
-    "dev:storybook:start": "STORYBOOK_DEV=true storybook dev -p 6006 --no-open",
+    "dev:storybook:start": "storybook dev -p 6006 --no-open",
     "watch": "NODE_ENV=development webpack --watch"
   },
   "overrides": {
