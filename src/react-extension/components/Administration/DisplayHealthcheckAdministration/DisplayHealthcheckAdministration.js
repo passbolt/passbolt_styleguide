@@ -208,20 +208,29 @@ class DisplayHealthcheckAdministration extends Component {
     return (
       <div key={checkKey} className={`accordion healthcheck-check ${isHelpOpened ? "" : "closed"}`}>
         <div className="healthcheck-check-row accordion-header">
-          <span className={`healthcheck-badge ${modifier}`}>
-            <StatusIcon />
-          </span>
-          <span className="healthcheck-check-message">{check.message}</span>
-          {hasHelp && (
-            <button
-              type="button"
-              className="link no-border healthcheck-help-toggle"
-              aria-expanded={isHelpOpened}
-              aria-controls={helpId}
-              onClick={() => this.handleHelpToggleClick(checkKey)}
-            >
-              {isHelpOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-            </button>
+          {hasHelp ? (
+            <>
+              <button
+                type="button"
+                className="link no-border healthcheck-help-toggle"
+                aria-expanded={isHelpOpened}
+                aria-controls={helpId}
+                onClick={() => this.handleHelpToggleClick(checkKey)}
+              >
+                <span className={`healthcheck-badge ${modifier}`}>
+                  <StatusIcon />
+                </span>
+                <span className="healthcheck-check-message">{check.message}</span>
+                {isHelpOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+              </button>
+            </>
+          ) : (
+            <>
+              <span className={`healthcheck-badge ${modifier}`}>
+                <StatusIcon />
+              </span>
+              <span className="healthcheck-check-message">{check.message}</span>
+            </>
           )}
         </div>
         {isHelpOpened && (
