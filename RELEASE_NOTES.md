@@ -1,8 +1,3 @@
-# v5.18.0
+# v5.18.1
 
-Release version of the Styleguide package that includes:
-- security improvement
-- 2 new themes
-- autofill improvement
-- duo security hardening
-- ShareDialog performance optimization
+Fixes icon colors on API served pages for the 2 new themes.
