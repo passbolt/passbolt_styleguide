@@ -48,6 +48,43 @@ describe("FieldClassificationService", () => {
 
         expect(decision).toStrictEqual({ role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD });
       });
+
+      it.each(["button", "checkbox", "combobox", "spinbutton", "radio", "slider"])(
+        "should hard-exclude an INPUT with non-credential role %j to OTHER at tier NONE",
+        (role) => {
+          expect.assertions(1);
+
+          const decision = FieldClassificationService.classify(defaultField({ role, name: "username" }));
+
+          expect(decision).toStrictEqual({ role: FieldRole.OTHER, tier: Tier.NONE });
+        },
+      );
+
+      it("should not hard-exclude an INPUT with a credential-neutral role (textbox) and let the ladder resolve it", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ role: "textbox", name: "username" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should not hard-exclude an INPUT without a role and let the ladder resolve it", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField({ name: "username" }));
+
+        expect(decision).toStrictEqual({ role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
+      it("should not hard-exclude a non-INPUT tag by the input-role rule", () => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(
+          defaultField({ tagName: "SELECT", type: "", role: "combobox", name: "username" }),
+        );
+
+        expect(decision).toStrictEqual({ role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
     });
 
     describe("recovery veto", () => {

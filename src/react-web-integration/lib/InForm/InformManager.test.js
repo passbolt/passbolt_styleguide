@@ -2368,6 +2368,28 @@ describe("InformManager", () => {
 
       expect(ctaElements()).toContain(document.getElementById("email"));
     });
+
+    it("should not attach a call-to-action to a readonly field until it is editable", async () => {
+      expect.assertions(3);
+
+      // Second step of a multi-step login: the identifier is recalled in a readonly field above the password.
+      document.body.innerHTML = `<form>
+        <input type='email' id='email' name='email' readonly value='admin@passbolt.com'/>
+        <input type='password' id='password' name='password'/>
+      </form>`;
+      await act(async () => new InformManagerPage());
+      const ctaElements = () => InFormManager.callToActionFields.map(({ field }) => field);
+      expect(ctaElements()).not.toContain(document.getElementById("email"));
+      expect(ctaElements()).toContain(document.getElementById("password"));
+
+      // The site makes the field editable: the next scan attaches its call-to-action.
+      await act(async () => {
+        document.getElementById("email").removeAttribute("readonly");
+      });
+      InFormManager.findAndSetAuthenticationFields();
+
+      expect(ctaElements()).toContain(document.getElementById("email"));
+    });
   });
 
   describe("Focus healer integration", () => {

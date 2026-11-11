@@ -31,6 +31,7 @@ import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryServic
 import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
 import PageClassificationService from "../../services/PageClassificationService";
 import { FieldRole } from "../../services/classification/Taxonomy";
+import FieldFeatureService from "../../services/classification/FieldFeatureService";
 
 const Z_INDEX_MAX = 2147483647;
 const HOST_MOUNT_MAX_RETRIES = 3;
@@ -327,7 +328,7 @@ class InFormManager {
      * Else we clean and reset callToActionFields.
      */
     const { fields: classifiedFields } = PageClassificationService.classifyPage();
-    const fields = classifiedFields.filter(({ element }) => !element.disabled);
+    const fields = classifiedFields.filter(({ element }) => FieldFeatureService.isFillable(element));
     const newUsernameFields = fields.filter((field) => IDENTIFIER_ROLES.includes(field.role));
     const newPasswordFields = fields.filter((field) => PASSWORD_ROLES.includes(field.role));
     const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP);
