@@ -17,7 +17,13 @@ import KeywordMatchingService from "./KeywordMatchingService";
 import SawfClassificationService from "./SawfClassificationService";
 import FieldFeatureService from "./FieldFeatureService";
 import { FieldRole, Tier } from "./Taxonomy";
-import { Keywords, NON_CREDENTIAL_INPUT_TYPES, MIN_OTP_SEGMENTS, MAX_OTP_SEGMENTS } from "./KeywordsDictionary";
+import {
+  Keywords,
+  NON_CREDENTIAL_INPUT_TYPES,
+  MIN_OTP_SEGMENTS,
+  MAX_OTP_SEGMENTS,
+  NON_CREDENTIAL_INPUT_ROLES,
+} from "./KeywordsDictionary";
 
 /**
  * A rough e-mail shape, used to detect an email field from its placeholder text.
@@ -80,7 +86,10 @@ class FieldClassificationService {
    * @returns {{role: string, tier: number}|null} OTHER or null.
    */
   static hardExclude(field) {
-    if (field.tagName === "INPUT" && NON_CREDENTIAL_INPUT_TYPES.has(field.type)) {
+    if (
+      field.tagName === "INPUT" &&
+      (NON_CREDENTIAL_INPUT_TYPES.has(field.type) || NON_CREDENTIAL_INPUT_ROLES.has(field.attributes.role))
+    ) {
       return { role: FieldRole.OTHER, tier: Tier.NONE };
     }
     return null;

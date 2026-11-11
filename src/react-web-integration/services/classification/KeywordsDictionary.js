@@ -535,3 +535,11 @@ export const MAX_CLASSIFIED_FIELDS = 200;
 export const NON_CREDENTIAL_INPUT_TYPES = Object.freeze(
   new Set(["checkbox", "radio", "submit", "reset", "button", "image", "file", "range", "color", "hidden"]),
 );
+
+/**
+ * Input roles which should never hold a credential.
+ * @type {ReadonlySet<string>}
+ */
+export const NON_CREDENTIAL_INPUT_ROLES = Object.freeze(
+  new Set(["button", "checkbox", "combobox", "spinbutton", "radio", "slider"]),
+);
