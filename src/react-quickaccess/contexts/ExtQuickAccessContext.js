@@ -23,7 +23,7 @@ import SpinnerSVG from "../../img/svg/spinner.svg";
 import { withActiveSessionLocalStorage } from "../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../shared/models/entity/session/userActiveSessionEntity";
 import { BOOTSTRAP_FEATURE } from "../ExtQuickAccess";
-import LogoSVG from "../../img/svg/logo.svg";
+import LogoSVG from "../../img/svg/size-logo.svg";
 import SiteSettingsServiceWorkerService from "../../shared/services/serviceWorker/siteSettings/siteSettingsServiceWorkerService";
 
 /**

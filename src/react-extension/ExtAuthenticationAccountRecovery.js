@@ -21,7 +21,7 @@ import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
 import AuthenticationAccountRecoveryContextProvider from "./contexts/Authentication/AuthenticationAccountRecoveryContext";
 import OrchestrateAccountRecovery from "./components/AuthenticationAccountRecovery/OrchestrateAccountRecovery/OrchestrateAccountRecovery";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 
 /**
  * The account recovery application served by the browser extension.

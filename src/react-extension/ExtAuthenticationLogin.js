@@ -23,7 +23,7 @@ import OrchestrateLoginBoxMain from "./components/AuthenticationLogin/Orchestrat
 import Footer from "./components/Common/Footer/Footer";
 import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
 import SsoContextProvider from "./contexts/SsoContext";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 import ActiveSessionLocalStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import AccountEntity from "../shared/models/entity/account/accountEntity";
 

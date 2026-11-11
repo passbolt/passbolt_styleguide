@@ -20,7 +20,7 @@ import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSetting
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
 import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 
 /**
  * The setup application served by the browser extension.

@@ -21,7 +21,7 @@ import { ApiClient } from "../shared/lib/apiClient/apiClient";
 import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiSetupLocale from "./components/Internationalisation/ChangeLocale/ChangeApiSetupLocale";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 
 /**
  * The setup application served by the API.

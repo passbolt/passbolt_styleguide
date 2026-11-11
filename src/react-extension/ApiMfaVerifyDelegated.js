@@ -17,7 +17,7 @@ import { ApiClientOptions } from "../shared/lib/apiClient/apiClientOptions";
 import ApiMfaVerifyDelegatedContextProvider from "./contexts/ApiMfaVerifyDelegatedContext";
 import OrchestrateApiMfaVerifyDelegated from "./components/AuthenticationMfa/OrchestrateApiMfaVerifyDelegated/OrchestrateApiMfaVerifyDelegated";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 
 /**
  * The MFA verification application delegated by the mobile applications, served by the API.

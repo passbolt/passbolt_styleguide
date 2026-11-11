@@ -17,7 +17,7 @@ import { ApiClientOptions } from "../shared/lib/apiClient/apiClientOptions";
 import ApiMfaVerifyContextProvider from "./contexts/ApiMfaVerifyContext";
 import OrchestrateApiMfaVerify from "./components/AuthenticationMfa/OrchestrateApiMfaVerify/OrchestrateApiMfaVerify";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 
 /**
  * The MFA verification application served by the API.

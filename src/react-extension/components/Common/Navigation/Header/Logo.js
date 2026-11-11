@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, { Component } from "react";
-import SVGLogo from "../../../../../img/svg/logo.svg";
+import SVGLogo from "../../../../../img/svg/size-logo.svg";
 
 class Logo extends Component {
   /**
@@ -22,10 +22,10 @@ class Logo extends Component {
   render() {
     return (
       <div className="top-bar-left">
-        <div className="logo-svg no-img" title="Passbolt logo">
+        <div className="logo-svg no-img" title="SIZE logo">
           <SVGLogo width="15rem" height="2.6rem" role="img" />
           <h1>
-            <span>Passbolt</span>
+            <span>SIZE Password Manager</span>
           </h1>
         </div>
       </div>

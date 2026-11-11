@@ -22,7 +22,7 @@ import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSetting
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiRecoverLocale from "./components/Internationalisation/ChangeLocale/ChangeApiRecoverLocale";
 import OrchestrateApiAccountRecovery from "./components/AuthenticationAccountRecovery/OrchestrateApiAccountRecovery/OrchestrateApiAccountRecovery";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 
 /**
  * The recover application served by the API.

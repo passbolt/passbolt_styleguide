@@ -20,7 +20,7 @@ import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAut
 import SiteSettingsEntity from "../shared/models/entity/siteSettings/siteSettingsEntity";
 import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
-import LogoSVG from "../img/svg/logo.svg";
+import LogoSVG from "../img/svg/size-logo.svg";
 
 /**
  * The recover application served by the browser extension.

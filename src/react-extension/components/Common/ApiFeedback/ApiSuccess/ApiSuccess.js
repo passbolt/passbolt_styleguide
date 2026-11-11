@@ -15,7 +15,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "react-i18next";
 import AnimatedFeedback from "../../../../../shared/components/Icons/AnimatedFeedback";
-import LogoSVG from "../../../../../img/svg/logo.svg";
+import LogoSVG from "../../../../../img/svg/size-logo.svg";
 
 class ApiSuccess extends Component {
   /**

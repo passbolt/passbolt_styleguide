@@ -17,7 +17,7 @@ import { Trans, withTranslation } from "react-i18next";
 import AnimatedFeedback from "../../../../../shared/components/Icons/AnimatedFeedback";
 import CarretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../../img/svg/caret_right.svg";
-import LogoSVG from "../../../../../img/svg/logo.svg";
+import LogoSVG from "../../../../../img/svg/size-logo.svg";
 
 class ApiError extends Component {
   /**

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
-import LogoSVG from "../../../img/svg/logo.svg";
+import LogoSVG from "../../../img/svg/size-logo.svg";
 import PowerSVG from "../../../img/svg/power.svg";
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import { withRouter } from "react-router-dom";
