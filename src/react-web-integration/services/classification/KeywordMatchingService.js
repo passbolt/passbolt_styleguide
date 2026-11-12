@@ -12,26 +12,40 @@
  * @since         5.15.0
  */
 
-import { SHORT_AMBIGUOUS, AUTOCOMPLETE_ROLE } from "./KeywordsDictionary";
+import { SHORT_AMBIGUOUS, BOUNDED_TOKENS, AUTOCOMPLETE_ROLE } from "./KeywordsDictionary";
 
 /**
- * Tests a normalized text against a keyword set.
+ * Tests normalized texts against a keyword set.
  */
 class KeywordMatchingService {
   /**
+   * Returns true when a keyword of the set is found in one of the texts, each text being matched on its own.
+   * @param {string|string[]} normalizedTexts The normalized text, or one per attribute.
+   * @param {string[]} set The keyword set.
+   * @returns {boolean} Whether any keyword matches.
+   */
+  static matchesAny(normalizedTexts, set) {
+    const texts = Array.isArray(normalizedTexts) ? normalizedTexts : [normalizedTexts];
+    return texts.some((text) => KeywordMatchingService._matchesText(text, set));
+  }
+
+  /**
    * Returns true when a keyword of the set is found in the text.
-   * Short tokens must match a whole segment, the others match as substring.
+   * @private
    * @param {string} normalizedText The normalized text.
    * @param {string[]} set The keyword set.
    * @returns {boolean} Whether any keyword matches.
    */
-  static matchesAny(normalizedText, set) {
+  static _matchesText(normalizedText, set) {
     if (!normalizedText) {
       return false;
     }
     const concatenated = normalizedText.replace(/\s/g, "");
     const segments = new Set(normalizedText.split(" "));
     return set.some((keyword) => {
+      if (BOUNDED_TOKENS.has(keyword)) {
+        return BOUNDED_TOKENS.get(keyword).test(normalizedText);
+      }
       // The text has its accented letters split into base letter + accent mark, so split the keyword the same way before comparing.
       const needle = keyword.normalize("NFD");
       // Short ambiguous tokens must match a whole segment

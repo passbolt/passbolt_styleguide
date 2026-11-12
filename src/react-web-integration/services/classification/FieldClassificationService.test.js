@@ -138,6 +138,41 @@ describe("FieldClassificationService", () => {
         expect(decision).toStrictEqual({ role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD });
       });
 
+      it.each([
+        { name: "fattura_acconto_10902", id: "fattura_10902" },
+        { name: "voce_2_fattura" },
+        { name: "10902fattura" },
+        { id: "importo_12", placeholder: "fa riferimento alla fattura" },
+      ])("should not classify %j as TOTP when 2fa only appears across a boundary", (attributes) => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField(attributes));
+
+        expect(decision.role).not.toBe(FieldRole.TOTP);
+      });
+
+      it.each([
+        { name: "2fa" },
+        { name: "2FA" },
+        { id: "Field2FA" },
+        { name: "2fa_code" },
+        { name: "2faCode" },
+        { name: "2facode" },
+        { name: "user2fa" },
+        { labelText: "2FA code" },
+        { name: "twofa" },
+        { name: "otpcode" },
+        { name: "mfa_token" },
+        { name: "one_time_code" },
+        { name: "twoFactorCode" },
+      ])("should still classify %j as TOTP at tier ATTRIBUTE_KEYWORD", (attributes) => {
+        expect.assertions(1);
+
+        const decision = FieldClassificationService.classify(defaultField(attributes));
+
+        expect(decision).toStrictEqual({ role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD });
+      });
+
       it("should classify a field whose label is a TOTP keyword as TOTP at tier ATTRIBUTE_KEYWORD", () => {
         expect.assertions(1);
 

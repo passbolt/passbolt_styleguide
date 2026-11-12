@@ -14,6 +14,7 @@
 
 import ScrapingIdentityService from "./ScrapingIdentityService";
 import LabelScraperService from "./LabelScraperService";
+import LabelIndex from "./LabelIndex";
 import { MAX_SCRAPED_STRING_LENGTH, AUTOCOMPLETE_ATTRS, OPT_OUT_ATTRS } from "../../lib/InForm/ScrapingDictionary";
 
 /**
@@ -25,9 +26,10 @@ class FieldScraperService {
    *
    * @param {Element} element The field element.
    * @param {string} formId The id of the container.
+   * @param {LabelIndex} [labelIndex] The label index of the scrape.
    * @returns {FieldScraping} The record, without the element.
    */
-  static build(element, formId) {
+  static build(element, formId, labelIndex = new LabelIndex()) {
     const tagName = element.nodeName.toUpperCase();
     // Only `input` has a type
     const type = tagName === "INPUT" ? (element.type || "text").toLowerCase() : "";
@@ -70,7 +72,7 @@ class FieldScraperService {
       optOut: FieldScraperService._optOut(element),
     };
 
-    LabelScraperService.enrich(record);
+    LabelScraperService.enrich(record, labelIndex);
 
     // Remove the element so the record is serializable
     delete record.element;
@@ -83,10 +85,11 @@ class FieldScraperService {
    *
    * @param {Element} element The field element.
    * @param {string} formId The id of the container the field is in.
+   * @param {LabelIndex} [labelIndex] The label index of the scrape.
    * @returns {FieldScraping} The record.
    */
-  static scrape(element, formId) {
-    return FieldScraperService.build(element, formId);
+  static scrape(element, formId, labelIndex) {
+    return FieldScraperService.build(element, formId, labelIndex);
   }
 
   /**

@@ -29,22 +29,20 @@ const DIGIT_CONSTRAINED_PATTERN = /\\d|\[0-9\]/;
 
 class FieldFeatureService {
   /**
-   * Returns the normalized text of the field's name, id, label, aria-label and placeholder.
+   * Returns the normalized texts of the field's name, id, label, aria-label and placeholder, one per attribute.
    * @param {FieldScraping} field The field record.
-   * @returns {string} The normalized text.
+   * @returns {string[]} The normalized texts, empty attributes excluded.
    */
-  static fieldText(field) {
-    return TextNormalizer.normalizeForMatch(
-      [
-        field.attributes?.name,
-        field.attributes?.id,
-        field.label?.text,
-        field.inputDescription?.ariaLabel,
-        field.inputDescription?.placeholder,
-      ]
-        .filter(Boolean)
-        .join(" "),
-    );
+  static fieldTexts(field) {
+    return [
+      field.attributes?.name,
+      field.attributes?.id,
+      field.label?.text,
+      field.inputDescription?.ariaLabel,
+      field.inputDescription?.placeholder,
+    ]
+      .filter(Boolean)
+      .map((value) => TextNormalizer.normalizeForMatch(value));
   }
 
   /**
