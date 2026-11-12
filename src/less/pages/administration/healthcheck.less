@@ -92,7 +92,7 @@
   }
 }
 
-// The glyphs are drawn with stroke="var(--icon-color)", so a tint plus an override is all a status needs.
+// The glyphs are drawn with stroke="var(--icon-color)" in the icon colour, so a tint is all a status needs.
 .healthcheck-badge {
   display: inline-flex;
   align-items: center;
@@ -101,25 +101,22 @@
   min-width: 3.2rem;
   height: 3.2rem;
   border-radius: var(--Section-border-radius);
+  --icon-color: var(--Text-and-icons-Icons);
 
   &.healthcheck-badge--success {
     background: var(--Healthcheck-Healthcheck-Success);
-    --icon-color: var(--Healthcheck-Healthcheck-Success-icon);
   }
 
   &.healthcheck-badge--warning {
     background: var(--Healthcheck-Healthcheck-Warning);
-    --icon-color: var(--Healthcheck-Healthcheck-Warning-icon);
   }
 
   &.healthcheck-badge--error {
     background: var(--Healthcheck-Healthcheck-Error);
-    --icon-color: var(--Healthcheck-Healthcheck-Error-icon);
   }
 
   &.healthcheck-badge--info {
     background: var(--Healthcheck-Healthcheck-Info);
-    --icon-color: var(--Healthcheck-Healthcheck-Info-icon);
   }
 }
 
