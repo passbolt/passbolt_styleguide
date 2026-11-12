@@ -17,43 +17,6 @@ import path from "path";
 const LESS_DIR = path.resolve(__dirname, "..");
 const DEFINITION = /(?:^|[{;])\s*(--[\w-]+)\s*:/gm; // a custom property declaration
 const USAGE = /var\(\s*(--[\w-]+)/g;
-// tokens present in some palettes only; WP6 re-exports the six palettes from Figma and empties this list
-const ALLOWED_DRIFT = [
-  // only in default, midgar, solarized_dark and solarized_light
-  "--Healthcheck-Healthcheck-Success-icon",
-  "--Healthcheck-Healthcheck-Warning-icon",
-  "--Healthcheck-Healthcheck-Error-icon",
-  "--Healthcheck-Healthcheck-Info-icon",
-  // only in sakura and layette
-  "--Badges-Alert-background",
-  "--Badges-Success-background",
-  "--Badges-Error-background",
-  "--Badges-Loader-background",
-  "--Badges-Loader-stroke",
-  "--Badges-Bagde-icon",
-  "--Icon-Color-01",
-  "--Icon-Color-02",
-  "--Icon-Color-03",
-  "--Icon-Color-04",
-  "--Icon-Color-05",
-  "--Icon-Color-06",
-  "--Icon-Color-07",
-  "--Icon-Color-08",
-  "--Icon-Color-09",
-  "--Icon-Color-10",
-  "--Icon-Color-11",
-  "--Icon-Color-12",
-  "--Icon-Color-13",
-  "--Icon-Color-14",
-  "--Secret-history-Diff",
-  "--Onboarding-Background",
-  "--Onboarding-Border",
-  "--Onboarding-Resource-and-Data-Creation",
-  "--Onboarding-Account-and-Security-Settings",
-  "--Onboarding-User-Onboarding-and-Collaboration",
-  "--Onboarding-System-Validation",
-  "--User-drag-n-drop-padding",
-];
 
 const read = (file) => fs.readFileSync(file, "utf8");
 const names = (content, regex) => Array.from(content.matchAll(regex), (match) => match[1]);
@@ -82,9 +45,7 @@ const allTokens = new Set(Array.from(palettes.values()).flatMap((tokens) => Arra
 describe("colorVariables", () => {
   it.each(themes)("should define in the %s palette every token another palette defines", (theme) => {
     expect.assertions(1);
-    const missing = Array.from(allTokens).filter(
-      (token) => !palettes.get(theme).has(token) && !ALLOWED_DRIFT.includes(token),
-    );
+    const missing = Array.from(allTokens).filter((token) => !palettes.get(theme).has(token));
     expect(missing).toEqual([]);
   });
 
