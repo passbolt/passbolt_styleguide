@@ -151,6 +151,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
       searchHistory: {},
       updateSearch: this.updateSearch,
       openerTabId: this.props.openerTabId, // Get the opener tab id, useful when used in detached mode to get info of the opener tab.
+      passwordDraftId: this.props.passwordDraftId || null, // The password draft the autosave window offers to save, if any.
       // Detached mode boolean property
       detached: this.props.detached,
       // Manage popup blur
@@ -379,6 +380,7 @@ ExtQuickAccessContextProvider.propTypes = {
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   ActiveSessionSessionStorageContext: PropTypes.any, // The active session context
   openerTabId: PropTypes.string, // The opener tab id
+  passwordDraftId: PropTypes.string, // The password draft the autosave window offers to save
   bootstrapFeature: PropTypes.string, // The bootstrap feature
   detached: PropTypes.bool, // The detached boolean property
   children: PropTypes.any, // The children components
