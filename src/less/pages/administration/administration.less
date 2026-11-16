@@ -177,12 +177,12 @@
     .metadata-key-info {
       &.error {
         table {
-          border: 1px solid @hint-error-color;
-          color: @text-error-color;
+          border: 1px solid var(--Field-Error);
+          color: var(--Field-Error);
         }
 
         .empty-value {
-          color: @default-text-color;
+          color: var(--Text-and-icons-Main-text);
         }
       }
 
@@ -194,14 +194,13 @@
         table-layout: fixed;
         border-spacing: .8rem;
         width: 100%;
-        border: 1px solid @input-radio-list-border;
         border-radius: 3px;
-        background-color: @input-radio-list-background;
+        background-color: var(--Action-button-Action-button-background);
         padding: 1.6rem;
         margin-right: 0;
 
         tr.error-message {
-          color: @text-error-color;
+          color: var(--Field-Error);
         }
 
         td {
