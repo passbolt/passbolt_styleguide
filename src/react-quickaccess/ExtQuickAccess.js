@@ -234,6 +234,7 @@ class ExtQuickAccess extends React.Component {
             port={this.props.port}
             account={this.state.account}
             openerTabId={this.props.openerTabId}
+            passwordDraftId={this.props.passwordDraftId}
             bootstrapFeature={this.props.bootstrapFeature}
             detached={this.props.detached}
           >
@@ -412,6 +413,7 @@ ExtQuickAccess.propTypes = {
   bootstrapFeature: PropTypes.string,
   bootstrapRequestId: PropTypes.string,
   openerTabId: PropTypes.string,
+  passwordDraftId: PropTypes.string,
   detached: PropTypes.bool,
 };
 
