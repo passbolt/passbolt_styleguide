@@ -21,3 +21,15 @@ export const PASSKEY_CREDENTIAL_ID_MAX_LENGTH = 1364;
 export const PASSKEY_ES256_ALGORITHM = -7;
 /** Algorithm of the PRF secrets */
 export const PASSKEY_HMAC_ALGORITHM = "hmac-sha256";
+/** Organisation policy letting each user choose how passkey requests requiring user verification are verified */
+export const PASSKEY_USER_VERIFICATION_POLICY_USER_CHOICE = "user_choice";
+/** Passkey verification preferences: a prompt every time, or the unlocked session counts */
+export const PASSKEY_VERIFICATION_STRICT = "strict";
+export const PASSKEY_VERIFICATION_NON_STRICT = "non_strict";
+/** Purposes of the passkey passphrase prompt */
+export const PASSKEY_PROMPT_PURPOSE_VERIFY = "verify";
+export const PASSKEY_PROMPT_PURPOSE_VERIFY_ORGANISATION = "verify-organisation";
+export const PASSKEY_PROMPT_PURPOSE_UNLOCK = "unlock";
+/** WebAuthn ceremonies */
+export const PASSKEY_CEREMONY_CREATE = "create";
+export const PASSKEY_CEREMONY_GET = "get";
