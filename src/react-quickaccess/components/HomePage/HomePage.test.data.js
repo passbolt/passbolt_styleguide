@@ -132,3 +132,34 @@ export function denyUiActionProps(data = {}) {
     ...data,
   });
 }
+
+/**
+ * Password drafts props.
+ * @param {Array<object>} passwordDrafts The password drafts returned by the background page.
+ * @param {object} data Override the default props.
+ * @return {Object}
+ */
+export function passwordDraftsProps(passwordDrafts = [defaultPasswordDraftDto()], data = {}) {
+  const port = new MockPort();
+  port.addRequestListener(
+    "passbolt.quickaccess.get-password-drafts",
+    jest.fn(() => passwordDrafts),
+  );
+  const context = defaultAppContext({ port, ...data });
+  return defaultProps({ context, resources: [] });
+}
+
+/**
+ * Default password draft dto, as returned by the background page.
+ * @param {object} data Override the default dto.
+ * @return {Object}
+ */
+export function defaultPasswordDraftDto(data = {}) {
+  return {
+    id: "3f2f1a8e-5d3c-4b7a-9c1e-2a6b8d0e4f11",
+    name: "Gitlab",
+    uri: "https://gitlab.com/users/sign_up",
+    username: "",
+    ...data,
+  };
+}
