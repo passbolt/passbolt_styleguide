@@ -110,6 +110,7 @@ class InFormManager {
 
     // Insert the host in the provided container
     container.appendChild(this.host);
+    this.hostMutationObserver?.observe(this.host, { attributes: true });
   }
 
   /**
@@ -172,7 +173,9 @@ class InFormManager {
     this.htmlMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.documentElement));
     this.bodyMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.body));
 
-    this.hostMutationObserver.observe(this.host, { attributes: true });
+    if (this.host) {
+      this.hostMutationObserver.observe(this.host, { attributes: true });
+    }
     this.htmlMutationObserver.observe(document.documentElement, { attributes: true });
     this.bodyMutationObserver.observe(document.body, { attributes: true });
   }
@@ -311,10 +314,20 @@ class InFormManager {
 
     if (!this.host) {
       this.createAndInsertShadowRootWithHost(container);
-    } else if (this.host.parentNode !== container || container.lastChild !== this.host) {
-      // Re-append the host when it is not the last child so it stays above overlays at equal z-index.
+    } else if (this.host.parentNode !== container) {
       container.appendChild(this.host);
     }
+  }
+
+  /**
+   * Re-append the host as the last child of its container so it stays above overlays at equal z-index.
+   */
+  reappendHost() {
+    const container = this.host?.parentNode;
+    if (!container || container.lastChild === this.host || this.shadowRoot.querySelector("iframe")) {
+      return;
+    }
+    container.appendChild(this.host);
   }
 
   /**
@@ -333,10 +346,10 @@ class InFormManager {
     const newPasswordFields = fields.filter((field) => PASSWORD_ROLES.includes(field.role));
     const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP);
 
-    const container = this.getContainerElement(
-      [...newUsernameFields, ...newPasswordFields, ...newOTPFields].map((field) => field.element),
-    );
-    this.ensureHostMounted(container);
+    const fieldElements = [...newUsernameFields, ...newPasswordFields, ...newOTPFields].map((field) => field.element);
+    if (fieldElements.length > 0) {
+      this.ensureHostMounted(this.getContainerElement(fieldElements));
+    }
 
     /**
      * A function factory to map a classified field to an existing call-to-action or create a new one.
@@ -347,7 +360,9 @@ class InFormManager {
      */
     const mapField = (fieldType) => (field) => {
       const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field.element);
-      const callToActionField = existingField ?? new InFormCallToActionField(field.element, fieldType, this.shadowRoot);
+      const callToActionField =
+        existingField ??
+        new InFormCallToActionField(field.element, fieldType, this.shadowRoot, () => this.reappendHost());
       callToActionField.setClassification(field.role, field.formId);
       return callToActionField;
     };
@@ -477,7 +492,7 @@ class InFormManager {
    * @returns {boolean}
    */
   _ensureHostIntegrity() {
-    if (this.isHostInValidLocation()) {
+    if (!this.host || this.isHostInValidLocation()) {
       return true;
     }
     this.retryMountHost();
@@ -963,7 +978,7 @@ class InFormManager {
     window.removeEventListener("resize", this.clean);
     document.removeEventListener("cut", this.handleClipboardChange);
     document.removeEventListener("copy", this.handleClipboardChange);
-    this.host.remove();
+    this.host?.remove();
   }
 
   /**

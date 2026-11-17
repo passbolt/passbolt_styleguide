@@ -129,7 +129,7 @@ export default class InformManagerPage {
    * Returns the iframe length
    */
   get iframesLength() {
-    return InFormManager.shadowRoot.querySelectorAll("iframe").length;
+    return InFormManager.shadowRoot?.querySelectorAll("iframe").length ?? 0;
   }
 
   /**
