@@ -2148,6 +2148,90 @@ describe("InformManager", () => {
     });
   });
 
+  describe("Frameset page", () => {
+    /**
+     * Swap the body for a frameset holding one frame whose document contains the given login form.
+     * @param {string} html The form markup to load inside the frame.
+     * @returns {HTMLFrameElement} The frame element.
+     */
+    const replaceBodyWithFrameset = (html) => {
+      const frameset = document.createElement("frameset");
+      const frame = document.createElement("frame");
+
+      frameset.appendChild(frame);
+      document.documentElement.replaceChild(frameset, document.body);
+
+      frame.contentDocument.body.innerHTML = html;
+
+      // The frame document is a separate realm, so the getBoundingClientRect mock must be set here as well
+      [...frame.contentDocument.querySelectorAll("input")].forEach((input) => {
+        jest
+          .spyOn(input, "getBoundingClientRect")
+          .mockReturnValue({ x: 0, y: 0, top: 0, left: 0, right: 100, bottom: 20, width: 100, height: 20 });
+      });
+
+      return frame;
+    };
+
+    beforeEach(() => {
+      jest.spyOn(DomUtils, "isRequestInitiatedFromSameOrigin").mockImplementation(() => true);
+    });
+
+    afterEach(() => {
+      document.documentElement.replaceChild(document.createElement("body"), document.body);
+    });
+
+    it("should return the document element as container when the body is a frameset", async () => {
+      expect.assertions(2);
+
+      replaceBodyWithFrameset(domElementLoginWithIdAttributeLogin);
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      expect(document.body.nodeName).toBe("FRAMESET");
+      expect(InFormManager.getContainerElement(informManager.usernames, informManager.passwords)).toBe(
+        document.documentElement,
+      );
+    });
+
+    it("should mount the host under the document element when the body is a frameset", async () => {
+      expect.assertions(4);
+
+      replaceBodyWithFrameset(domElementLoginWithIdAttributeLogin);
+
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      expect(InFormManager.host.parentNode).toBe(document.documentElement);
+      expect(informManager.iframesLength).toBe(0);
+
+      await informManager.focusOnUsernameIframe();
+      expect(informManager.iframesLength).toBe(1);
+      await informManager.blurOnUsernameIframe();
+      expect(informManager.iframesLength).toBe(0);
+    });
+
+    it("should not destroy inform when the host is legitimately under the document element of a frameset page and the DOM changes", async () => {
+      expect.assertions(3);
+
+      replaceBodyWithFrameset(domElementLoginWithIdAttributeLogin);
+
+      jest.spyOn(InFormManager, "destroy");
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      expect(InFormManager.host.parentNode).toBe(document.documentElement);
+
+      // A DOM change elsewhere triggers the mutation observer
+      document.documentElement.append(document.createElement("div"));
+      await informManager.focusOnUsernameIframe();
+
+      expect(InFormManager.destroy).not.toHaveBeenCalled();
+      expect(InFormManager.host.parentNode).toBe(document.documentElement);
+    });
+  });
+
   describe("InFormManager::onShadowMutation", () => {
     it("should ignore the mutations of its own call-to-action shadow root", async () => {
       expect.assertions(1);
