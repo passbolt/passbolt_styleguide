@@ -31,14 +31,6 @@ const OUTPUTS = {
   api_authentication: "ext_authentication",
 };
 const DEFAULT_ONLY = ["ext_external"]; // self-contained body, no palette prepended
-const LEGACY = {
-  default: "colors.less",
-  midgar: "colors_migdar.less",
-  solarized_dark: "colors_solarized-dark.less",
-  solarized_light: "colors_solarized-light.less",
-  sakura: "colors.less",
-  layette: "colors.less",
-}; // until the legacy palettes are deleted
 
 const buildLessEntries = () => {
   const entries = {};
@@ -64,9 +56,9 @@ const banner =
   `* @source\t\t\t\t${packageJson.repository}\n` +
   `* @license\t\t\t${packageJson.license}\n**/`;
 
-// what the theme stubs used to import, in the same order
+// the abstractions every themed entry starts with, in the stubs' order
 const themeImports = (theme) =>
-  ["variables.less", `color_variables_${theme}.less`, `color_variables_${theme}.extra.less`, LEGACY[theme]]
+  ["variables.less", `color_variables_${theme}.less`, `color_variables_${theme}.extra.less`]
     .map((file) => `@import "../../abstractions/${file}";\n`)
     .join("");
 
