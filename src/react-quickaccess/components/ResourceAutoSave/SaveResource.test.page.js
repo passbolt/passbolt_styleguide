@@ -27,11 +27,12 @@ export default class SaveResourcePage {
   /**
    * Default constructor
    * @param props Props to attach
+   * @param {object} [locationState] The router location state
    */
-  constructor(props) {
+  constructor(props, locationState) {
     this._page = render(
       <MockTranslationProvider>
-        <Router>
+        <Router initialEntries={[{ pathname: "/", state: locationState }]}>
           <SaveResource {...props} />
         </Router>
       </MockTranslationProvider>,
@@ -101,6 +102,13 @@ export default class SaveResourcePage {
    */
   get saveButton() {
     return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
+  }
+
+  /**
+   * Returns the "no, thanks" link element
+   */
+  get cancelLink() {
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /** Click on the element */

@@ -226,4 +226,110 @@ describe("See the Create Resource - save resource", () => {
     expect(page.usernameError.textContent).toStrictEqual("The username is invalid");
     expect(page.passwordError.textContent).toStrictEqual("The password is too weak");
   });
+
+  describe("As a signed-in user saving a password draft", () => {
+    const passwordDraftId = "3f2f1a8e-5d3c-4b7a-9c1e-2a6b8d0e4f11";
+    const passwordDraft = {
+      name: "Register",
+      uris: ["https://signup.example.com/register"],
+      username: "ada@passbolt.com",
+      secret_clear: "generated-password",
+    };
+
+    it("should fill the form with the password draft chosen on the unsaved passwords page", async () => {
+      expect.assertions(5);
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.quickaccess.get-password-draft-for-save", () => passwordDraft);
+      jest.spyOn(props.context.port, "request");
+
+      const page = new SaveResourcePage(props, { passwordDraftId });
+      await waitForTrue(() => page.password.value === passwordDraft.secret_clear);
+
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.quickaccess.get-password-draft-for-save",
+        passwordDraftId,
+      );
+      expect(page.name.value).toBe(passwordDraft.name);
+      expect(page.uri.value).toBe(passwordDraft.uris[0]);
+      expect(page.username.value).toBe(passwordDraft.username);
+      expect(page.password.value).toBe(passwordDraft.secret_clear);
+    });
+
+    it("should remove the password draft chosen on the unsaved passwords page once saved", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.quickaccess.get-password-draft-for-save", () => passwordDraft);
+      props.context.port.addRequestListener("passbolt.resources.create", () => {});
+      props.context.port.addRequestListener("passbolt.quickaccess.remove-password-draft", () => {});
+      jest.spyOn(props.context.port, "request");
+
+      const page = new SaveResourcePage(props, { passwordDraftId });
+      await waitForTrue(() => page.password.value === passwordDraft.secret_clear);
+      await page.save();
+      await waitForTrue(() => props.context.closeWindow.mock.calls.length > 0);
+
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.quickaccess.remove-password-draft",
+        passwordDraftId,
+      );
+      expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
+    });
+
+    it("should remove the password draft of the submitted form when the user clicks on no, thanks", async () => {
+      expect.assertions(3);
+      const props = defaultProps({ appContext: { passwordDraftId } });
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", () => passwordDraft);
+      props.context.port.addRequestListener("passbolt.quickaccess.remove-password-draft", () => {});
+      jest.spyOn(props.context.port, "request");
+
+      const page = new SaveResourcePage(props);
+      await waitForTrue(() => page.password.value === passwordDraft.secret_clear);
+      await page.click(page.cancelLink);
+      await waitForTrue(() => props.context.closeWindow.mock.calls.length > 0);
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.quickaccess.prepare-autosave");
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.quickaccess.remove-password-draft",
+        passwordDraftId,
+      );
+      expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
+    });
+
+    it("should keep the password draft when the save fails", async () => {
+      expect.assertions(2);
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.quickaccess.get-password-draft-for-save", () => passwordDraft);
+      props.context.port.addRequestListener("passbolt.resources.create", () => {
+        throw new Error("Unexpected error");
+      });
+      jest.spyOn(props.context.port, "request");
+
+      const page = new SaveResourcePage(props, { passwordDraftId });
+      await waitForTrue(() => page.password.value === passwordDraft.secret_clear);
+      await page.save();
+
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.quickaccess.remove-password-draft",
+        passwordDraftId,
+      );
+      expect(props.context.closeWindow).not.toHaveBeenCalled();
+    });
+
+    it("should close the window even if the password draft cannot be removed", async () => {
+      expect.assertions(1);
+      jest.spyOn(console, "error").mockImplementation(() => {});
+      const props = defaultProps({ appContext: { passwordDraftId } });
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", () => passwordDraft);
+      props.context.port.addRequestListener("passbolt.quickaccess.remove-password-draft", () => {
+        throw new Error("Cannot remove the draft");
+      });
+
+      const page = new SaveResourcePage(props);
+      await waitForTrue(() => page.password.value === passwordDraft.secret_clear);
+      await page.click(page.cancelLink);
+      await waitForTrue(() => props.context.closeWindow.mock.calls.length > 0);
+
+      expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
+    });
+  });
 });

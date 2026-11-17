@@ -73,6 +73,7 @@ class SaveResource extends React.Component {
    */
   initEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -82,7 +83,9 @@ class SaveResource extends React.Component {
    * @returns {Promise<void>}
    */
   async loadPasswordMetaFromTabForm() {
-    const resourceDto = await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
+    const resourceDto = this.isSavingPasswordDraft
+      ? await this.props.context.port.request("passbolt.quickaccess.get-password-draft-for-save", this.passwordDraftId)
+      : await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
     resourceDto.uri = resourceDto.uris && resourceDto.uris.length > 0 ? resourceDto.uris[0] : "";
     resourceDto.password = resourceDto.secret_clear;
     let resourceType;
@@ -106,6 +109,46 @@ class SaveResource extends React.Component {
    */
   async handleClose() {
     await this.props.context.closeWindow();
+  }
+
+  /**
+   * Is the page opened from a password draft chosen on the unsaved passwords page, rather than on a form submission.
+   * @returns {boolean}
+   */
+  get isSavingPasswordDraft() {
+    return Boolean(this.props.location?.state?.passwordDraftId);
+  }
+
+  /**
+   * The password draft to save: the one chosen on the unsaved passwords page, or the one of the submitted form, if any.
+   * @returns {string|null}
+   */
+  get passwordDraftId() {
+    return this.props.location?.state?.passwordDraftId || this.props.context.passwordDraftId || null;
+  }
+
+  /**
+   * Handles the "no, thanks" event, the user does not want to save the password.
+   * @returns {Promise<void>}
+   */
+  async handleCancel() {
+    await this.removePasswordDraft();
+    await this.handleClose();
+  }
+
+  /**
+   * Remove the password draft, if any. A failure does not prevent the window from closing.
+   * @returns {Promise<void>}
+   */
+  async removePasswordDraft() {
+    if (!this.passwordDraftId) {
+      return;
+    }
+    try {
+      await this.props.context.port.request("passbolt.quickaccess.remove-password-draft", this.passwordDraftId);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**
@@ -144,6 +187,8 @@ class SaveResource extends React.Component {
 
     try {
       await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
+      // Awaited before closing, the request could otherwise be lost with the window.
+      await this.removePasswordDraft();
       await this.handleClose();
     } catch (error) {
       this.handleSubmitError(error);
@@ -329,7 +374,7 @@ class SaveResource extends React.Component {
             </div>
           </div>
           <div className="submit-wrapper input flex-row-end">
-            <a className="cancel" role="button" onClick={this.handleClose}>
+            <a className="cancel" role="button" onClick={this.handleCancel}>
               {this.translate("no, thanks")}
             </a>
             <button
@@ -351,6 +396,7 @@ class SaveResource extends React.Component {
 SaveResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object,
+  location: PropTypes.object, // The router location
   t: PropTypes.func, // The translation function
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
