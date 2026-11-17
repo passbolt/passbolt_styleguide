@@ -1,3 +1,3 @@
-# v5.18.1
+# v5.18.2
 
-Fixes icon colors on API served pages for the 2 new themes.
+Fixes alignement in the left sidebar folder tree
