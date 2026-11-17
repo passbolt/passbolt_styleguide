@@ -285,7 +285,7 @@ class InFormManager {
   /**
    * Returns the element the shadow root host should be mounted into for the given input fields.
    * @param {...HTMLElement[]} fieldsArrays One or more arrays of input fields.
-   * @return {HTMLElement} The dialog containing one of the fields (if any), or document.body.
+   * @return {HTMLElement} The dialog containing one of the fields (if any), the document element on a frameset page, or document.body.
    */
   getContainerElement(...fieldsArrays) {
     const fields = fieldsArrays.flat();
@@ -297,6 +297,11 @@ class InFormManager {
       if (dialog?.ownerDocument === document) {
         return dialog;
       }
+    }
+
+    // A frameset body renders only its frames: mount the host next to it, under <html>
+    if (document.body?.nodeName === "FRAMESET") {
+      return document.documentElement;
     }
 
     return document.body;
@@ -467,9 +472,11 @@ class InFormManager {
     const belongsToDocument = parent?.ownerDocument === document;
     const isConnected = parent?.isConnected ?? false;
     const isInBody = parent === document.body;
+    // On a frameset page the host is mounted under <html>, next to the frameset.
+    const isInFramesetRoot = document.body?.nodeName === "FRAMESET" && parent === document.documentElement;
     const isInDialog = parent?.nodeName === "DIALOG";
 
-    return belongsToDocument && isConnected && (isInBody || isInDialog);
+    return belongsToDocument && isConnected && (isInBody || isInFramesetRoot || isInDialog);
   }
 
   /**

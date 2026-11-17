@@ -46,10 +46,10 @@ export default class InformManagerPage {
    * Returns the username in iframe element
    */
   get usernameIframe() {
-    // The detected username field that lives inside the same-origin iframe. Same source as `username`
-    // (the classification result), scoped to the iframe document so it is unambiguous when the page also
-    // holds fields outside the iframe.
-    const iframeDocument = document.querySelector("iframe").contentDocument;
+    // The detected username field that lives inside the same-origin iframe (or frame). Same source as
+    // `username` (the classification result), scoped to the iframe document so it is unambiguous when
+    // the page also holds fields outside the iframe.
+    const iframeDocument = document.querySelector("iframe,frame").contentDocument;
     const username = InFormManager.callToActionFields.find(
       (field) => field.fieldType === "username" && iframeDocument.contains(field.field),
     );
@@ -77,8 +77,8 @@ export default class InformManagerPage {
    * Returns the password in iframe element
    */
   get passwordIframe() {
-    // The detected password field that lives inside the same-origin iframe (see usernameIframe).
-    const iframeDocument = document.querySelector("iframe").contentDocument;
+    // The detected password field that lives inside the same-origin iframe or frame (see usernameIframe).
+    const iframeDocument = document.querySelector("iframe,frame").contentDocument;
     const password = InFormManager.callToActionFields.find(
       (field) => field.fieldType === "password" && iframeDocument.contains(field.field),
     );
