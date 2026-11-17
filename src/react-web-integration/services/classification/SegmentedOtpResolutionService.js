@@ -94,7 +94,7 @@ class SegmentedOtpResolutionService {
     return (
       field.attributes?.maxLength === 1 &&
       OTP_BOX_INPUT_TYPES.includes(field.type) &&
-      !KeywordMatchingService.matchesAny(FieldFeatureService.fieldText(field), Keywords.RECOVERY)
+      !KeywordMatchingService.matchesAny(FieldFeatureService.fieldTexts(field), Keywords.RECOVERY)
     );
   }
 
@@ -107,7 +107,7 @@ class SegmentedOtpResolutionService {
     return (
       FieldFeatureService.autoCompleteHasOtp(field) ||
       FieldFeatureService.looksNumeric(field) ||
-      KeywordMatchingService.matchesAny(FieldFeatureService.fieldText(field), Keywords.TOTP)
+      KeywordMatchingService.matchesAny(FieldFeatureService.fieldTexts(field), Keywords.TOTP)
     );
   }
 }

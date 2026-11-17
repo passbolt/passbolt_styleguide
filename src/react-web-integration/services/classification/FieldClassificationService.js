@@ -63,18 +63,15 @@ class FieldClassificationService {
   }
 
   /**
-   * Normalizes the texts and declared roles.
+   * Normalizes the texts, one per attribute, and the declared roles.
    * @param {FieldScraping} field The field.
-   * @returns {{strongText: string, weakText: string, sawfRole: string, acRole: string|null}} The signals.
+   * @returns {{strongTexts: string[], weakTexts: string[], sawfRole: string, acRole: string|null}} The signals.
    */
   static signals(field) {
+    const normalizeEach = (values) => values.filter(Boolean).map((value) => TextNormalizer.normalizeForMatch(value));
     return {
-      strongText: TextNormalizer.normalizeForMatch(
-        [field.label?.text, field.inputDescription?.ariaLabel].filter(Boolean).join(" "),
-      ),
-      weakText: TextNormalizer.normalizeForMatch(
-        [field.attributes?.name, field.attributes?.id, field.inputDescription?.placeholder].filter(Boolean).join(" "),
-      ),
+      strongTexts: normalizeEach([field.label?.text, field.inputDescription?.ariaLabel]),
+      weakTexts: normalizeEach([field.attributes?.name, field.attributes?.id, field.inputDescription?.placeholder]),
       sawfRole: SawfClassificationService.sawfFieldRole(field.dataFormType),
       acRole: KeywordMatchingService.roleFromAutocomplete(field.autoComplete),
     };
@@ -98,13 +95,13 @@ class FieldClassificationService {
   /**
    * Returns OTHER when a recovery or backup keyword is found.
    * @param {FieldScraping} field The field.
-   * @param {{strongText: string, weakText: string}} signals The signals.
+   * @param {{strongTexts: string[], weakTexts: string[]}} signals The signals.
    * @returns {{role: string, tier: number}|null} OTHER or null.
    */
-  static recoveryVeto(field, { strongText, weakText }) {
+  static recoveryVeto(field, { strongTexts, weakTexts }) {
     if (
-      KeywordMatchingService.matchesAny(strongText, Keywords.RECOVERY) ||
-      KeywordMatchingService.matchesAny(weakText, Keywords.RECOVERY)
+      KeywordMatchingService.matchesAny(strongTexts, Keywords.RECOVERY) ||
+      KeywordMatchingService.matchesAny(weakTexts, Keywords.RECOVERY)
     ) {
       return { role: FieldRole.OTHER, tier: Tier.ATTRIBUTE_KEYWORD };
     }
@@ -114,10 +111,10 @@ class FieldClassificationService {
   /**
    * Returns TOTP when declared by data-form-type or autocomplete, or when a TOTP keyword is found.
    * @param {FieldScraping} field The field.
-   * @param {{strongText: string, weakText: string, sawfRole: string, acRole: string|null}} signals The signals.
+   * @param {{strongTexts: string[], weakTexts: string[], sawfRole: string, acRole: string|null}} signals The signals.
    * @returns {{role: string, tier: number}|null} A TOTP decision, or null.
    */
-  static totp(field, { strongText, weakText, sawfRole, acRole }) {
+  static totp(field, { strongTexts, weakTexts, sawfRole, acRole }) {
     if (sawfRole === FieldRole.TOTP) {
       return { role: FieldRole.TOTP, tier: Tier.SAWF };
     }
@@ -125,15 +122,15 @@ class FieldClassificationService {
       return { role: FieldRole.TOTP, tier: Tier.AUTOCOMPLETE };
     }
     if (
-      KeywordMatchingService.matchesAny(strongText, Keywords.TOTP) ||
-      KeywordMatchingService.matchesAny(weakText, Keywords.TOTP)
+      KeywordMatchingService.matchesAny(strongTexts, Keywords.TOTP) ||
+      KeywordMatchingService.matchesAny(weakTexts, Keywords.TOTP)
     ) {
       return { role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD };
     }
     // An ambiguous token (code, pin) only counts as TOTP when the maxLength or a numeric input hint confirms it.
     if (
-      (KeywordMatchingService.matchesAny(strongText, Keywords.TOTP_AMBIGUOUS) ||
-        KeywordMatchingService.matchesAny(weakText, Keywords.TOTP_AMBIGUOUS)) &&
+      (KeywordMatchingService.matchesAny(strongTexts, Keywords.TOTP_AMBIGUOUS) ||
+        KeywordMatchingService.matchesAny(weakTexts, Keywords.TOTP_AMBIGUOUS)) &&
       FieldClassificationService.corroboratesSingleOtp(field)
     ) {
       return { role: FieldRole.TOTP, tier: Tier.ATTRIBUTE_KEYWORD };
@@ -199,13 +196,13 @@ class FieldClassificationService {
    * them as a username. Runs after the declared (SAWF / autocomplete) and native `type=email|password`
    * tiers, so real credentials still win, and ignores `class` so widget class names never trigger it.
    * @param {FieldScraping} field The field.
-   * @param {{strongText: string, weakText: string}} signals The signals.
+   * @param {{strongTexts: string[], weakTexts: string[]}} signals The signals.
    * @returns {({role: string, tier: number}|null)} OTHER, or null to continue.
    */
-  static ignoreVeto(field, { strongText, weakText }) {
+  static ignoreVeto(field, { strongTexts, weakTexts }) {
     if (
-      KeywordMatchingService.matchesAny(strongText, Keywords.FIELD_IGNORE) ||
-      KeywordMatchingService.matchesAny(weakText, Keywords.FIELD_IGNORE)
+      KeywordMatchingService.matchesAny(strongTexts, Keywords.FIELD_IGNORE) ||
+      KeywordMatchingService.matchesAny(weakTexts, Keywords.FIELD_IGNORE)
     ) {
       return { role: FieldRole.OTHER, tier: Tier.ATTRIBUTE_KEYWORD };
     }
@@ -217,21 +214,21 @@ class FieldClassificationService {
    * The placeholder is only evaluated for EMAIL.
    * Returns null when the label describes a password together with an email or identifier.
    * @param {FieldScraping} field The field.
-   * @param {{strongText: string}} signals The signals.
+   * @param {{strongTexts: string[]}} signals The signals.
    * @returns {{role: string, tier: number}|null} A label decision, or null.
    */
-  static byExplicitLabel(field, { strongText }) {
+  static byExplicitLabel(field, { strongTexts }) {
     const isEmail =
-      KeywordMatchingService.matchesAny(strongText, Keywords.EMAIL) ||
+      KeywordMatchingService.matchesAny(strongTexts, Keywords.EMAIL) ||
       EMAIL_PLACEHOLDER.test(field.inputDescription?.placeholder || "");
 
     const isPassword =
-      KeywordMatchingService.matchesAny(strongText, Keywords.PASSWORD) &&
-      !KeywordMatchingService.matchesAny(strongText, Keywords.PASSWORD_EXCLUDE);
+      KeywordMatchingService.matchesAny(strongTexts, Keywords.PASSWORD) &&
+      !KeywordMatchingService.matchesAny(strongTexts, Keywords.PASSWORD_EXCLUDE);
 
     const isIdentifier =
-      KeywordMatchingService.matchesAny(strongText, Keywords.IDENTIFIER) &&
-      !KeywordMatchingService.matchesAny(strongText, Keywords.ACCOUNT_NUMBER);
+      KeywordMatchingService.matchesAny(strongTexts, Keywords.IDENTIFIER) &&
+      !KeywordMatchingService.matchesAny(strongTexts, Keywords.ACCOUNT_NUMBER);
 
     if (isEmail && !isPassword) {
       return { role: FieldRole.EMAIL, tier: Tier.EXPLICIT_LABEL };
@@ -251,27 +248,27 @@ class FieldClassificationService {
   /**
    * Returns the role found in the name, id and placeholder keywords.
    * @param {FieldScraping} field The field.
-   * @param {{weakText: string}} signals The signals.
+   * @param {{weakTexts: string[]}} signals The signals.
    * @returns {{role: string, tier: number}|null} A keyword decision, or null.
    */
-  static byAttributeKeyword(field, { weakText }) {
+  static byAttributeKeyword(field, { weakTexts }) {
     if (
-      KeywordMatchingService.matchesAny(weakText, Keywords.EMAIL) &&
-      !KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER_EXCLUDE)
+      KeywordMatchingService.matchesAny(weakTexts, Keywords.EMAIL) &&
+      !KeywordMatchingService.matchesAny(weakTexts, Keywords.IDENTIFIER_EXCLUDE)
     ) {
       return { role: FieldRole.EMAIL, tier: Tier.ATTRIBUTE_KEYWORD };
     }
     if (
       field.type === "text" &&
-      KeywordMatchingService.matchesAny(weakText, Keywords.PASSWORD) &&
-      !KeywordMatchingService.matchesAny(weakText, Keywords.PASSWORD_EXCLUDE)
+      KeywordMatchingService.matchesAny(weakTexts, Keywords.PASSWORD) &&
+      !KeywordMatchingService.matchesAny(weakTexts, Keywords.PASSWORD_EXCLUDE)
     ) {
       return { role: FieldRole.PASSWORD, tier: Tier.ATTRIBUTE_KEYWORD };
     }
     if (
-      KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER) &&
-      !KeywordMatchingService.matchesAny(weakText, Keywords.IDENTIFIER_EXCLUDE) &&
-      !KeywordMatchingService.matchesAny(weakText, Keywords.ACCOUNT_NUMBER)
+      KeywordMatchingService.matchesAny(weakTexts, Keywords.IDENTIFIER) &&
+      !KeywordMatchingService.matchesAny(weakTexts, Keywords.IDENTIFIER_EXCLUDE) &&
+      !KeywordMatchingService.matchesAny(weakTexts, Keywords.ACCOUNT_NUMBER)
     ) {
       return { role: FieldRole.USERNAME, tier: Tier.ATTRIBUTE_KEYWORD };
     }

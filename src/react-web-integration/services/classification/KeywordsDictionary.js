@@ -223,7 +223,12 @@ export const Keywords = Object.freeze({
     "verificationcode",
     "securitycode",
     "twofactor",
-    "twofactorcode", // universal
+    "twofactorcode",
+    "twofa",
+    "2facode",
+    "2fatoken",
+    "otpcode",
+    "mfacode", // universal
     "codedeverification",
     "codeauthentification",
     "authentificateur", // fr
@@ -463,6 +468,13 @@ export const Keywords = Object.freeze({
 export const SHORT_AMBIGUOUS = Object.freeze(
   new Set(["otp", "code", "pin", "id", "go", "mail", "user", "new", "old", "mdp", "mfa"]),
 );
+
+/**
+ * Tokens which must not follow a digit and must end a segment, with their regex.
+ * The regex allows the spaces the normalization inserts inside the token.
+ * @type {ReadonlyMap<string, RegExp>}
+ */
+export const BOUNDED_TOKENS = Object.freeze(new Map([["2fa", /(?<!\p{N})2 ?f ?a(?= |$)/u]]));
 
 /**
  * The standard HTML autocomplete token for one-time codes.

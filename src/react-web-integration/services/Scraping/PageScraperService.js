@@ -15,6 +15,7 @@
 import FormScraperService from "../DomExtraction/FormScraperService";
 import FieldScraperService from "./FieldScraperService";
 import ScrapingIdentityService from "./ScrapingIdentityService";
+import LabelIndex from "./LabelIndex";
 import ShadowDomQueryService from "../ShadowDom/ShadowDomQueryService";
 
 /**
@@ -31,9 +32,10 @@ class PageScraperService {
     const skeletons = formElements ?? [];
     const forms = {};
     const fields = [];
+    const labelIndex = new LabelIndex();
 
     for (const skeleton of skeletons) {
-      const scraped = PageScraperService._scrapeForm(skeleton);
+      const scraped = PageScraperService._scrapeForm(skeleton, labelIndex);
       if (scraped) {
         forms[scraped.form.formId] = scraped.form;
         fields.push(...scraped.fields);
@@ -55,10 +57,11 @@ class PageScraperService {
    * {@link FormScraperService} and each field to {@link FieldScraperService}, and tally the `fieldTypes` histogram.
    * @private
    * @param {object} skeleton The skeleton container entry.
+   * @param {LabelIndex} labelIndex The `<label for>` index of the scrape.
    * @returns {{form: FormScraping, fields: FieldScraping[]}} The form and its fields, or `null` when the
    *   container is not an element.
    */
-  static _scrapeForm(skeleton) {
+  static _scrapeForm(skeleton, labelIndex) {
     const containerElement = skeleton?.containerElement;
     if (!ShadowDomQueryService.isElement(containerElement)) {
       return null;
@@ -74,7 +77,7 @@ class PageScraperService {
         continue;
       }
 
-      const fieldRecord = FieldScraperService.scrape(element, formId);
+      const fieldRecord = FieldScraperService.scrape(element, formId, labelIndex);
       fields.push(fieldRecord);
       PageScraperService._incrementFieldTypeCount(form, fieldRecord.type);
     }

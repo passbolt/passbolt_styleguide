@@ -14,6 +14,7 @@
 
 import ShadowDomQueryService from "../ShadowDom/ShadowDomQueryService";
 import PageScraperHelpers from "./PageScraperHelpers";
+import LabelIndex from "./LabelIndex";
 import TextNormalizer from "../../lib/InForm/TextNormalizer";
 import {
   LABEL_TIERS,
@@ -40,15 +41,16 @@ class LabelScraperService {
    * Elect the field's label and capture its ARIA state, writing both back onto the payload.
    * @param {FieldScraping} fieldScraping The per-field payload: reads `element` (and `inputDescription.placeholder`),
    *   writes `label` ({text, source}) and `ariaState`.
+   * @param {LabelIndex} [labelIndex] The label index of the scrape.
    * @returns {FieldScraping} The same payload, for call-site chaining.
    */
-  static enrich(fieldScraping) {
+  static enrich(fieldScraping, labelIndex = new LabelIndex()) {
     const element = fieldScraping?.element;
     if (!ShadowDomQueryService.isElement(element)) {
       return fieldScraping;
     }
 
-    fieldScraping.label = LabelScraperService._electLabel(fieldScraping);
+    fieldScraping.label = LabelScraperService._electLabel(fieldScraping, labelIndex);
     fieldScraping.ariaState = LabelScraperService._ariaState(element);
 
     return fieldScraping;
@@ -59,12 +61,13 @@ class LabelScraperService {
    * yields non-empty, cleaned text together with the tier that produced it.
    * @private
    * @param {FieldScraping} fieldScraping The per-field payload.
+   * @param {LabelIndex} labelIndex The label index of the scrape.
    * @returns {{text: string, source: ?string}} The elected label, or `{text: "", source: null}` when
    *   every tier came up empty.
    */
-  static _electLabel(fieldScraping) {
+  static _electLabel(fieldScraping, labelIndex) {
     for (const tier of LABEL_TIERS) {
-      const text = LabelScraperService._clean(LabelScraperService[tier](fieldScraping));
+      const text = LabelScraperService._clean(LabelScraperService[tier](fieldScraping, labelIndex));
       if (text) {
         return { text, source: tier };
       }
@@ -79,19 +82,19 @@ class LabelScraperService {
    * ancestor climbed across shadow boundaries.
    * @private
    * @param {FieldScraping} fieldScraping The per-field payload.
+   * @param {LabelIndex} [labelIndex] The label index of the scrape.
    * @returns {string} The raw label text, or "" when no explicit association exists.
    */
-  static _explicit(fieldScraping) {
+  static _explicit(fieldScraping, labelIndex = new LabelIndex()) {
     const element = fieldScraping.element;
 
     // Native association. `.labels` covers both `for=` and wrapping labels in the light DOM. Guarded
     // (like every non-final source below) so an empty native `<label>` falls through to the next
-    // source rather than short-circuiting the tier with whitespace.
-    const nativeLabels = element.labels;
-    if (nativeLabels && nativeLabels.length > 0) {
-      const text = Array.from(nativeLabels)
-        .map((label) => PageScraperHelpers.textWithoutFields(label))
-        .join(" ");
+    // source rather than short-circuiting the tier with whitespace. Read from the index, since the
+    // first access to `element.labels` scans the whole root.
+    const nativeLabels = labelIndex.labelsOf(element);
+    if (nativeLabels.length > 0) {
+      const text = nativeLabels.map((label) => PageScraperHelpers.textWithoutFields(label)).join(" ");
       if (LabelScraperService._hasText(text)) {
         return text;
       }
@@ -101,7 +104,7 @@ class LabelScraperService {
     // across a shadow boundary (nor onto the live document for a detached field). `.labels` is often
     // empty here, hence the fallback.
     const root = LabelScraperService._root(element);
-    const forLabel = LabelScraperService._labelForField(root, element);
+    const forLabel = LabelScraperService._labelForField(root, element, labelIndex);
     if (forLabel) {
       const text = PageScraperHelpers.textWithoutFields(forLabel);
       if (LabelScraperService._hasText(text)) {
@@ -124,15 +127,16 @@ class LabelScraperService {
    * @private
    * @param {Document|ShadowRoot} root The field's root node.
    * @param {Element} element The field element.
+   * @param {LabelIndex} labelIndex The label index of the scrape.
    * @returns {Element} The matching label, or `null`.
    */
-  static _labelForField(root, element) {
+  static _labelForField(root, element, labelIndex) {
     for (const attr of LABEL_FOR_ATTRS) {
       const value = element.getAttribute(attr);
       if (!value) {
         continue;
       }
-      const match = root.querySelector(`label[for="${LabelScraperService._cssEscape(value)}"]`);
+      const match = labelIndex.labelFor(root, value);
       if (match) {
         return match;
       }
