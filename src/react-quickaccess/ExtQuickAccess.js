@@ -7,6 +7,7 @@ import FilterResourcesBySharedWithMePage from "./components/FilterResourcesBySha
 import FilterResourcesByTagPage from "./components/FilterResourcesByTagPage/FilterResourcesByTagPage";
 import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
+import UnsavedPasswordsPage from "./components/UnsavedPasswordsPage/UnsavedPasswordsPage";
 import LoginPage from "./components/LoginPage/LoginPage";
 import MoreFiltersPage from "./components/MoreFiltersPage/MoreFiltersPage";
 import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePage";
@@ -379,6 +380,11 @@ class ExtQuickAccess extends React.Component {
                                         <PrivateRoute
                                           path="/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys"
                                           component={ActionAbortedMissingMetadataKeysPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/unsaved-passwords"
+                                          component={UnsavedPasswordsPage}
                                         />
                                         <PrivateRoute
                                           exact
