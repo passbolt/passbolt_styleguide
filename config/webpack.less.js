@@ -20,7 +20,7 @@ const packageJson = require("../package.json");
 const ROOT_DIR = path.resolve(__dirname, "..");
 const COMMON_DIR = path.resolve(ROOT_DIR, "src/less/themes/common");
 const THEMES = ["default", "midgar", "solarized_dark", "solarized_light", "sakura", "layette"];
-// output name to body in src/less/themes/common; api_reports and api_authentication are aliases
+// output name to body in src/less/themes/common; api_authentication is an alias of ext_authentication
 const OUTPUTS = {
   api_main: "api_main",
   ext_app: "ext_app",
@@ -28,10 +28,9 @@ const OUTPUTS = {
   ext_quickaccess: "ext_quickaccess",
   ext_in_form_menu: "ext_in_form_menu",
   ext_in_form_cta: "ext_in_form_cta",
-  api_reports: "api_main",
   api_authentication: "ext_authentication",
 };
-const DEFAULT_ONLY = ["api_webinstaller", "api_cloud", "ext_external"]; // self-contained bodies, no palette prepended
+const DEFAULT_ONLY = ["ext_external"]; // self-contained body, no palette prepended
 const LEGACY = {
   default: "colors.less",
   midgar: "colors_migdar.less",
@@ -42,10 +41,7 @@ const LEGACY = {
 }; // until the legacy palettes are deleted
 
 const buildLessEntries = () => {
-  const entries = {
-    public: path.resolve(ROOT_DIR, "src/less/public.less"),
-    help: path.resolve(ROOT_DIR, "src/less/help.less"),
-  };
+  const entries = {};
   for (const theme of THEMES) {
     for (const [output, body] of Object.entries(OUTPUTS)) {
       // the query makes one module per theme and output; the loader reads the theme from it
@@ -85,7 +81,7 @@ const lessRule = {
     },
   },
   generator: {
-    // the entry name is the output path: themes/<theme>/<output>, public, help
+    // the entry name is the output path: themes/<theme>/<output>
     filename: ({ module, chunkGraph }) => `css/${chunkGraph.getModuleChunks(module)[0].name}.min.css`,
   },
 };
