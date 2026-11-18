@@ -1168,7 +1168,7 @@
   "Review": "Review",
   "Review account recovery request": "Review account recovery request",
   "Review recovery request": "Review recovery request",
-  "Review unsaved passwords": "Review unsaved passwords",
+  "Review unsaved passwords - {{passwordDraftsCount}}/{{passwordDraftsMaxCount}}": "Review unsaved passwords - {{passwordDraftsCount}}/{{passwordDraftsMaxCount}}",
   "right now": "right now",
   "Role": "Role",
   "Role Based Access Control": "Role Based Access Control",

@@ -88,6 +88,8 @@ class SaveResource extends React.Component {
       : await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
     resourceDto.uri = resourceDto.uris && resourceDto.uris.length > 0 ? resourceDto.uris[0] : "";
     resourceDto.password = resourceDto.secret_clear;
+    resourceDto.username =
+      resourceDto.username?.length > 0 ? resourceDto.username : this.props.context.userSettings.username;
     let resourceType;
 
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {

@@ -50,6 +50,23 @@ describe("See the Create Resource - save resource", () => {
     expect(page.password.value).toBe(resourceMetaFromTab.secret_clear);
   });
 
+  it("As a signed-in user creating a password on the quickaccess, I should see my username when none was detected", async () => {
+    expect.assertions(1);
+    const props = defaultProps();
+    let page;
+    const resourceMetaFromTab = {
+      name: "Passbolt",
+      uri: "https://passbolt.com",
+      username: "",
+      secret_clear: "secret",
+    };
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => resourceMetaFromTab);
+
+    await act(() => (page = new SaveResourcePage(props)));
+
+    expect(page.username.value).toBe(props.context.userSettings.username);
+  });
+
   it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v4", async () => {
     expect.assertions(2);
     // data mocked
