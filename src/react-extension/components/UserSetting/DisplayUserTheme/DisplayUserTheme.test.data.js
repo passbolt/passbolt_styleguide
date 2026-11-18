@@ -76,3 +76,8 @@ export const themes = [
     name: "layette",
   },
 ];
+
+export const unsupportedTheme = {
+  id: "aurora",
+  name: "aurora",
+};
