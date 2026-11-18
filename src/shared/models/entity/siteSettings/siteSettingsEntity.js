@@ -187,6 +187,15 @@ class SiteSettingsEntity extends EntityV2 {
   }
 
   /**
+   * Whether the organisation lets the browser extension intercept the passkey requests of web pages.
+   * A missing value is off.
+   * @returns {boolean}
+   */
+  get isPasskeyInterceptionEnabled() {
+    return getPropValue(this._props, "passbolt.plugins.passkeys.interceptionEnabled") === true;
+  }
+
+  /**
    * Get the generator plugin configuration.
    * @returns {object|undefined}
    */

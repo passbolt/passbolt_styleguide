@@ -18,6 +18,8 @@ import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEnt
 import {
   defaultCeSiteSettings,
   defaultProSiteSettings,
+  passkeyInterceptionDisabledSiteSettings,
+  passkeyInterceptionEnabledSiteSettings,
   passkeyUserChoiceSiteSettings,
 } from "./siteSettingsEntity.test.data";
 
@@ -251,6 +253,34 @@ describe("SiteSettingsEntity", () => {
       expect.assertions(1);
       const entity = new SiteSettingsEntity(defaultProSiteSettings());
       expect(entity.canUsersChoosePasskeyVerification).toBe(false);
+    });
+  });
+
+  describe("::isPasskeyInterceptionEnabled", () => {
+    it("returns true when the passkeys interception is enabled", () => {
+      expect.assertions(1);
+      const entity = new SiteSettingsEntity(passkeyInterceptionEnabledSiteSettings());
+      expect(entity.isPasskeyInterceptionEnabled).toBe(true);
+    });
+
+    it("returns false when the passkeys interception is disabled", () => {
+      expect.assertions(1);
+      const entity = new SiteSettingsEntity(passkeyInterceptionDisabledSiteSettings());
+      expect(entity.isPasskeyInterceptionEnabled).toBe(false);
+    });
+
+    it("returns false when the passkeys settings are absent", () => {
+      expect.assertions(1);
+      const entity = new SiteSettingsEntity(defaultProSiteSettings());
+      expect(entity.isPasskeyInterceptionEnabled).toBe(false);
+    });
+
+    it.each([["true"], [1]])("returns false when the passkeys interception value is %p, not true", (value) => {
+      expect.assertions(1);
+      const dto = passkeyInterceptionEnabledSiteSettings();
+      dto.passbolt.plugins.passkeys.interceptionEnabled = value;
+      const entity = new SiteSettingsEntity(dto);
+      expect(entity.isPasskeyInterceptionEnabled).toBe(false);
     });
   });
 

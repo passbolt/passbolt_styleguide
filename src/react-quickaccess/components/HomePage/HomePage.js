@@ -102,7 +102,9 @@ class HomePage extends React.Component {
 
     this.loadActiveTabUrl();
     this.loadPasswordDrafts();
-    this.loadPendingPasskeyRequests();
+    if (this.props.context.siteSettings.isPasskeyInterceptionEnabled) {
+      this.loadPendingPasskeyRequests();
+    }
   }
 
   /**
@@ -352,13 +354,16 @@ class HomePage extends React.Component {
     // The groups are retrieved from the API, the filter is not offered while in an offline session.
     const isSessionOnline = Boolean(this.props.activeSession?.isSessionOnline);
     let browsedResources, suggestedResources;
+    const canUsePasskeys = this.props.context.siteSettings.isPasskeyInterceptionEnabled;
     let sitePasskeys = [];
 
     if (isReady) {
       const resources = this.resourcesSupportedByQuickAccess;
       browsedResources = this.filterSearchedResources(resources, this.props.context.search);
       suggestedResources = this.filterSuggestedResources(resources, this.state.activeTabUrl);
-      sitePasskeys = this.filterSitePasskeys(resources, this.state.activeTabUrl, this.state.pendingPasskeyRequests);
+      if (canUsePasskeys) {
+        sitePasskeys = this.filterSitePasskeys(resources, this.state.activeTabUrl, this.state.pendingPasskeyRequests);
+      }
     }
 
     return (

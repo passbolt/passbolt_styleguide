@@ -31,6 +31,8 @@ import {
 } from "../../../shared/models/entity/customField/customFieldEntity.test.data";
 import CustomFieldEntity from "../../../shared/models/entity/customField/customFieldEntity";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
+import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import { passkeyInterceptionDisabledSiteSettings } from "../../../shared/models/entity/siteSettings/siteSettingsEntity.test.data";
 import { defaultProps, denyUiActionProps, passwordDraftsProps } from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
 import { createMemoryHistory } from "history";
@@ -601,6 +603,29 @@ describe("HomePage", () => {
       const page = new HomePagePage(props);
       await waitForTrue(() => page.suggestedResourcesContent);
       expect(page.passkeyEntries.length).toStrictEqual(0);
+    });
+
+    it("I cannot see a passkeys section when the organisation disabled the passkey interception", async () => {
+      expect.assertions(2);
+      const examplePassword = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({ name: "example password", uris: ["https://example.com"] }),
+      });
+      const passkey = resourcePasskeyDto();
+      const props = defaultProps({ resources: [passkey, examplePassword] });
+      props.context.siteSettings = new SiteSettingsEntity(passkeyInterceptionDisabledSiteSettings());
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", async () => "https://www.example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", async () => [
+        { id: uuidv4(), rp_id: "example.com", passkey_ids: [passkey.id] },
+      ]);
+      jest.spyOn(props.context.port, "request");
+      const page = new HomePagePage(props);
+      // The suggested password shows once the tab url reached the page.
+      await waitForTrue(() => page.suggestedResourcesEntries?.length > 0);
+      expect(page.passkeyEntries.length).toStrictEqual(0);
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.passkey.get-tab-pending-requests",
+        expect.anything(),
+      );
     });
   });
 

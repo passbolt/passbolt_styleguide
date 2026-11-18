@@ -650,7 +650,9 @@ class ResourceViewPage extends React.Component {
               {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
             </a>
           )}
-          {this.isPasskeyResources && <UsePasskeyOnThisPage resource={this.state.resource} />}
+          {this.isPasskeyResources && this.props.context.siteSettings.isPasskeyInterceptionEnabled && (
+            <UsePasskeyOnThisPage resource={this.state.resource} />
+          )}
           {this.state.error && <div className="error-message">{this.state.error}</div>}
         </div>
       </div>

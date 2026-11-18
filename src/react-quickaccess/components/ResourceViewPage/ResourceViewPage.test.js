@@ -37,6 +37,8 @@ import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeG
 import { denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultTotpViewModelDto } from "../../../shared/models/entity/totp/totpDto.test.data";
 import { act } from "react";
+import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import { passkeyInterceptionDisabledSiteSettings } from "../../../shared/models/entity/siteSettings/siteSettingsEntity.test.data";
 import { fireEvent } from "@testing-library/react";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 
@@ -330,6 +332,31 @@ describe("ResourceViewPage", () => {
       });
       await waitForTrue(() => page.useOnThisPageButton);
       expect(page.useOnThisPageButton.classList.contains("disabled")).toBe(false);
+    });
+
+    it("As LU, I should not be able to use a passkey on its site when the organisation disabled the passkey interception", async () => {
+      expect.assertions(2);
+      const props = passkeyResourceProps();
+      props.context.siteSettings = new SiteSettingsEntity(passkeyInterceptionDisabledSiteSettings());
+      const passkeyId = (await props.context.storage.local.get(["resources"])).resources[0].id;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", () => "https://example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", () => [
+        { id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856", rp_id: "example.com", passkey_ids: [passkeyId] },
+      ]);
+      jest.spyOn(props.context.port, "request");
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      await act(async () => {
+        await Promise.all(props.context.port.request.mock.results.map((result) => result.value));
+      });
+
+      expect(page.useOnThisPageButton).toBeNull();
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.passkey.get-tab-pending-requests",
+        expect.anything(),
+      );
     });
 
     it("As LU, I should see the username and uri of a passkey, and no password, totp or use on this page off its site", async () => {

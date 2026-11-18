@@ -286,6 +286,24 @@ export const passkeyUserChoiceSiteSettings = (siteSettings) => {
   return { ...defaultData, ...siteSettings };
 };
 
+export const passkeyInterceptionEnabledSiteSettings = (siteSettings) => {
+  const defaultData = defaultProSiteSettings();
+  defaultData.passbolt.plugins.passkeys = {
+    interceptionEnabled: true,
+  };
+
+  return { ...defaultData, ...siteSettings };
+};
+
+export const passkeyInterceptionDisabledSiteSettings = (siteSettings) => {
+  const defaultData = defaultProSiteSettings();
+  defaultData.passbolt.plugins.passkeys = {
+    interceptionEnabled: false,
+  };
+
+  return { ...defaultData, ...siteSettings };
+};
+
 export const customEmailValidationProSiteSettings = (siteSettings) => {
   const defaultData = defaultProSiteSettings();
   defaultData.passbolt.email = {
