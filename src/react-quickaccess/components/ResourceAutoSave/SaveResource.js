@@ -28,6 +28,7 @@ import ResourceTypesCollection from "../../../shared/models/entity/resourceType/
 import { withMetadataTypesSettingsLocalStorage } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceViewModelFactory from "../../../shared/models/resource/ResourceViewModelFactory";
+import UpdateResource, { findUpdateCandidates } from "./UpdateResource";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
@@ -55,6 +56,8 @@ class SaveResource extends React.Component {
       unexpectedErrorMessage: "",
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
       loaded: false,
+      updateCandidates: [], // The existing resources the credentials could update
+      isUpdateMode: false, // True if the user is offered to update an existing resource
     };
   }
 
@@ -75,6 +78,7 @@ class SaveResource extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSaveAsNew = this.handleSaveAsNew.bind(this);
   }
 
   /**
@@ -98,7 +102,38 @@ class SaveResource extends React.Component {
       resourceDto,
     );
 
-    this.setState({ loaded: true, resourceViewModel: resourceViewModel });
+    const updateCandidates = await this.findUpdateCandidates(resourceDto);
+    this.setState({
+      loaded: true,
+      resourceViewModel: resourceViewModel,
+      updateCandidates,
+      isUpdateMode: updateCandidates.length > 0,
+    });
+  }
+
+  /**
+   * Find the existing resources the submitted credentials could update.
+   * @param {object} resourceDto The submitted credentials
+   * @returns {Promise<Array<object>>}
+   */
+  async findUpdateCandidates(resourceDto) {
+    try {
+      const storageData = await this.props.context.storage.local.get(["resources"]);
+      return findUpdateCandidates(storageData?.resources, this.props.resourceTypes, {
+        uri: resourceDto.uri,
+        username: resourceDto.username,
+      });
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  /**
+   * Whenever the user prefers to save the credentials as a new resource
+   */
+  handleSaveAsNew() {
+    this.setState({ isUpdateMode: false });
   }
 
   /**
@@ -221,6 +256,18 @@ class SaveResource extends React.Component {
    * @returns {JSX}
    */
   render() {
+    if (this.state.isUpdateMode) {
+      return (
+        <UpdateResource
+          candidates={this.state.updateCandidates}
+          password={this.state.resourceViewModel?.password}
+          username={this.state.resourceViewModel?.username}
+          onSaveAsNew={this.handleSaveAsNew}
+          onClose={this.handleClose}
+        />
+      );
+    }
+
     return (
       <div className="resource-auto-save">
         <h1 className="title">
