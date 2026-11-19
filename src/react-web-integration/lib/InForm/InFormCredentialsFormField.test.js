@@ -241,4 +241,47 @@ describe("InFormCredentialsFormField", () => {
       expect(window.port.emit).not.toHaveBeenCalled();
     });
   });
+  describe("InFormCredentialsFormField::submittedPassword", () => {
+    const input = (value) => {
+      const field = document.createElement("input");
+      field.value = value;
+      return field;
+    };
+
+    it("should return the password of a sign-in form", () => {
+      const formField = new InFormCredentialsFormField(document.createElement("form"), {
+        passwordField: input("secret"),
+      });
+      expect(formField.submittedPassword).toBe("secret");
+    });
+
+    it("should return the new password of a change password form (current, new, confirmation)", () => {
+      const formField = new InFormCredentialsFormField(document.createElement("form"), {
+        passwordField: input("old-password"),
+        confirmPasswordFields: [input("new-password"), input("new-password")],
+      });
+      expect(formField.submittedPassword).toBe("new-password");
+    });
+
+    it("should return the last filled password of a change password form without confirmation", () => {
+      const formField = new InFormCredentialsFormField(document.createElement("form"), {
+        passwordField: input("old-password"),
+        confirmPasswordFields: [input("new-password"), input("")],
+      });
+      expect(formField.submittedPassword).toBe("new-password");
+    });
+
+    it("should autosave the new password of a change password form", () => {
+      const formField = new InFormCredentialsFormField(document.createElement("form"), {
+        usernameField: input("ada"),
+        passwordField: input("old-password"),
+        confirmPasswordFields: [input("new-password"), input("new-password")],
+      });
+      formField.autosave();
+      expect(port.emit).toHaveBeenCalledWith(
+        "passbolt.web-integration.autosave",
+        expect.objectContaining({ username: "ada", password: "new-password" }),
+      );
+    });
+  });
 });

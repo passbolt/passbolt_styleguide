@@ -36,6 +36,8 @@ import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
 import EyeCloseSVG from "../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../img/svg/eye_open.svg";
 import TimerSVG from "../../../img/svg/timer.svg";
+import EditSVG from "../../../img/svg/edit.svg";
+import ResourceEditService from "../../../shared/services/resourceEdit/resourceEditService";
 import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
@@ -90,6 +92,7 @@ class ResourceViewPage extends React.Component {
 
   initEventHandlers() {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
+    this.handleEditClick = this.handleEditClick.bind(this);
     this.handleCopyLoginClick = this.handleCopyLoginClick.bind(this);
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
     this.handleCopyPinCodeClick = this.handleCopyPinCodeClick.bind(this);
@@ -177,6 +180,24 @@ class ResourceViewPage extends React.Component {
     }
 
     this.props.history.goBack();
+  }
+
+  /**
+   * Handle the click on the edit button
+   * @param {React.Event} event
+   */
+  handleEditClick(event) {
+    event.preventDefault();
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/edit/${this.props.match.params.id}`);
+  }
+
+  /**
+   * Returns true if the user can edit the resource from the QuickAccess.
+   * Editing requires an online session and at least the update permission on the resource.
+   * @returns {boolean}
+   */
+  get canEdit() {
+    return Boolean(this.props.activeSession?.isSessionOnline) && ResourceEditService.canUpdate(this.state.resource);
   }
 
   async loadResource() {
@@ -729,6 +750,19 @@ class ResourceViewPage extends React.Component {
               <Trans>Edit in passbolt</Trans>
             </span>
           </a>
+          {this.canEdit && (
+            <a
+              href="#"
+              className="secondary-action button-transparent button edit-resource"
+              onClick={this.handleEditClick}
+              title={this.translate("Edit")}
+            >
+              <EditSVG />
+              <span className="visually-hidden">
+                <Trans>Edit</Trans>
+              </span>
+            </a>
+          )}
         </div>
         <ul className="properties">
           {!this.isStandaloneTotpResource && !this.isStandalonePinCodeResource && (

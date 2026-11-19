@@ -22,6 +22,10 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import { SECRET_DATA_OBJECT_TYPE } from "../../../shared/models/entity/secretData/secretDataEntity";
 import { act } from "react";
+import { fireEvent } from "@testing-library/react";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -225,5 +229,38 @@ describe("See the Create Resource - save resource", () => {
     expect(page.uriError.textContent).toStrictEqual("The uri is invalid, The uri contains a forbidden scheme");
     expect(page.usernameError.textContent).toStrictEqual("The username is invalid");
     expect(page.passwordError.textContent).toStrictEqual("The password is too weak");
+  });
+
+  it("As a signed-in user saving credentials of a website I already have a password for, I am offered to update it, or to save a new one instead", async () => {
+    expect.assertions(4);
+    const props = defaultProps();
+    const existingResource = defaultResourceDto({
+      resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+      metadata: defaultResourceMetadataDto({
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+        uris: ["https://www.example.com"],
+        username: "ada@passbolt.com",
+      }),
+    });
+    await props.context.storage.local.set({ resources: [existingResource] });
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({
+      name: "Example",
+      uris: ["https://www.example.com/account/password"],
+      username: "ada@passbolt.com",
+      secret_clear: "new-password",
+    }));
+    let page;
+    await act(() => (page = new SaveResourcePage(props)));
+
+    const container = page._page.container;
+    await waitForTrue(() => Boolean(container.querySelector(".resource-auto-update")));
+    expect(container.querySelector(".resource-auto-update")).not.toBeNull();
+    expect(container.querySelector("#resource").value).toContain(existingResource.metadata.name);
+
+    await act(async () => {
+      fireEvent.click(container.querySelector(".save-as-new"));
+    });
+    expect(container.querySelector(".resource-auto-update")).toBeNull();
+    expect(page.password.value).toBe("new-password");
   });
 });

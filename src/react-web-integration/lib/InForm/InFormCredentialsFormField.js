@@ -75,15 +75,36 @@ class InFormCredentialsFormField {
     this.submitButton?.addEventListener("click", this.autosave);
   }
 
+  /**
+   * Returns the password submitted with the form.
+   * On a change password form (current password, new password, confirmation), the new password is the one which is
+   * repeated for confirmation, or else the last one filled.
+   * @returns {string}
+   */
+  get submittedPassword() {
+    const values = [this.passwordField, ...this.confirmPasswordFields]
+      .map((field) => field?.value || "")
+      .filter((value) => value.length > 0);
+    if (values.length <= 1) {
+      return values[0] || "";
+    }
+    for (let i = values.length - 1; i > 0; i--) {
+      if (values.slice(0, i).includes(values[i])) {
+        return values[i];
+      }
+    }
+    return values[values.length - 1];
+  }
+
   /** Autosave current credentials in the page */
   autosave() {
-    const areFieldsFilled = Boolean(this.usernameField?.value?.trim()) || Boolean(this.passwordField?.value?.trim());
+    const areFieldsFilled = Boolean(this.usernameField?.value?.trim()) || Boolean(this.submittedPassword.trim());
     if (!this.hasAlreadySubmitted && areFieldsFilled) {
       this.hasAlreadySubmitted = true;
       port.emit("passbolt.web-integration.autosave", {
         name: document.title,
         username: this.usernameField?.value || "",
-        password: this.passwordField?.value || "",
+        password: this.submittedPassword,
         url: document.URL,
       });
     }

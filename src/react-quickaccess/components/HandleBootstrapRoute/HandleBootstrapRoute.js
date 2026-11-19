@@ -16,6 +16,8 @@ import { BOOTSTRAP_FEATURE } from "../../ExtQuickAccess";
 import { withActiveSessionLocalStorage } from "../../../shared/context/ActiveSession/ActiveSessionLocalStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { withRouter } from "react-router-dom";
+import { isValidUuid } from "../../../shared/utils/assertions";
+
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 /**
@@ -63,6 +65,11 @@ class HandleBootstrapRoute extends React.Component {
         return "/webAccessibleResources/quickaccess/resources/create";
       case BOOTSTRAP_FEATURE.AUTOSAVE_CREDENTIALS:
         return "/webAccessibleResources/quickaccess/resources/autosave";
+      case BOOTSTRAP_FEATURE.EDIT_RESOURCE:
+        if (isValidUuid(this.props.bootstrapResourceId)) {
+          return `/webAccessibleResources/quickaccess/resources/edit/${this.props.bootstrapResourceId}`;
+        }
+        break;
     }
 
     return "/webAccessibleResources/quickaccess/home";
@@ -82,6 +89,7 @@ HandleBootstrapRoute.propTypes = {
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
   history: PropTypes.object, // The history
   bootstrapFeature: PropTypes.string, // The bootstrap feature
+  bootstrapResourceId: PropTypes.string, // The resource the bootstrap feature applies to, if any
 };
 
 export default withRouter(withAppContext(withActiveSessionLocalStorage(HandleBootstrapRoute)));
