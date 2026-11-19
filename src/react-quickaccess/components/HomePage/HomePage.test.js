@@ -30,7 +30,7 @@ import {
 } from "../../../shared/models/entity/customField/customFieldEntity.test.data";
 import CustomFieldEntity from "../../../shared/models/entity/customField/customFieldEntity";
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
-import { defaultProps, denyUiActionProps } from "./HomePage.test.data";
+import { defaultProps, denyUiActionProps, passwordDraftsProps } from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
 import { createMemoryHistory } from "history";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
@@ -696,6 +696,67 @@ describe("HomePage", () => {
       });
       const page = new HomePagePage(props);
       expect(page.createButton).toBeNull();
+    });
+  });
+
+  describe("As LU I can see the generated passwords waiting to be saved", () => {
+    it("should display the unsaved passwords banner if password drafts exist", async () => {
+      expect.assertions(1);
+      const page = new HomePagePage(passwordDraftsProps());
+
+      await waitForTrue(() => page.unsavedPasswordsBanner !== null);
+
+      expect(page.unsavedPasswordsBanner.textContent).toStrictEqual("Review unsaved passwords - 1/20");
+    });
+
+    it("should open the unsaved passwords page when clicking on the banner", async () => {
+      expect.assertions(1);
+      const props = passwordDraftsProps();
+      props.history = createMemoryHistory();
+      const page = new HomePagePage(props);
+      await waitForTrue(() => page.unsavedPasswordsBanner !== null);
+
+      await page.clickOnUnsavedPasswordsBanner();
+
+      expect(props.history.location.pathname).toStrictEqual("/webAccessibleResources/quickaccess/unsaved-passwords");
+    });
+
+    it("should not display the unsaved passwords banner if there is no password draft", async () => {
+      expect.assertions(1);
+      const props = passwordDraftsProps([]);
+      const requestListener = props.context.port.requestListeners["passbolt.quickaccess.get-password-drafts"];
+      const page = new HomePagePage(props);
+
+      await waitForTrue(() => requestListener.mock.calls.length > 0);
+
+      expect(page.unsavedPasswordsBanner).toBeNull();
+    });
+
+    it("should not display the unsaved passwords banner while searching", async () => {
+      expect.assertions(1);
+      const props = passwordDraftsProps(undefined, { search: "gitlab" });
+      const requestListener = props.context.port.requestListeners["passbolt.quickaccess.get-password-drafts"];
+      const page = new HomePagePage(props);
+
+      await waitForTrue(() => requestListener.mock.calls.length > 0);
+
+      expect(page.unsavedPasswordsBanner).toBeNull();
+    });
+
+    it("should not display the unsaved passwords banner if the password drafts cannot be retrieved", async () => {
+      expect.assertions(2);
+      const props = passwordDraftsProps();
+      const error = new Error("Unable to retrieve the password drafts.");
+      props.context.port.addRequestListener("passbolt.quickaccess.get-password-drafts", () => {
+        throw error;
+      });
+      jest.spyOn(console, "error").mockImplementation(() => {});
+      const page = new HomePagePage(props);
+
+      await waitForTrue(() => console.error.mock.calls.length > 0);
+
+      expect(console.error).toHaveBeenCalledWith(error);
+      expect(page.unsavedPasswordsBanner).toBeNull();
     });
   });
 });

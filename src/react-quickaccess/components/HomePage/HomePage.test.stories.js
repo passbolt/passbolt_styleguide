@@ -19,6 +19,7 @@ import HomePage from "./HomePage";
 import {
   loadingProps,
   noResourcesProps,
+  passwordDraftsProps,
   searchNoResultProps,
   searchWithResultProps,
   suggestedResourcesProps,
@@ -79,5 +80,11 @@ export const SearchResources = {
 export const SuggestedResources = {
   render: Template,
   args: suggestedResourcesProps(),
+  parameters: parameters,
+};
+
+export const UnsavedPasswords = {
+  render: Template,
+  args: passwordDraftsProps(),
   parameters: parameters,
 };

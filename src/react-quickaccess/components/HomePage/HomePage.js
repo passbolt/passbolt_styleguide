@@ -37,6 +37,7 @@ import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import FilterSVG from "../../../img/svg/filter.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
+import AttentionSVG from "../../../img/svg/attention.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
@@ -45,6 +46,7 @@ import UserActiveSessionEntity from "../../../shared/models/entity/session/userA
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
+const PASSWORD_DRAFTS_MAX_COUNT = 20; // The maximum of password drafts the browser extension keeps
 
 class HomePage extends React.Component {
   /**
@@ -72,6 +74,7 @@ class HomePage extends React.Component {
     return {
       activeTabUrl: null,
       usingOnThisTab: false,
+      passwordDraftsCount: 0, // The number of generated passwords waiting to be saved
     };
   }
 
@@ -95,6 +98,7 @@ class HomePage extends React.Component {
     this.props.context.updateSearch("");
 
     this.loadActiveTabUrl();
+    this.loadPasswordDrafts();
   }
 
   /**
@@ -115,6 +119,19 @@ class HomePage extends React.Component {
         this.props.context.openerTabId,
       );
       this.setState({ activeTabUrl });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Loads the number of generated passwords waiting to be saved, into the state.
+   * @returns {Promise<void>}
+   */
+  async loadPasswordDrafts() {
+    try {
+      const passwordDrafts = await this.props.context.port.request("passbolt.quickaccess.get-password-drafts");
+      this.setState({ passwordDraftsCount: passwordDrafts?.length || 0 });
     } catch (error) {
       console.error(error);
     }
@@ -248,6 +265,7 @@ class HomePage extends React.Component {
   render() {
     const isReady = this.props.resources !== null && this.props.resourceTypes != null;
     const hasSearch = this.props.context.search?.length > 0;
+    const showUnsavedPasswordsBanner = !hasSearch && this.state.passwordDraftsCount > 0;
     const showSuggestedSection = !hasSearch;
     const showBrowsedResourcesSection = hasSearch;
     const showFiltersSection = !hasSearch;
@@ -266,6 +284,20 @@ class HomePage extends React.Component {
     return (
       <div className="index-list">
         <div className="list-container">
+          {showUnsavedPasswordsBanner && (
+            <div className="unsaved-passwords-banner">
+              <Link to={"/webAccessibleResources/quickaccess/unsaved-passwords"}>
+                <AttentionSVG className="attention-required" />
+                <span className="unsaved-passwords-banner-title">
+                  {this.props.t("Review unsaved passwords - {{passwordDraftsCount}}/{{passwordDraftsMaxCount}}", {
+                    passwordDraftsCount: this.state.passwordDraftsCount,
+                    passwordDraftsMaxCount: PASSWORD_DRAFTS_MAX_COUNT,
+                  })}
+                </span>
+                <CaretRightSVG />
+              </Link>
+            </div>
+          )}
           {showSuggestedSection && (
             <div className={`list-section`}>
               <div className="list-title">

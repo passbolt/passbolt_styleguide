@@ -38,6 +38,14 @@ export default class HomePagePage {
   }
 
   /**
+   * Returns the unsaved passwords banner link if any
+   * @returns {HTMLElement|null}
+   */
+  get unsavedPasswordsBanner() {
+    return this._page.container.querySelector(".unsaved-passwords-banner a");
+  }
+
+  /**
    * Returns the suggested resources if any
    * @returns {NodeListOf<HTLMElement>}
    */
@@ -176,6 +184,15 @@ export default class HomePagePage {
   async clickOnBrowsedResource(index) {
     const element = this.getBrowsedResourceItem(index)?.querySelector(".inline-resource-entry");
     fireEvent.click(element, { button: 0 });
+    await waitFor(() => {});
+  }
+
+  /**
+   * Simulates a click on the unsaved passwords banner
+   * @returns {Promise<void>}
+   */
+  async clickOnUnsavedPasswordsBanner() {
+    fireEvent.click(this.unsavedPasswordsBanner, { button: 0 });
     await waitFor(() => {});
   }
 

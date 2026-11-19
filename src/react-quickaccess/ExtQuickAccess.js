@@ -7,6 +7,7 @@ import FilterResourcesBySharedWithMePage from "./components/FilterResourcesBySha
 import FilterResourcesByTagPage from "./components/FilterResourcesByTagPage/FilterResourcesByTagPage";
 import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
+import UnsavedPasswordsPage from "./components/UnsavedPasswordsPage/UnsavedPasswordsPage";
 import LoginPage from "./components/LoginPage/LoginPage";
 import MoreFiltersPage from "./components/MoreFiltersPage/MoreFiltersPage";
 import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePage";
@@ -234,6 +235,7 @@ class ExtQuickAccess extends React.Component {
             port={this.props.port}
             account={this.state.account}
             openerTabId={this.props.openerTabId}
+            passwordDraftId={this.props.passwordDraftId}
             bootstrapFeature={this.props.bootstrapFeature}
             detached={this.props.detached}
           >
@@ -381,6 +383,11 @@ class ExtQuickAccess extends React.Component {
                                         />
                                         <PrivateRoute
                                           exact
+                                          path="/webAccessibleResources/quickaccess/unsaved-passwords"
+                                          component={UnsavedPasswordsPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
                                           path="/webAccessibleResources/quickaccess/home"
                                           component={HomePage}
                                         />
@@ -412,6 +419,7 @@ ExtQuickAccess.propTypes = {
   bootstrapFeature: PropTypes.string,
   bootstrapRequestId: PropTypes.string,
   openerTabId: PropTypes.string,
+  passwordDraftId: PropTypes.string,
   detached: PropTypes.bool,
 };
 

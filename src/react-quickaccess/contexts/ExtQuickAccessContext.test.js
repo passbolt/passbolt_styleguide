@@ -156,4 +156,21 @@ describe("ExtQuickAccess Context", () => {
       expect(context.isReady()).toBeTruthy();
     });
   });
+
+  describe("As LU the quickaccess should know the password draft to save", () => {
+    it("exposes the password draft id given by the autosave window", () => {
+      expect.assertions(1);
+      const context = new ExtQuickAccessContextProvider({
+        ...defaultAppContext(),
+        passwordDraftId: "3f2f1a8e-5d3c-4b7a-9c1e-2a6b8d0e4f11",
+      });
+      expect(context.state.passwordDraftId).toEqual("3f2f1a8e-5d3c-4b7a-9c1e-2a6b8d0e4f11");
+    });
+
+    it("exposes no password draft id when none is given", () => {
+      expect.assertions(1);
+      const context = new ExtQuickAccessContextProvider(defaultAppContext());
+      expect(context.state.passwordDraftId).toBeNull();
+    });
+  });
 });

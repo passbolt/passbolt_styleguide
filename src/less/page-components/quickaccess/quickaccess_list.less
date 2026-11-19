@@ -14,6 +14,30 @@
             position: relative;
             margin-left: .8rem;
         }
+        .unsaved-passwords-banner {
+            a {
+                color: var(--Text-and-icons-Main-text);
+                background: var(--Workspace-Announcement-bar-background);
+                display: flex;
+                align-items: center;
+                padding: 1.6rem;
+                font-size: 1.5rem;
+
+                &:hover, &:active {
+                    color: var(--Text-and-icons-Main-text);
+                    text-decoration: none;
+                }
+            }
+            .attention-required {
+                --icon-exclamation-color: var(--Alert-Alert-icon);
+                --icon-exclamation-background-color: var(--Alert-Alert-background);
+                --icon-exclamation-border-color: var(--Alert-Alert-background);
+                flex-shrink: 0;
+            }
+            .unsaved-passwords-banner-title {
+                flex: 1;
+            }
+        }
         .empty-entry {
             margin: 1.6rem;
             display: flex;
