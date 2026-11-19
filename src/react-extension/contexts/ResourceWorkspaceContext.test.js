@@ -166,6 +166,14 @@ describe("Resource Workspace Context", () => {
       expect(page.filteredResources[0].metadata.name).toBe("Resource in folder");
     });
 
+    it("AS LU I should have resources matching a text when the filter is TEXT in resource id", async () => {
+      const expectedResourcesCount = 1;
+      await page.goToText(context.resources[0].id);
+      await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
+      expect(page.filteredResources).toHaveLength(expectedResourcesCount);
+      expect(page.filteredResources[0].metadata.name).toBe("Resource owned");
+    });
+
     it("AS LU I should have resources belonged to a group when the filter is GROUP", async () => {
       expect.hasAssertions();
       const mockGroupResources = context.resources.slice(0, 3);
