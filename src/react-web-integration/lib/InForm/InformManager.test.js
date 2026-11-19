@@ -129,6 +129,8 @@ describe("InformManager", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    InFormManager.host = null;
+    InFormManager.shadowRoot = null;
     // Force to true as Jest do not provide opacity value
     jest.spyOn(InFormManager, "isPageNotVisible").mockImplementation(() => false);
     jest
@@ -1684,6 +1686,10 @@ describe("InformManager", () => {
 
       expect(ElementVisibilityService.isElementRendered).toHaveBeenCalledWith(document.documentElement);
       expect(InFormManager.destroy).not.toHaveBeenCalled();
+
+      ElementVisibilityService.isElementRendered.mockRestore();
+      ElementVisibilityService.hasViewableSize.mockRestore();
+      InFormManager.destroy.mockRestore();
     });
   });
 
@@ -2102,7 +2108,7 @@ describe("InformManager", () => {
       let informManager;
       await act(async () => (informManager = new InformManagerPage()));
 
-      expect(InFormManager.host.parentNode).toBe(document.body);
+      expect(InFormManager.host).toBeNull();
       expect(informManager.iframesLength).toBe(0);
 
       // A modal dialog containing a login form opens afterwards
@@ -2125,8 +2131,8 @@ describe("InformManager", () => {
       expect(InFormManager.host.parentNode).toBe(dialog);
     });
 
-    it("As LU it re-appends the host as the last child of its container so it wins at equal z-index", async () => {
-      expect.assertions(2);
+    it("As LU it re-appends the host as the last child of its container before displaying a call-to-action", async () => {
+      expect.assertions(3);
 
       document.body.innerHTML = domElementLoginWithNameAttributeUsername;
       let informManager;
@@ -2137,14 +2143,151 @@ describe("InformManager", () => {
       document.body.append(overlay);
       expect(document.body.lastChild).not.toBe(informManager.host);
 
-      // A re-scan must move the host back to the end so that, at equal z-index, it stays painted on top
-      // (repairing both the hidden call-to-action and elementFromPoint hit-testing on the modal).
+      await informManager.focusOnUsername();
+
+      expect(document.body.lastChild).toBe(informManager.host);
+      expect(informManager.iframesLength).toBe(1);
+    });
+
+    it("As LU it does not re-append the host on a re-scan when a page moves it among its siblings", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = `${domElementLoginWithNameAttributeUsername}<div class="ui-dialog"></div>`;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      const dialog = document.querySelector(".ui-dialog");
+      document.body.insertBefore(informManager.host, dialog);
+
       await act(async () => {
         InFormManager.findAndSetInputFields();
         await waitFor(() => {});
       });
 
-      expect(document.body.lastChild).toBe(informManager.host);
+      expect(informManager.host.parentNode).toBe(document.body);
+      expect(document.body.lastChild).toBe(dialog);
+    });
+
+    it("As LU it does not re-append the host while an iframe is displayed", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = domElementLoginWithNameAttributeUsername;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+      await informManager.focusOnUsername();
+      expect(informManager.iframesLength).toBe(1);
+
+      const overlay = document.createElement("div");
+      document.body.append(overlay);
+
+      InFormManager.reappendHost();
+
+      expect(document.body.lastChild).toBe(overlay);
+      expect(informManager.iframesLength).toBe(1);
+    });
+  });
+
+  describe("Lazy host mount", () => {
+    beforeEach(() => {
+      document.body.removeAttribute("style");
+      document.documentElement.removeAttribute("style");
+    });
+
+    it("As LU I should not have the host mounted on a page without login fields", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = domElementWithNoUsernamePassword;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+
+      expect(InFormManager.host).toBeNull();
+      expect(document.body.querySelector(":scope > div[style*='z-index']")).toBeNull();
+      expect(informManager.iframesLength).toBe(0);
+    });
+
+    it("As LU the host integrity check should pass without remounting while no host is mounted", async () => {
+      expect.assertions(3);
+
+      document.body.innerHTML = domElementWithNoUsernamePassword;
+      await act(async () => new InformManagerPage());
+      const retrySpy = jest.spyOn(InFormManager, "retryMountHost");
+
+      expect(InFormManager._ensureHostIntegrity()).toBe(true);
+      expect(retrySpy).not.toHaveBeenCalled();
+      expect(InFormManager.host).toBeNull();
+
+      retrySpy.mockRestore();
+    });
+
+    it("As LU I should not have inform destroyed by DOM changes while no host is mounted", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementWithNoUsernamePassword;
+      jest.spyOn(InFormManager, "destroy");
+      await act(async () => new InformManagerPage());
+
+      await act(async () => {
+        document.body.append(document.createElement("div"));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+      });
+
+      expect(InFormManager.destroy).not.toHaveBeenCalled();
+      expect(InFormManager.host).toBeNull();
+    });
+
+    it("As LU I should have the host mounted once a login form appears", async () => {
+      expect.assertions(4);
+
+      document.body.innerHTML = domElementWithNoUsernamePassword;
+      let informManager;
+      await act(async () => (informManager = new InformManagerPage()));
+      expect(InFormManager.host).toBeNull();
+
+      const loginForm = document.createElement("div");
+      loginForm.innerHTML = domElementLoginWithNameAttributeUsername;
+      document.body.append(loginForm);
+      await act(async () => {
+        InFormManager.findAndSetInputFields();
+        await waitFor(() => {});
+      });
+
+      expect(InFormManager.host.parentNode).toBe(document.body);
+      await informManager.focusOnUsername();
+      expect(informManager.iframesLength).toBe(1);
+      expect(document.body.lastChild).toBe(InFormManager.host);
+    });
+
+    it("As LU I should destroy inform if opacity of a host mounted after initialization changes", async () => {
+      expect.assertions(2);
+
+      document.body.innerHTML = domElementWithNoUsernamePassword;
+      jest.spyOn(InFormManager, "destroy");
+      await act(async () => new InformManagerPage());
+
+      const loginForm = document.createElement("div");
+      loginForm.innerHTML = domElementLoginWithNameAttributeUsername;
+      document.body.append(loginForm);
+      await act(async () => {
+        InFormManager.findAndSetInputFields();
+        await waitFor(() => {});
+      });
+      expect(InFormManager.host).not.toBeNull();
+
+      await act(async () => {
+        InFormManager.host.setAttribute("style", "opacity: 0.3 !important");
+        await waitFor(() => {});
+      });
+
+      expect(InFormManager.destroy).toHaveBeenCalled();
+    });
+
+    it("As LU I should destroy inform without error while no host is mounted", async () => {
+      expect.assertions(1);
+
+      document.body.innerHTML = domElementWithNoUsernamePassword;
+      await act(async () => new InformManagerPage());
+
+      expect(() => InFormManager.destroy()).not.toThrow();
     });
   });
 

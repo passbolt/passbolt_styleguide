@@ -34,8 +34,9 @@ class InFormCallToActionField {
    * @param field The DOM element
    * @param fieldType The type of field
    * @param shadowRoot The shadow root
+   * @param {function} [onBeforeIframeInsertion] Called right before the call-to-action iframe is inserted
    */
-  constructor(field, fieldType, shadowRoot) {
+  constructor(field, fieldType, shadowRoot, onBeforeIframeInsertion = () => {}) {
     /** The field to which the in-form is attached */
     this.field = field;
     /** Type of the field ("username" or "password") */
@@ -58,6 +59,8 @@ class InFormCallToActionField {
     this.callToActionClickCallback = null;
     /** The shadow root **/
     this.shadowRoot = shadowRoot;
+    /** Callback called right before the call-to-action iframe is inserted */
+    this.onBeforeIframeInsertion = onBeforeIframeInsertion;
     /** Rectangle coordinates of the field */
     this.viewableRect = null;
     /** Pending removal scheduled while the pointer travels from the field to the call-to-action */
@@ -145,6 +148,7 @@ class InFormCallToActionField {
       if (existingIframe) {
         this.removeIframe();
       }
+      this.onBeforeIframeInsertion();
       const iframe = await this.createCallToActionIframe();
       this.handleCallToActionClicked(iframe);
     }
