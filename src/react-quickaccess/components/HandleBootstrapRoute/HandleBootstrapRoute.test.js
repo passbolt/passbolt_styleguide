@@ -145,6 +145,28 @@ describe("HandleBootstrapRoute", () => {
       expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/resources/create");
     });
 
+    it("As LU I should be redirected to the resource edit page", () => {
+      expect.assertions(1);
+      const resourceId = "8e3874ae-4b40-590b-968a-418f704b9d9a";
+      const props = defaultProps({
+        bootstrapFeature: BOOTSTRAP_FEATURE.EDIT_RESOURCE,
+        bootstrapResourceId: resourceId,
+      });
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith(
+        `/webAccessibleResources/quickaccess/resources/edit/${resourceId}`,
+      );
+    });
+
+    it("As LU I should be redirected to the home page if the resource to edit is not valid", () => {
+      expect.assertions(1);
+      const props = defaultProps({ bootstrapFeature: BOOTSTRAP_FEATURE.EDIT_RESOURCE, bootstrapResourceId: "../../x" });
+      new HandleBootstrapRoutePage(props);
+
+      expect(props.history.push).toHaveBeenCalledWith("/webAccessibleResources/quickaccess/home");
+    });
+
     it("As LU I should be redirected to new credential save page", () => {
       expect.assertions(1);
       const props = defaultProps({ bootstrapFeature: BOOTSTRAP_FEATURE.SAVE_CREDENTIALS });

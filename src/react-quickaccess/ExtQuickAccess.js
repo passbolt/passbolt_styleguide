@@ -21,6 +21,7 @@ import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtension
 import ManageQuickAccessMode from "./components/ManageQuickAccessMode/ManageQuickAccessMode";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import SaveResource from "./components/ResourceAutoSave/SaveResource";
+import ResourceEditPage from "./components/ResourceEditPage/ResourceEditPage";
 import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePasswordPage";
 import PrepareResourceContextProvider from "./contexts/PrepareResourceContext";
 import SsoContextProvider from "./contexts/SsoContext";
@@ -61,6 +62,7 @@ export const BOOTSTRAP_FEATURE = {
   CREATE_NEW_CREDENTIALS: "create-new-credentials",
   SAVE_CREDENTIALS: "save-credentials",
   AUTOSAVE_CREDENTIALS: "autosave-credentials",
+  EDIT_RESOURCE: "edit-resource",
   REQUEST_PASSPHRASE: "request-passphrase",
 };
 
@@ -247,7 +249,12 @@ class ExtQuickAccess extends React.Component {
                     <Route
                       exact
                       path={"/webAccessibleResources/quickaccess.html"}
-                      render={() => <HandleBootstrapRoute bootstrapFeature={this.props.bootstrapFeature} />}
+                      render={() => (
+                        <HandleBootstrapRoute
+                          bootstrapFeature={this.props.bootstrapFeature}
+                          bootstrapResourceId={this.props.bootstrapResourceId}
+                        />
+                      )}
                     />
                     {/* The route when the user is not authenticated */}
                     <Route
@@ -358,6 +365,11 @@ class ExtQuickAccess extends React.Component {
                                           component={SaveResource}
                                         />
                                         <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/edit/:id"
+                                          component={ResourceEditPage}
+                                        />
+                                        <PrivateRoute
                                           path="/webAccessibleResources/quickaccess/resources/view/:id"
                                           component={ResourceViewPage}
                                         />
@@ -411,6 +423,7 @@ ExtQuickAccess.propTypes = {
   storage: PropTypes.object,
   bootstrapFeature: PropTypes.string,
   bootstrapRequestId: PropTypes.string,
+  bootstrapResourceId: PropTypes.string,
   openerTabId: PropTypes.string,
   detached: PropTypes.bool,
 };

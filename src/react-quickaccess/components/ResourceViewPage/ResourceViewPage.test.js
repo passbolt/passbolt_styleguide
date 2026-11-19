@@ -27,6 +27,10 @@ import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeG
 import { denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultTotpViewModelDto } from "../../../shared/models/entity/totp/totpDto.test.data";
 import { act } from "react";
+import UserActiveSessionEntity, {
+  USER_ACTIVE_SESSION_OFFLINE,
+} from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { defaultUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -34,6 +38,41 @@ beforeEach(() => {
 });
 
 describe("ResourceViewPage", () => {
+  describe("As LU, I can edit the resource from the QuickAccess.", () => {
+    it("As LU with update permission, I should see the edit button and reach the edit page", async () => {
+      const props = defaultProps();
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      const editButton = page._page.container.querySelector(".edit-resource");
+      expect(editButton).not.toBeNull();
+    });
+
+    it("As a read-only user, I should not see the edit button", async () => {
+      const props = defaultProps();
+      const storageData = await props.context.storage.local.get(["resources"]);
+      storageData.resources[0].permission.type = 1;
+      await props.context.storage.local.set({ resources: storageData.resources });
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      expect(page._page.container.querySelector(".edit-resource")).toBeNull();
+    });
+
+    it("As LU with an offline session, I should not see the edit button", async () => {
+      const props = defaultProps({
+        activeSession: new UserActiveSessionEntity(defaultUserActiveSessionDto({ type: USER_ACTIVE_SESSION_OFFLINE })),
+      });
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      expect(page._page.container.querySelector(".edit-resource")).toBeNull();
+    });
+  });
+
   const mockContextRequest = (context, implementation) =>
     jest.spyOn(context.port, "request").mockImplementationOnce(implementation);
 
