@@ -15,13 +15,14 @@
       font-weight: 700;
       flex: 1 1 0;
 
+      // Figma values with no token in the collection, like the bar gradient below
       &:first-child {
-        color: @complexity-bar-low-color;
+        color: #A40101;
         text-align: left;
       }
 
       &:last-child {
-        color: @complexity-bar-high-color;
+        color: #0EAB01;
         text-align: right;
       }
     }
@@ -36,7 +37,7 @@
     .range-input {
       height: 1rem;
       width: 100%;
-      background: @complexity-bar-gradient-background;
+      background: linear-gradient(to right, #BA2809, #FFA724, #0EAA00);
       border-radius: 0.5rem;
       appearance: none;
       outline: none;

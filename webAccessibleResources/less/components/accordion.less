@@ -14,16 +14,6 @@
         }
     }
 
-    h3.accordion-header {
-      a, button {
-        line-height: 3.2rem;
-        border-bottom: 1px solid @default-border;
-        .svg-icon {
-          margin-right:.4rem;
-        }
-      }
-    }
-
     .accordion-content {
         a:hover, button:not(.processing):hover {
           color: var(--Palette-Contrast-1);
@@ -95,7 +85,7 @@
 }
 .accordion.sidebar-section {
     .attention-required {
-        --icon-exclamation-background-color: @icon-exclamation-required-color;
+        --icon-exclamation-background-color: var(--Badges-Alert-background);
     }
 
     .accordion-header {

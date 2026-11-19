@@ -7,7 +7,7 @@
         width: 1.6rem;
         height: 1.6rem;
         pointer-events: none;
-        background: @input-background;
+        background: var(--Field-Field-background);
     }
 
     input[type=date] {
@@ -19,7 +19,7 @@
         }
 
         &.empty {
-            color: fade(@default-text-color, 50%);
+            color: rgb(from var(--Text-and-icons-Main-text) r g b / 50%);
         }
     }
 }

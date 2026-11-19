@@ -101,7 +101,7 @@ html, body {
     .invalid-passphrase.error-message button {
       font-size: 1.5rem;
       margin-top: 0;
-      color: @text-error-color;
+      color: var(--Field-Error);
     }
   }
 
@@ -187,7 +187,7 @@ html, body {
       height: 25rem;
     }
     .arrow {
-      background-color: @icon-color;
+      background-color: var(--Text-and-icons-Icons);
       -webkit-mask: url('@{images}/illustrations/wave-pin_my_extension.svg') center top no-repeat;
       width: 10rem;
       height: 10rem;
@@ -227,8 +227,8 @@ html, body {
         }
 
         &.focused {
-          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
-          color: @default-text-color;
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 1px var(--States-Focus);
+          color: var(--Text-and-icons-Main-text);
           text-decoration: none;
           border: none;
         }
@@ -307,33 +307,21 @@ html, body {
       }
 
       input[type=password] {
-        color: @default-text-color;
-        background: @input-background;
+        ._field-borders();
+        color: var(--Text-and-icons-Main-text);
+        background: var(--Field-Field-background);
         padding: .8rem .8rem;
         margin-bottom: 1.2rem;
-        box-shadow: inset 0 0 0 .1rem @input-border;
         border-radius: .4rem;
-
-        // Fields hover
-        &:hover {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
-        }
 
         // Fields focus
         &:focus {
-          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
           outline: 0;
-        }
-
-        // Fields pressed
-        &:active {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
         }
 
         // Disabled fields.
         &:disabled {
           cursor: default;
-          box-shadow: inset 0 0 0 .1rem @input-border;
           opacity: .5;
         }
       }
