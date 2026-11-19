@@ -90,6 +90,25 @@ describe("DomUtils", () => {
     });
   });
 
+  describe("DomUtils::getAccessibleAndSameDomainIframes", () => {
+    afterEach(() => {
+      document.documentElement.replaceChild(document.createElement("body"), document.body);
+    });
+
+    it("Should return the same-origin frame elements alongside the same-origin iframe elements", () => {
+      expect.assertions(1);
+
+      jest.spyOn(DOMUtils, "isRequestInitiatedFromSameOrigin").mockReturnValue(true);
+      const frameset = document.createElement("frameset");
+      const frame = document.createElement("frame");
+      const iframe = document.createElement("iframe");
+      frameset.append(frame, iframe);
+      document.documentElement.replaceChild(frameset, document.body);
+
+      expect(DOMUtils.getAccessibleAndSameDomainIframes()).toEqual([frame, iframe]);
+    });
+  });
+
   describe("DomUtils::getContainingDialog", () => {
     it("Should return the closest ancestor dialog of an element contained inside a dialog", () => {
       expect.assertions(1);

@@ -189,6 +189,45 @@ describe("InFormCallToActionField", () => {
       expect(callToActionField.isCallToActionIframeAlive(iframe)).toStrictEqual(false);
     });
 
+    it("should call the before insertion callback before creating the iframe", async () => {
+      expect.assertions(2);
+
+      const onBeforeIframeInsertion = jest.fn();
+      const field = document.createElement("input");
+      document.body.appendChild(field);
+      const shadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+      const callToActionField = new InFormCallToActionField(field, "username", shadowRoot, onBeforeIframeInsertion);
+      callToActionField.createCallToActionIframe = jest.fn(async () => {
+        expect(onBeforeIframeInsertion).toHaveBeenCalledTimes(1);
+        return { addEventListener: jest.fn() };
+      });
+      callToActionField.handleCallToActionClicked = jest.fn();
+
+      await callToActionField.insertInformCallToActionIframe();
+
+      expect(callToActionField.createCallToActionIframe).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not call the before insertion callback when a live iframe is already inserted", async () => {
+      expect.assertions(1);
+
+      const onBeforeIframeInsertion = jest.fn();
+      const field = document.createElement("input");
+      document.body.appendChild(field);
+      const shadowRoot = document.createElement("div").attachShadow({ mode: "open" });
+      const callToActionField = new InFormCallToActionField(field, "username", shadowRoot, onBeforeIframeInsertion);
+      const iframe = document.createElement("iframe");
+      iframe.id = callToActionField.iframeId;
+      shadowRoot.appendChild(iframe);
+      const browsingContext = {};
+      Object.defineProperty(iframe, "contentWindow", { value: browsingContext });
+      callToActionField.callToActionWindow = browsingContext;
+
+      await callToActionField.insertInformCallToActionIframe();
+
+      expect(onBeforeIframeInsertion).not.toHaveBeenCalled();
+    });
+
     it("should create the iframe and handle its click event", async () => {
       expect.assertions(2);
 

@@ -1035,7 +1035,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const canUseTags = this.props.context.siteSettings.canIUse("tags");
     const foldersMatchCache = {};
 
-    // Test match of some escaped test words against the name / username / uri / description /tags resource properties
+    // Test match of some escaped test words against the name / username / uri / description /tags / id (exact) resource properties
     const escapeWord = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const wordToRegex = (word) => new RegExp(escapeWord(word), "i");
     const matchWord = (word, value) => wordToRegex(word).test(value);
@@ -1058,11 +1058,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       resource.metadata?.custom_fields?.some((customField) => matchWord(word, customField.metadata_key));
     const matchStringProperty = (word, resource) =>
       ["name", "username", "description"].some((key) => matchWord(word, resource.metadata?.[key]));
+    const matchIdProperty = (word, resource) => resource.id === word.toLowerCase();
     const matchResource = (word, resource) =>
       matchStringProperty(word, resource) ||
       matchUrisProperty(word, resource) ||
       (canUseTags && matchTagProperty(word, resource)) ||
       matchCustomFieldsProperty(word, resource) ||
+      matchIdProperty(word, resource) ||
       (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
     const matchText = (resource) => words.every((word) => matchResource(word, resource));
 

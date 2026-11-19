@@ -114,6 +114,21 @@ describe("filterUtils", () => {
       expect(resources[0]).toStrictEqual(resource1);
     });
 
+    it("should filter the resources with the given keyword on the resource id", () => {
+      expect.assertions(3);
+      const resource1 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "abc" }) });
+      const resource2 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "def" }) });
+      const resource3 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "ghi" }) });
+      const resource4 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "jkl" }) });
+
+      const allResources = [resource1, resource2, resource3, resource4];
+
+      const resources = filterResourcesBySearch(allResources, resource2.id.toUpperCase());
+      expect(resources.length).toStrictEqual(1);
+      expect(resources[0]).toStrictEqual(resource2);
+      expect(filterResourcesBySearch(allResources, resource2.id.slice(0, 8)).length).toStrictEqual(0);
+    });
+
     it("should never match the custom field values", () => {
       expect.assertions(1);
       const resource = defaultResourceDto({

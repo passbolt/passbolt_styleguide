@@ -31,6 +31,7 @@ import ShadowDomQueryService from "../../services/ShadowDom/ShadowDomQueryServic
 import ElementVisibilityService from "../../services/DomExtraction/ElementVisibilityService";
 import PageClassificationService from "../../services/PageClassificationService";
 import { FieldRole } from "../../services/classification/Taxonomy";
+import FieldFeatureService from "../../services/classification/FieldFeatureService";
 
 const Z_INDEX_MAX = 2147483647;
 const HOST_MOUNT_MAX_RETRIES = 3;
@@ -109,6 +110,7 @@ class InFormManager {
 
     // Insert the host in the provided container
     container.appendChild(this.host);
+    this.hostMutationObserver?.observe(this.host, { attributes: true });
   }
 
   /**
@@ -171,7 +173,9 @@ class InFormManager {
     this.htmlMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.documentElement));
     this.bodyMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.body));
 
-    this.hostMutationObserver.observe(this.host, { attributes: true });
+    if (this.host) {
+      this.hostMutationObserver.observe(this.host, { attributes: true });
+    }
     this.htmlMutationObserver.observe(document.documentElement, { attributes: true });
     this.bodyMutationObserver.observe(document.body, { attributes: true });
   }
@@ -284,7 +288,7 @@ class InFormManager {
   /**
    * Returns the element the shadow root host should be mounted into for the given input fields.
    * @param {...HTMLElement[]} fieldsArrays One or more arrays of input fields.
-   * @return {HTMLElement} The dialog containing one of the fields (if any), or document.body.
+   * @return {HTMLElement} The dialog containing one of the fields (if any), the document element on a frameset page, or document.body.
    */
   getContainerElement(...fieldsArrays) {
     const fields = fieldsArrays.flat();
@@ -296,6 +300,11 @@ class InFormManager {
       if (dialog?.ownerDocument === document) {
         return dialog;
       }
+    }
+
+    // A frameset body renders only its frames: mount the host next to it, under <html>
+    if (document.body?.nodeName === "FRAMESET") {
+      return document.documentElement;
     }
 
     return document.body;
@@ -310,10 +319,20 @@ class InFormManager {
 
     if (!this.host) {
       this.createAndInsertShadowRootWithHost(container);
-    } else if (this.host.parentNode !== container || container.lastChild !== this.host) {
-      // Re-append the host when it is not the last child so it stays above overlays at equal z-index.
+    } else if (this.host.parentNode !== container) {
       container.appendChild(this.host);
     }
+  }
+
+  /**
+   * Re-append the host as the last child of its container so it stays above overlays at equal z-index.
+   */
+  reappendHost() {
+    const container = this.host?.parentNode;
+    if (!container || container.lastChild === this.host || this.shadowRoot.querySelector("iframe")) {
+      return;
+    }
+    container.appendChild(this.host);
   }
 
   /**
@@ -327,15 +346,15 @@ class InFormManager {
      * Else we clean and reset callToActionFields.
      */
     const { fields: classifiedFields } = PageClassificationService.classifyPage();
-    const fields = classifiedFields.filter(({ element }) => !element.disabled);
+    const fields = classifiedFields.filter(({ element }) => FieldFeatureService.isFillable(element));
     const newUsernameFields = fields.filter((field) => IDENTIFIER_ROLES.includes(field.role));
     const newPasswordFields = fields.filter((field) => PASSWORD_ROLES.includes(field.role));
     const newOTPFields = fields.filter((field) => field.role === FieldRole.TOTP);
 
-    const container = this.getContainerElement(
-      [...newUsernameFields, ...newPasswordFields, ...newOTPFields].map((field) => field.element),
-    );
-    this.ensureHostMounted(container);
+    const fieldElements = [...newUsernameFields, ...newPasswordFields, ...newOTPFields].map((field) => field.element);
+    if (fieldElements.length > 0) {
+      this.ensureHostMounted(this.getContainerElement(fieldElements));
+    }
 
     /**
      * A function factory to map a classified field to an existing call-to-action or create a new one.
@@ -346,7 +365,9 @@ class InFormManager {
      */
     const mapField = (fieldType) => (field) => {
       const existingField = this.callToActionFields.find(({ field: ctaField }) => ctaField === field.element);
-      const callToActionField = existingField ?? new InFormCallToActionField(field.element, fieldType, this.shadowRoot);
+      const callToActionField =
+        existingField ??
+        new InFormCallToActionField(field.element, fieldType, this.shadowRoot, () => this.reappendHost());
       callToActionField.setClassification(field.role, field.formId);
       return callToActionField;
     };
@@ -466,9 +487,11 @@ class InFormManager {
     const belongsToDocument = parent?.ownerDocument === document;
     const isConnected = parent?.isConnected ?? false;
     const isInBody = parent === document.body;
+    // On a frameset page the host is mounted under <html>, next to the frameset.
+    const isInFramesetRoot = document.body?.nodeName === "FRAMESET" && parent === document.documentElement;
     const isInDialog = parent?.nodeName === "DIALOG";
 
-    return belongsToDocument && isConnected && (isInBody || isInDialog);
+    return belongsToDocument && isConnected && (isInBody || isInFramesetRoot || isInDialog);
   }
 
   /**
@@ -476,7 +499,7 @@ class InFormManager {
    * @returns {boolean}
    */
   _ensureHostIntegrity() {
-    if (this.isHostInValidLocation()) {
+    if (!this.host || this.isHostInValidLocation()) {
       return true;
     }
     this.retryMountHost();
@@ -962,7 +985,7 @@ class InFormManager {
     window.removeEventListener("resize", this.clean);
     document.removeEventListener("cut", this.handleClipboardChange);
     document.removeEventListener("copy", this.handleClipboardChange);
-    this.host.remove();
+    this.host?.remove();
   }
 
   /**

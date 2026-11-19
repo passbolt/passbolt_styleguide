@@ -16,7 +16,7 @@ import LabelScraperService from "./LabelScraperService";
 import ShadowDomQueryService from "../ShadowDom/ShadowDomQueryService";
 import ShadowRootCacheService from "../ShadowDom/ShadowRootCacheService";
 import ShadowMutationObserverService from "../ShadowDom/ShadowMutationObserverService";
-import { MAX_SCRAPED_STRING_LENGTH } from "../../lib/InForm/ScrapingDictionary";
+import { MAX_LABEL_ANCESTOR_HOPS, MAX_SCRAPED_STRING_LENGTH } from "../../lib/InForm/ScrapingDictionary";
 
 /**
  * Build a minimal FieldScraping payload around a field element.
@@ -625,8 +625,8 @@ describe("LabelScraperService", () => {
     it("should elect a qualifying ancestor sitting at the last examined hop", () => {
       expect.assertions(1);
 
-      // The labelled div is the 20th ancestor (examined at hops=19); everything between is empty.
-      const payload = fieldScraping(nestedAncestorLabel(20, "Deep"));
+      // The labelled div is the last ancestor within the cap; everything between is empty.
+      const payload = fieldScraping(nestedAncestorLabel(MAX_LABEL_ANCESTOR_HOPS, "Deep"));
 
       LabelScraperService.enrich(payload);
 
@@ -636,8 +636,8 @@ describe("LabelScraperService", () => {
     it("should not elect a qualifying ancestor one hop past the cap", () => {
       expect.assertions(1);
 
-      // The labelled div is the 21st ancestor (would need hops=20) and must never be reached.
-      const payload = fieldScraping(nestedAncestorLabel(21, "TooDeep"));
+      // The labelled div is the first ancestor past the cap and must never be reached.
+      const payload = fieldScraping(nestedAncestorLabel(MAX_LABEL_ANCESTOR_HOPS + 1, "TooDeep"));
 
       LabelScraperService.enrich(payload);
 

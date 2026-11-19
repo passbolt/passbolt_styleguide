@@ -142,7 +142,7 @@ class FieldsRationalizationService {
         roles.get(field.fieldId) === FieldRole.OTHER &&
         USERNAME_CANDIDATE_TYPES.includes(field.type) &&
         field.tagName !== "BUTTON" &&
-        KeywordMatchingService.matchesAny(FieldFeatureService.fieldText(field), Keywords.ACCOUNT_NUMBER),
+        KeywordMatchingService.matchesAny(FieldFeatureService.fieldTexts(field), Keywords.ACCOUNT_NUMBER),
     );
     if (candidate) {
       roles.set(candidate.fieldId, FieldRole.USERNAME);

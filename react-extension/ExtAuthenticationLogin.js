@@ -69,6 +69,7 @@ class ExtAuthenticationLogin extends Component {
       siteSettings: null, // The site settings
       extensionVersion: null, // The extension version
       locale: null, // The locale
+      account: null, // The account
 
       // Locale
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),

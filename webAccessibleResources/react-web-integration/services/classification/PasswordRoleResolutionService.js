@@ -168,7 +168,7 @@ class PasswordRoleResolutionService {
    * @returns {boolean} Whether a creation keyword is present.
    */
   static hasCreationKeyword(field) {
-    return KeywordMatchingService.matchesAny(FieldFeatureService.fieldText(field), Keywords.ACCOUNT_CREATION);
+    return KeywordMatchingService.matchesAny(FieldFeatureService.fieldTexts(field), Keywords.ACCOUNT_CREATION);
   }
 
   /**
@@ -177,7 +177,7 @@ class PasswordRoleResolutionService {
    * @returns {boolean} Whether an update keyword is present.
    */
   static hasUpdateKeyword(field) {
-    return KeywordMatchingService.matchesAny(FieldFeatureService.fieldText(field), Keywords.PASSWORD_UPDATE);
+    return KeywordMatchingService.matchesAny(FieldFeatureService.fieldTexts(field), Keywords.PASSWORD_UPDATE);
   }
 }
 

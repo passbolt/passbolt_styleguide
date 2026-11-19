@@ -14,7 +14,7 @@
 
 /**
  * Build a value-free field record for classification.
- * @param {object} [overrides] Field overrides (flat: tagName/type/dataFormType/autoComplete/name/id/labelText/ariaLabel/placeholder/maxLength/inputMode/pattern).
+ * @param {object} [overrides] Field overrides (flat: tagName/type/dataFormType/autoComplete/name/id/labelText/ariaLabel/placeholder/maxLength/inputMode/pattern/role).
  * @returns {object} The field record.
  */
 export const defaultField = (overrides = {}) => {
@@ -31,6 +31,7 @@ export const defaultField = (overrides = {}) => {
     maxLength = null,
     inputMode = "",
     pattern = "",
+    role = "",
   } = overrides;
   return {
     fieldId: "field",
@@ -38,7 +39,7 @@ export const defaultField = (overrides = {}) => {
     type,
     dataFormType,
     autoComplete,
-    attributes: { name, id, maxLength, inputMode, pattern },
+    attributes: { name, id, maxLength, inputMode, pattern, role },
     label: { text: labelText },
     inputDescription: { ariaLabel, placeholder },
   };

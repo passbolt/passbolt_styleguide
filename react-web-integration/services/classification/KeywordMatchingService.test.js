@@ -68,6 +68,41 @@ describe("KeywordMatchingService", () => {
       expect(KeywordMatchingService.matchesAny(TextNormalizer.normalizeForMatch("Field2FA"), ["2fa"])).toBe(true);
     });
 
+    it("should match each text of an array on its own, never across two texts", () => {
+      expect.assertions(3);
+
+      const texts = ["fattura acconto 10902", "fattura 10902"].map((text) => TextNormalizer.normalizeForMatch(text));
+
+      expect(KeywordMatchingService.matchesAny(texts, ["2fa"])).toBe(false);
+      expect(KeywordMatchingService.matchesAny(["user", "password"], ["userpassword"])).toBe(false);
+      expect(KeywordMatchingService.matchesAny(["first", "user name"], ["username"])).toBe(true);
+    });
+
+    it("should return false for an empty array or an array of empty texts", () => {
+      expect.assertions(2);
+
+      expect(KeywordMatchingService.matchesAny([], ["password"])).toBe(false);
+      expect(KeywordMatchingService.matchesAny(["", null], ["password"])).toBe(false);
+    });
+
+    it.each(["fattura_10902", "10902fattura", "voce_2_fattura", "x2fat", "12FA"])(
+      "should not match the bounded token 2fa in %j (preceded by a digit or not ending a segment)",
+      (raw) => {
+        expect.assertions(1);
+
+        expect(KeywordMatchingService.matchesAny(TextNormalizer.normalizeForMatch(raw), ["2fa"])).toBe(false);
+      },
+    );
+
+    it.each(["2fa", "2FA", "2fa_code", "2faCode", "user2fa", "my-2fa", "Code 2FA"])(
+      "should match the bounded token 2fa in %j",
+      (raw) => {
+        expect.assertions(1);
+
+        expect(KeywordMatchingService.matchesAny(TextNormalizer.normalizeForMatch(raw), ["2fa"])).toBe(true);
+      },
+    );
+
     it("should not match a SHORT_AMBIGUOUS token buried inside a larger segment", () => {
       expect.assertions(1);
 

@@ -17,7 +17,7 @@
  */
 class DomUtils {
   static getAccessibleAndSameDomainIframes() {
-    return Array.prototype.filter.call(document.querySelectorAll("iframe"), (iframe) => {
+    return Array.prototype.filter.call(document.querySelectorAll("iframe,frame"), (iframe) => {
       const contentDocument = DomUtils.getAccessedIframeContentDocument(iframe);
       return (
         contentDocument &&

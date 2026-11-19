@@ -84,7 +84,8 @@ class DisplayUserTheme extends React.Component {
     this.props.loadingContext.add();
     const themes = await this.props.context.port.request("passbolt.themes.find-all");
     const selectedTheme = this.props.context.userSettings.getTheme();
-    this.setState({ themes, selectedTheme });
+    // Hide the themes this client cannot preview, case when the API is newer than the extension.
+    this.setState({ themes: themes.filter((theme) => this.getThemeName(theme)), selectedTheme });
     this.props.loadingContext.remove();
   }
 

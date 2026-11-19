@@ -108,7 +108,7 @@ export const LABEL_ANCESTOR_TAGS = ["LABEL", "DIV", "TD", "TH", "DD", "LI"];
  * Maximum number of ancestors walked up from a field while looking for its label.
  * @type {number}
  */
-export const MAX_LABEL_ANCESTOR_HOPS = 20;
+export const MAX_LABEL_ANCESTOR_HOPS = 10;
 
 /**
  * Heading tags used to derive a field's contextual title.

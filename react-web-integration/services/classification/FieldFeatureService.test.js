@@ -15,8 +15,8 @@
 import FieldFeatureService from "./FieldFeatureService";
 
 describe("FieldFeatureService", () => {
-  describe("FieldFeatureService::fieldText", () => {
-    it("should aggregate all sources in order and apply normalization", () => {
+  describe("FieldFeatureService::fieldTexts", () => {
+    it("should return one normalized text per source, in order", () => {
       expect.assertions(1);
 
       const field = {
@@ -25,7 +25,13 @@ describe("FieldFeatureService", () => {
         inputDescription: { ariaLabel: "Your Email", placeholder: "Enter email" },
       };
 
-      expect(FieldFeatureService.fieldText(field)).toBe("user name login id email your email enter email");
+      expect(FieldFeatureService.fieldTexts(field)).toEqual([
+        "user name",
+        "login id",
+        "email",
+        "your email",
+        "enter email",
+      ]);
     });
 
     it("should ignore aria-labelledby (IDREF list, not label text)", () => {
@@ -33,10 +39,10 @@ describe("FieldFeatureService", () => {
 
       const field = { attributes: { name: "user" }, inputDescription: { ariaLabelledby: "lbl-42 hint-7" } };
 
-      expect(FieldFeatureService.fieldText(field)).toBe("user");
+      expect(FieldFeatureService.fieldTexts(field)).toEqual(["user"]);
     });
 
-    it("should drop empty and nullish fragments before joining", () => {
+    it("should drop empty and nullish sources", () => {
       expect.assertions(1);
 
       const field = {
@@ -45,7 +51,7 @@ describe("FieldFeatureService", () => {
         inputDescription: { ariaLabel: undefined, placeholder: "pw" },
       };
 
-      expect(FieldFeatureService.fieldText(field)).toBe("login pw");
+      expect(FieldFeatureService.fieldTexts(field)).toEqual(["login", "pw"]);
     });
 
     it("should preserve duplicate fragments across sources", () => {
@@ -53,21 +59,29 @@ describe("FieldFeatureService", () => {
 
       const field = { attributes: { name: "email", id: "email" } };
 
-      expect(FieldFeatureService.fieldText(field)).toBe("email email");
+      expect(FieldFeatureService.fieldTexts(field)).toEqual(["email", "email"]);
     });
 
-    it("should return an empty string when every source is empty", () => {
+    it("should return no text when every source is empty", () => {
       expect.assertions(1);
 
       const field = { attributes: {}, label: {}, inputDescription: {} };
 
-      expect(FieldFeatureService.fieldText(field)).toBe("");
+      expect(FieldFeatureService.fieldTexts(field)).toEqual([]);
     });
 
-    it("should not throw and return empty when sub-objects are missing", () => {
+    it("should not throw and return no text when sub-objects are missing", () => {
       expect.assertions(1);
 
-      expect(FieldFeatureService.fieldText({})).toBe("");
+      expect(FieldFeatureService.fieldTexts({})).toEqual([]);
+    });
+
+    it("should keep the attributes apart", () => {
+      expect.assertions(1);
+
+      const field = { attributes: { name: "fattura_acconto_10902", id: "fattura_10902" } };
+
+      expect(FieldFeatureService.fieldTexts(field)).toEqual(["fattura acconto 10902", "fattura 10902"]);
     });
   });
 

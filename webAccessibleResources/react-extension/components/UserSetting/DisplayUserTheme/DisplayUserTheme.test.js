@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import { defaultProps, themes } from "./DisplayUserTheme.test.data";
+import { defaultProps, themes, unsupportedTheme } from "./DisplayUserTheme.test.data";
 import DisplayUserThemePage from "./DisplayUserTheme.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { screen } from "@testing-library/react";
@@ -106,5 +106,17 @@ describe("Display user theme", () => {
       expect(page.theme(1).isSelected).toBeTruthy();
       expect(page.theme(5).isSelected).toBeFalsy();
     });
+  });
+});
+
+describe("Display user theme with a theme this client cannot preview", () => {
+  it("As LU, I should not see a theme this client has no preview for", async () => {
+    expect.assertions(2);
+    const props = defaultProps();
+    props.context.port.addRequestListener("passbolt.themes.find-all", () => [...themes, unsupportedTheme]);
+    const page = new DisplayUserThemePage(props);
+    await screen.findAllByRole("button");
+    expect(page.themesCount).toStrictEqual(6);
+    expect(page.theme(6).name).toStrictEqual("Layette");
   });
 });

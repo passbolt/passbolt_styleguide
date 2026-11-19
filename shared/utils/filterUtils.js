@@ -22,7 +22,7 @@ export const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$
 
 /**
  * Filter resources by keywords.
- * Search on the name, the username, the primary uri, the description of the resources and the custom fields labels.
+ * Search on the name, the username, the primary uri, the description of the resources, the custom fields labels and the exact id.
  * @param {array} resources The list of resources to filter.
  * @param {string} needle The needle to search.
  * @param {number} [limit = Number.MAX_SAFE_INTEGER] the count limit of results.
@@ -47,7 +47,8 @@ export const filterResourcesBySearch = (resources, needle, limit = Number.MAX_SA
         regexes[i].test(resource.metadata.username) ||
         regexes[i].test(resource.metadata.uris?.[0]) ||
         regexes[i].test(resource.metadata.description) ||
-        resource.metadata.custom_fields?.some((field) => regexes[i].test(field.metadata_key));
+        resource.metadata.custom_fields?.some((field) => regexes[i].test(field.metadata_key)) ||
+        resource.id === needles[i].toLowerCase();
 
       if (!match) {
         //early exit, there is no need to search for more matches in that case

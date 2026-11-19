@@ -223,7 +223,12 @@ export const Keywords = Object.freeze({
     "verificationcode",
     "securitycode",
     "twofactor",
-    "twofactorcode", // universal
+    "twofactorcode",
+    "twofa",
+    "2facode",
+    "2fatoken",
+    "otpcode",
+    "mfacode", // universal
     "codedeverification",
     "codeauthentification",
     "authentificateur", // fr
@@ -465,6 +470,13 @@ export const SHORT_AMBIGUOUS = Object.freeze(
 );
 
 /**
+ * Tokens which must not follow a digit and must end a segment, with their regex.
+ * The regex allows the spaces the normalization inserts inside the token.
+ * @type {ReadonlyMap<string, RegExp>}
+ */
+export const BOUNDED_TOKENS = Object.freeze(new Map([["2fa", /(?<!\p{N})2 ?f ?a(?= |$)/u]]));
+
+/**
  * The standard HTML autocomplete token for one-time codes.
  * @type {string}
  */
@@ -534,4 +546,12 @@ export const MAX_CLASSIFIED_FIELDS = 200;
  */
 export const NON_CREDENTIAL_INPUT_TYPES = Object.freeze(
   new Set(["checkbox", "radio", "submit", "reset", "button", "image", "file", "range", "color", "hidden"]),
+);
+
+/**
+ * Input roles which should never hold a credential.
+ * @type {ReadonlySet<string>}
+ */
+export const NON_CREDENTIAL_INPUT_ROLES = Object.freeze(
+  new Set(["button", "checkbox", "combobox", "spinbutton", "radio", "slider"]),
 );
