@@ -257,12 +257,12 @@ class ExtAppContextProvider extends React.Component {
   }
 
   /**
-   * Get the list of user settings from local storage and set it in the state
+   * Get the user settings of the active account and set it in the state
    * Using UserSettings
    */
   async getUserSettings() {
-    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
-    const userSettings = new UserSettings(storageData._passbolt_data.config);
+    const userSettingsDto = await this.props.port.request("passbolt.user-settings.get-legacy-user-settings");
+    const userSettings = new UserSettings(userSettingsDto);
     this.setState({ userSettings });
   }
 
@@ -336,10 +336,8 @@ class ExtAppContextProvider extends React.Component {
       const resources = changes.resources.newValue;
       this.setState({ resources });
     }
-    if (changes._passbolt_data && changes._passbolt_data.newValue) {
-      const userData = changes._passbolt_data.newValue;
-      const userSettings = new UserSettings(userData.config);
-      this.setState({ userSettings });
+    if (this.hasUserSettingsChanged(changes)) {
+      this.getUserSettings().catch(console.error);
     }
     if (changes.folders && changes.folders.newValue) {
       const folders = changes.folders.newValue;
@@ -359,6 +357,22 @@ class ExtAppContextProvider extends React.Component {
       const groups = changes[storageKey].newValue;
       this.setState({ groups });
     }
+  }
+
+  /**
+   * Check if a storage change affects the user settings built by the background page from the account (accounts),
+   * the theme (theme-<accountId>) and the account data still written in the legacy storage (_passbolt_data).
+   * TODO: Remove the _passbolt_data check once the active account is read from the accounts local storage.
+   * @param {object} changes The change from the local storage
+   * @returns {boolean}
+   */
+  hasUserSettingsChanged(changes) {
+    const themeStorageKey = this.state.account ? `theme-${this.state.account.id}` : null;
+    return Boolean(
+      changes.accounts?.newValue ||
+      changes._passbolt_data?.newValue ||
+      (themeStorageKey && changes[themeStorageKey]?.newValue),
+    );
   }
 
   /**
