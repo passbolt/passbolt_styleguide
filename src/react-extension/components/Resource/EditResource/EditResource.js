@@ -39,12 +39,11 @@ import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
-import { DateTime } from "luxon";
 import EditResourceSkeleton from "./EditResourceSkeleton";
 import { RESOURCE_TYPE_PASSWORD_STRING_SLUG } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import { withMetadataTypesSettingsLocalStorage } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import CustomFieldsCollection from "../../../../shared/models/entity/customField/customFieldsCollection";
+import ResourceEditService from "../../../../shared/services/resourceEdit/resourceEditService";
 
 class EditResource extends Component {
   constructor(props) {
@@ -106,7 +105,7 @@ class EditResource extends Component {
        */
       const resourceDto = structuredClone(this.props.resource);
       const secret = await this.getDecryptedSecret();
-      this.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
+      ResourceEditService.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
       resourceDto.secret = secret;
       this.resourceFormEntity = new ResourceFormEntity(resourceDto, {
         validate: false,
@@ -131,27 +130,6 @@ class EditResource extends Component {
       }
       this.props.dialogContext.open(NotifyError, { error });
       this.handleClose();
-    }
-  }
-
-  /**
-   * Merge custom fields metadata into secret
-   * @param {object} resourceDto
-   * @param {object} secret
-   * @return {void}
-   */
-  mergeCustomFieldsMetadataAndSecret(resourceDto, secret) {
-    if (secret?.custom_fields?.length > 0) {
-      const customFieldsMetadataCollection = new CustomFieldsCollection(resourceDto.metadata.custom_fields);
-      const customFieldsSecretCollection = new CustomFieldsCollection(secret.custom_fields);
-      secret.custom_fields = CustomFieldsCollection.mergeCollectionsMetadataAndSecret(
-        customFieldsMetadataCollection,
-        customFieldsSecretCollection,
-      ).toDto();
-      // Set the custom fields to null to remove the reference in the metadata to not have inconsistency if the user remove the custom fields secret
-      resourceDto.metadata.custom_fields = null;
-      // Remove the property
-      delete resourceDto.metadata.custom_fields;
     }
   }
 
@@ -482,8 +460,13 @@ class EditResource extends Component {
    */
   async save(resource) {
     const isSecretChanged = resource.secret.areSecretsDifferent(this.state.originalSecret);
-    if (isSecretChanged && this.shouldUpdateExpirationDate()) {
-      resource.set("expired", this.getResourceExpirationDate());
+    if (isSecretChanged && this.state.resource.secret.password !== this.state.originalSecret.password) {
+      const expired = ResourceEditService.getExpirationDateOnPasswordChange(
+        this.props.passwordExpiryContext.getSettings(),
+      );
+      if (typeof expired !== "undefined") {
+        resource.set("expired", expired);
+      }
     }
 
     let secretDto = null;
@@ -616,34 +599,6 @@ class EditResource extends Component {
    */
   get hasSecretDecrypting() {
     return this.state.isSecretDecrypting;
-  }
-
-  /**
-   * Returns true if the expiration date of the resource should be updated.
-   * @returns {boolean}
-   */
-  shouldUpdateExpirationDate() {
-    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
-    if (!passwordExpirySettings?.automatic_update) {
-      return false;
-    }
-
-    return this.state.resource.secret.password !== this.state.originalSecret.password;
-  }
-
-  /**
-   * Get the expiration date on the given resource according to the password expiry settings
-   * @returns {DateTime|null}
-   */
-  getResourceExpirationDate() {
-    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
-    if (passwordExpirySettings.default_expiry_period == null) {
-      // settings say we need to update the expiration date but the default_expiry_period is null so, we mark the resource as "not expired".
-      return null;
-    }
-
-    // we have to update the expiration date in future based on the configuration.
-    return DateTime.utc().plus({ days: passwordExpirySettings.default_expiry_period }).toISO();
   }
 
   /**
