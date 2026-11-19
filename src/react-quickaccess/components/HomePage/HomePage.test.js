@@ -706,7 +706,7 @@ describe("HomePage", () => {
 
       await waitForTrue(() => page.unsavedPasswordsBanner !== null);
 
-      expect(page.unsavedPasswordsBanner.textContent).toStrictEqual("Review unsaved passwords");
+      expect(page.unsavedPasswordsBanner.textContent).toStrictEqual("Review unsaved passwords - 1/20");
     });
 
     it("should open the unsaved passwords page when clicking on the banner", async () => {

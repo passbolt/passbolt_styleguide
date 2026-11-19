@@ -46,6 +46,7 @@ import UserActiveSessionEntity from "../../../shared/models/entity/session/userA
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
+const PASSWORD_DRAFTS_MAX_COUNT = 20; // The maximum of password drafts the browser extension keeps
 
 class HomePage extends React.Component {
   /**
@@ -73,7 +74,7 @@ class HomePage extends React.Component {
     return {
       activeTabUrl: null,
       usingOnThisTab: false,
-      hasPasswordDrafts: false,
+      passwordDraftsCount: 0, // The number of generated passwords waiting to be saved
     };
   }
 
@@ -124,13 +125,13 @@ class HomePage extends React.Component {
   }
 
   /**
-   * Loads whether generated passwords are waiting to be saved, into the state.
+   * Loads the number of generated passwords waiting to be saved, into the state.
    * @returns {Promise<void>}
    */
   async loadPasswordDrafts() {
     try {
       const passwordDrafts = await this.props.context.port.request("passbolt.quickaccess.get-password-drafts");
-      this.setState({ hasPasswordDrafts: passwordDrafts?.length > 0 });
+      this.setState({ passwordDraftsCount: passwordDrafts?.length || 0 });
     } catch (error) {
       console.error(error);
     }
@@ -264,7 +265,7 @@ class HomePage extends React.Component {
   render() {
     const isReady = this.props.resources !== null && this.props.resourceTypes != null;
     const hasSearch = this.props.context.search?.length > 0;
-    const showUnsavedPasswordsBanner = !hasSearch && this.state.hasPasswordDrafts;
+    const showUnsavedPasswordsBanner = !hasSearch && this.state.passwordDraftsCount > 0;
     const showSuggestedSection = !hasSearch;
     const showBrowsedResourcesSection = hasSearch;
     const showFiltersSection = !hasSearch;
@@ -288,7 +289,10 @@ class HomePage extends React.Component {
               <Link to={"/webAccessibleResources/quickaccess/unsaved-passwords"}>
                 <AttentionSVG className="attention-required" />
                 <span className="unsaved-passwords-banner-title">
-                  <Trans>Review unsaved passwords</Trans>
+                  {this.props.t("Review unsaved passwords - {{passwordDraftsCount}}/{{passwordDraftsMaxCount}}", {
+                    passwordDraftsCount: this.state.passwordDraftsCount,
+                    passwordDraftsMaxCount: PASSWORD_DRAFTS_MAX_COUNT,
+                  })}
                 </span>
                 <CaretRightSVG />
               </Link>
