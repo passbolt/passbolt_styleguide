@@ -54,19 +54,19 @@ If you've found a security related issue in Passbolt, please don't open an issue
 Install
 =========
 
-Install grunt
-```
-npm install -g grunt-cli
-```
-
-Install the needed modules defined in the grunt config
+Install the dependencies
 ```
 npm install
 ```
 
-Make sure Grunt watch for less changes and compile them into CSS
+Build the styleguide
 ```
-grunt watch
+npm run build
+```
+
+Watch the LESS files for live recompilation
+```
+npm run watch
 ```
 
 Edit one LESS file to see if it works!
@@ -113,11 +113,6 @@ npm publish --tag alpha
 Upgrade the version of the styleguide in your project.
 ```
 npm upgrade passbolt-styleguide
-```
-
-In some passbolt projects an additional grunt task help you manage the deployment of the styleguide assets
-```
-grunt styleguide-update
 ```
 
 How to use Storybook?
