@@ -348,5 +348,51 @@ describe("See the Create Resource - save resource", () => {
 
       expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
     });
+
+    it("should go back to the unsaved passwords page when the user aborts the passphrase request", async () => {
+      expect.assertions(3);
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.quickaccess.get-password-draft-for-save", () => {
+        throw { name: "UserAbortsOperationError", message: "The dialog has been closed." };
+      });
+      jest.spyOn(props.context.port, "request");
+
+      const page = new SaveResourcePage(props, { passwordDraftId });
+      await waitForTrue(() => page.pathname === "/previous");
+
+      expect(page.pathname).toBe("/previous");
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.quickaccess.remove-password-draft",
+        passwordDraftId,
+      );
+      expect(props.context.closeWindow).not.toHaveBeenCalled();
+    });
+
+    it("should keep the password draft when it cannot be loaded and the user clicks on no, thanks", async () => {
+      expect.assertions(5);
+      jest.spyOn(console, "error").mockImplementation(() => {});
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.quickaccess.get-password-draft-for-save", () => {
+        throw new Error("Unexpected error");
+      });
+      props.context.port.addRequestListener("passbolt.quickaccess.remove-password-draft", () => {});
+      jest.spyOn(props.context.port, "request");
+
+      const page = new SaveResourcePage(props, { passwordDraftId });
+      await waitForTrue(() => Boolean(page.unexpectedError));
+
+      expect(page.unexpectedError.textContent).toBe("Unexpected error");
+      expect(page.name.disabled).toBe(true);
+      expect(page.saveButton.disabled).toBe(true);
+
+      await page.click(page.cancelLink);
+      await waitForTrue(() => props.context.closeWindow.mock.calls.length > 0);
+
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.quickaccess.remove-password-draft",
+        passwordDraftId,
+      );
+      expect(props.context.closeWindow).toHaveBeenCalledTimes(1);
+    });
   });
 });
