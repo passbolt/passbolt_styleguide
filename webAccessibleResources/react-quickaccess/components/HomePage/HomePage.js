@@ -37,14 +37,17 @@ import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import FilterSVG from "../../../img/svg/filter.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
+import AttentionSVG from "../../../img/svg/attention.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
 import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
+import { isRpIdOfUrl, parseRpIdFromUris } from "../../../shared/utils/passkeyRpIdUtils";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
+const PASSWORD_DRAFTS_MAX_COUNT = 20; // The maximum of password drafts the browser extension keeps
 
 class HomePage extends React.Component {
   /**
@@ -72,6 +75,9 @@ class HomePage extends React.Component {
     return {
       activeTabUrl: null,
       usingOnThisTab: false,
+      passwordDraftsCount: 0, // The number of generated passwords waiting to be saved
+      pendingPasskeyRequests: [], // The passkey sign-ins the pages of the tab wait for
+      signingInWithPasskeyId: null, // The id of the passkey the user signs in with
     };
   }
 
@@ -95,6 +101,10 @@ class HomePage extends React.Component {
     this.props.context.updateSearch("");
 
     this.loadActiveTabUrl();
+    this.loadPasswordDrafts();
+    if (this.props.context.siteSettings.isPasskeyInterceptionEnabled) {
+      this.loadPendingPasskeyRequests();
+    }
   }
 
   /**
@@ -102,6 +112,7 @@ class HomePage extends React.Component {
    */
   initEventHandlers() {
     this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
+    this.handleSignInWithPasskeyClick = this.handleSignInWithPasskeyClick.bind(this);
   }
 
   /**
@@ -121,6 +132,59 @@ class HomePage extends React.Component {
   }
 
   /**
+   * Loads the number of generated passwords waiting to be saved, into the state.
+   * @returns {Promise<void>}
+   */
+  async loadPasswordDrafts() {
+    try {
+      const passwordDrafts = await this.props.context.port.request("passbolt.quickaccess.get-password-drafts");
+      this.setState({ passwordDraftsCount: passwordDrafts?.length || 0 });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Loads the passkey sign-ins the pages of the tab wait for into the state.
+   * @returns {Promise<void>}
+   */
+  async loadPendingPasskeyRequests() {
+    try {
+      const pendingPasskeyRequests = await this.props.context.port.request(
+        "passbolt.passkey.get-tab-pending-requests",
+        this.props.context.openerTabId,
+      );
+      this.setState({ pendingPasskeyRequests });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Get the passkeys of the site of the active tab: those whose relying party is the tab host or a parent domain of
+   * it. The passkeys a waiting sign-in of the page accepts come first, with the id of that sign-in.
+   * @param {Array<Object>} resources The list of resources to filter.
+   * @param {string} activeTabUrl The active tab url.
+   * @param {Array<{id: string, passkey_ids: Array<string>}>} pendingPasskeyRequests The sign-ins the tab waits for.
+   * @return {Array<{resource: Object, rpId: string, pendingRequestId: string|null}>}
+   */
+  filterSitePasskeys = memoize((resources, activeTabUrl, pendingPasskeyRequests) => {
+    const sitePasskeys = [];
+    for (const resource of resources) {
+      if (!this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasPasskey()) {
+        continue;
+      }
+      const rpId = parseRpIdFromUris(resource.metadata.uris);
+      if (!isRpIdOfUrl(rpId, activeTabUrl)) {
+        continue;
+      }
+      const pendingRequest = pendingPasskeyRequests.find((request) => request.passkey_ids.includes(resource.id));
+      sitePasskeys.push({ resource, rpId, pendingRequestId: pendingRequest?.id ?? null });
+    }
+    return sitePasskeys.sort((a, b) => Number(Boolean(b.pendingRequestId)) - Number(Boolean(a.pendingRequestId)));
+  });
+
+  /**
    * Get the resources for the suggested section.
    * @param {Array} resources The list of resources to filter.
    * @param {string} activeTabUrl the active tab url
@@ -135,6 +199,10 @@ class HomePage extends React.Component {
 
     for (const i in resources) {
       const resource = resources[i];
+      // A suggestion fills the page with the resource secret.
+      if (!this.canDiscloseSecret(resource)) {
+        continue;
+      }
       if (CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)) {
         suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
@@ -145,6 +213,15 @@ class HomePage extends React.Component {
 
     return sortResourcesByUriMatchingScore(suggestedResources, activeTabUrl);
   });
+
+  /**
+   * Can the resource secret be shown or filled
+   * @param {Object} resource The resource
+   * @returns {boolean}
+   */
+  canDiscloseSecret(resource) {
+    return this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.canDiscloseSecret();
+  }
 
   /**
    * Get the resources for the browse section.
@@ -184,6 +261,26 @@ class HomePage extends React.Component {
           ),
         });
       }
+    }
+  }
+
+  /**
+   * Handles the click on a passkey a waiting sign-in of the page accepts: signs in with it.
+   * @param {string} passkeyId The id of the passkey resource.
+   * @param {string} pendingRequestId The id of the waiting sign-in.
+   * @returns {Promise<void>}
+   */
+  async handleSignInWithPasskeyClick(passkeyId, pendingRequestId) {
+    this.setState({ signingInWithPasskeyId: passkeyId, useOnThisTabError: null });
+    try {
+      await this.props.context.port.request("passbolt.passkey.authenticate", pendingRequestId, passkeyId);
+      await this.props.context.closeWindow();
+    } catch (error) {
+      if (error?.name !== "UserAbortsOperationError") {
+        console.error(error);
+        this.setState({ useOnThisTabError: this.props.t("Unable to sign in with the passkey on this page.") });
+      }
+      this.setState({ signingInWithPasskeyId: null });
     }
   }
 
@@ -248,6 +345,7 @@ class HomePage extends React.Component {
   render() {
     const isReady = this.props.resources !== null && this.props.resourceTypes != null;
     const hasSearch = this.props.context.search?.length > 0;
+    const showUnsavedPasswordsBanner = !hasSearch && this.state.passwordDraftsCount > 0;
     const showSuggestedSection = !hasSearch;
     const showBrowsedResourcesSection = hasSearch;
     const showFiltersSection = !hasSearch;
@@ -256,16 +354,35 @@ class HomePage extends React.Component {
     // The groups are retrieved from the API, the filter is not offered while in an offline session.
     const isSessionOnline = Boolean(this.props.activeSession?.isSessionOnline);
     let browsedResources, suggestedResources;
+    const canUsePasskeys = this.props.context.siteSettings.isPasskeyInterceptionEnabled;
+    let sitePasskeys = [];
 
     if (isReady) {
       const resources = this.resourcesSupportedByQuickAccess;
       browsedResources = this.filterSearchedResources(resources, this.props.context.search);
       suggestedResources = this.filterSuggestedResources(resources, this.state.activeTabUrl);
+      if (canUsePasskeys) {
+        sitePasskeys = this.filterSitePasskeys(resources, this.state.activeTabUrl, this.state.pendingPasskeyRequests);
+      }
     }
 
     return (
       <div className="index-list">
         <div className="list-container">
+          {showUnsavedPasswordsBanner && (
+            <div className="unsaved-passwords-banner">
+              <Link to={"/webAccessibleResources/quickaccess/unsaved-passwords"}>
+                <AttentionSVG className="attention-required" />
+                <span className="unsaved-passwords-banner-title">
+                  {this.props.t("Review unsaved passwords - {{passwordDraftsCount}}/{{passwordDraftsMaxCount}}", {
+                    passwordDraftsCount: this.state.passwordDraftsCount,
+                    passwordDraftsMaxCount: PASSWORD_DRAFTS_MAX_COUNT,
+                  })}
+                </span>
+                <CaretRightSVG />
+              </Link>
+            </div>
+          )}
           {showSuggestedSection && (
             <div className={`list-section`}>
               <div className="list-title">
@@ -319,6 +436,61 @@ class HomePage extends React.Component {
                       </Link>
                     </li>
                   ))}
+              </ul>
+            </div>
+          )}
+          {showSuggestedSection && sitePasskeys.length > 0 && (
+            <div className="list-section">
+              <div className="list-title">
+                <h2>
+                  <Trans>Passkeys</Trans>
+                </h2>
+              </div>
+              <ul className="list-items">
+                {sitePasskeys.map(({ resource, rpId, pendingRequestId }) => {
+                  const viewUrl = `/webAccessibleResources/quickaccess/resources/view/${resource.id}`;
+                  const name = (
+                    <div className="inline-resource-name">
+                      <span className="title">{resource.metadata.name}</span>
+                      <span className="username">
+                        {resource.metadata.username ? ` (${resource.metadata.username})` : ""}
+                      </span>
+                    </div>
+                  );
+                  return (
+                    <li className="suggested-resource-entry suggested-passkey-entry" key={resource.id}>
+                      {pendingRequestId ? (
+                        <button
+                          type="button"
+                          className="resource-details link"
+                          disabled={this.state.signingInWithPasskeyId !== null}
+                          onClick={() => this.handleSignInWithPasskeyClick(resource.id, pendingRequestId)}
+                        >
+                          {name}
+                          <div className="uris">
+                            <span className="url sign-in">
+                              {this.state.signingInWithPasskeyId === resource.id ? (
+                                <SpinnerSVG />
+                              ) : (
+                                <Trans>Sign in on this page</Trans>
+                              )}
+                            </span>
+                          </div>
+                        </button>
+                      ) : (
+                        <Link className="resource-details" to={viewUrl}>
+                          {name}
+                          <div className="uris">
+                            <span className="url">{rpId}</span>
+                          </div>
+                        </Link>
+                      )}
+                      <Link className="chevron-right-wrapper" to={viewUrl}>
+                        <CaretRightSVG />
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

@@ -1,0 +1,172 @@
+.quickaccess {
+  .passkey-create,
+  .passkey-select {
+    .title {
+      margin: 1.6rem;
+      overflow-wrap: anywhere;
+    }
+
+    .passkey-message {
+      margin: 1.6rem;
+
+      &.hint {
+        font-size: 1.3rem;
+        color: var(--Text-and-icons-Secondary-text);
+      }
+    }
+  }
+
+  .passkey-create {
+    .properties {
+      border-top: .1rem solid var(--Workspace-Dividers);
+
+      .property {
+        padding: 1.2rem 1.6rem;
+        border-bottom: .1rem solid var(--Workspace-Dividers);
+      }
+
+      .information {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .property-name {
+        font-size: 1.3rem;
+        line-height: 1.8rem;
+        color: var(--Text-and-icons-Secondary-text);
+        margin-bottom: .4rem;
+      }
+
+      .property-value {
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+
+  .passkey-select {
+    .passkey-message.instruction {
+      margin-top: -.8rem;
+      color: var(--Text-and-icons-Main-text);
+    }
+
+    .passkeys {
+      border-top: .1rem solid var(--Workspace-Dividers);
+
+      .passkey {
+        border-bottom: .1rem solid var(--Workspace-Dividers);
+      }
+
+      .passkey-entry {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        width: 100%;
+        height: auto;
+        margin: 0;
+        padding: 1.2rem 1.2rem 1.2rem 1.6rem;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        font-weight: normal;
+        color: var(--Text-and-icons-Main-text);
+        text-align: start;
+        cursor: pointer;
+
+        &::after {
+          content: none;
+        }
+
+        &:hover,
+        &:focus-visible {
+          background: var(--Quick-Access-Filter-hover);
+        }
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: inset 0 0 0 .1rem var(--States-Focus);
+        }
+
+        &:active,
+        &.processing {
+          background: var(--Sections-Filter-selected);
+        }
+
+        &:disabled {
+          cursor: default;
+        }
+
+        &:disabled:not(.processing) {
+          opacity: .5;
+        }
+      }
+
+      .teaser-image {
+        display: flex;
+        flex: 0 0 auto;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 100%;
+        background: var(--Resource-icon-Resource-icons-backgound);
+        --icon-color: var(--Resource-icon-Resource-icon-color);
+
+        svg {
+          width: 4rem;
+          height: 4rem;
+        }
+      }
+
+      .passkey-details {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .passkey-name {
+        font-size: 1.5rem;
+        .ellipsis();
+      }
+
+      .passkey-username {
+        font-size: 1.3rem;
+        padding-top: .4rem;
+        color: var(--Text-and-icons-Secondary-text);
+        .ellipsis();
+      }
+
+      .passkey-action {
+        display: flex;
+        flex: 0 0 auto;
+        width: 2.4rem;
+        justify-content: center;
+
+        svg {
+          width: 1.6rem;
+          height: 1.6rem;
+        }
+      }
+    }
+  }
+
+  .passphrase .passkey-messages,
+  .passkey-verification-preference .form-container {
+    p {
+      margin: 0 0 1.6rem;
+      overflow-wrap: anywhere;
+    }
+
+    .hint {
+      font-size: 1.3rem;
+      color: var(--Text-and-icons-Secondary-text);
+    }
+  }
+
+  .passkey-verification-preference .form-container {
+    margin: 1.6rem;
+
+    .hint {
+      margin: 1.2rem 0 0;
+    }
+  }
+}

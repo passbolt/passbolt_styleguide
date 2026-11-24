@@ -15,6 +15,11 @@ import EntityV2 from "../../abstract/entityV2";
 import IconEntity from "./IconEntity";
 import CustomFieldsCollection from "../../customField/customFieldsCollection";
 import assertString from "validator/es/lib/util/assertString";
+import {
+  PASSKEY_BASE64URL_REGEXP,
+  PASSKEY_CREDENTIAL_ID_MAX_LENGTH,
+  PASSKEY_CREDENTIAL_ID_MIN_LENGTH,
+} from "../../../../constants/passkey.const";
 
 const ENTITY_NAME = "ResourceMetadataEntity";
 const RESOURCE_NAME_MAX_LENGTH = 255;
@@ -66,6 +71,13 @@ class ResourceMetadataEntity extends EntityV2 {
         },
         icon: IconEntity.getSchema(),
         custom_fields: CustomFieldsCollection.getSchema(),
+        // Passkey only: copy of the secret credential id, required by the passkey definition.
+        credential_id: {
+          type: "string",
+          minLength: PASSKEY_CREDENTIAL_ID_MIN_LENGTH,
+          maxLength: PASSKEY_CREDENTIAL_ID_MAX_LENGTH,
+          pattern: PASSKEY_BASE64URL_REGEXP,
+        },
       },
     };
   }
@@ -176,6 +188,14 @@ class ResourceMetadataEntity extends EntityV2 {
    */
   get uris() {
     return this._props.uris || [];
+  }
+
+  /**
+   * Returns the passkey credential id if any
+   * @returns {string|null} base64url
+   */
+  get credentialId() {
+    return this._props.credential_id ?? null;
   }
 
   /**

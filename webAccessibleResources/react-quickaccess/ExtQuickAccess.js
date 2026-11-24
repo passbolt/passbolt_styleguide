@@ -7,6 +7,7 @@ import FilterResourcesBySharedWithMePage from "./components/FilterResourcesBySha
 import FilterResourcesByTagPage from "./components/FilterResourcesByTagPage/FilterResourcesByTagPage";
 import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
+import UnsavedPasswordsPage from "./components/UnsavedPasswordsPage/UnsavedPasswordsPage";
 import LoginPage from "./components/LoginPage/LoginPage";
 import MoreFiltersPage from "./components/MoreFiltersPage/MoreFiltersPage";
 import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePage";
@@ -32,6 +33,7 @@ import ResourceTypesLocalStorageContextProvider from "../shared/context/Resource
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import AccountEntity from "../shared/models/entity/account/accountEntity";
 import ConfirmMetadataKeyDialog from "./components/ConfirmMetadataKeyPage/ConfirmMetadataKeyPage";
+import PasskeyVerificationPreferencePage from "./components/PasskeyVerificationPreferencePage/PasskeyVerificationPreferencePage";
 import MetadataKeyEntity from "../shared/models/entity/metadata/metadataKeyEntity";
 import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataTrustedKeyEntity";
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
@@ -40,6 +42,8 @@ import OfflineSettingsLocalStorageContextProvider from "../shared/context/offlin
 import ActiveSessionSessionStorageContextProvider from "../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import ExtQuickAccessContextProvider from "./contexts/ExtQuickAccessContext";
 import HandleBootstrapRoute from "./components/HandleBootstrapRoute/HandleBootstrapRoute";
+import PasskeyCreatePage from "./components/PasskeyCreatePage/PasskeyCreatePage";
+import PasskeySelectPage from "./components/PasskeySelectPage/PasskeySelectPage";
 import QuickAccessServerUnavailable from "./components/QuickAccessServerUnavailable/QuickAccessServerUnavailable";
 import QuickAccessOfflineFooter from "./components/Offline/QuickAccessOfflineFooter";
 import OfflineLoginPage from "./components/Offline/OfflineLoginPage";
@@ -62,6 +66,9 @@ export const BOOTSTRAP_FEATURE = {
   SAVE_CREDENTIALS: "save-credentials",
   AUTOSAVE_CREDENTIALS: "autosave-credentials",
   REQUEST_PASSPHRASE: "request-passphrase",
+  PASSKEY_CREATE: "passkey-create",
+  PASSKEY_GET: "passkey-get",
+  PASSKEY_VERIFICATION_PREFERENCE: "passkey-verification-preference",
 };
 
 class ExtQuickAccess extends React.Component {
@@ -82,6 +89,9 @@ class ExtQuickAccess extends React.Component {
     this.handlePassphraseDialogCompleted = this.handlePassphraseDialogCompleted.bind(this);
     this.handleBackgroundPageConfirmMetadataKeyEvent = this.handleBackgroundPageConfirmMetadataKeyEvent.bind(this);
     this.handleConfirmMetadataKeyDialogCompleted = this.handleConfirmMetadataKeyDialogCompleted.bind(this);
+    this.handleBackgroundPageRequiresPasskeyVerificationPreferenceEvent =
+      this.handleBackgroundPageRequiresPasskeyVerificationPreferenceEvent.bind(this);
+    this.handlePasskeyVerificationPreferenceCompleted = this.handlePasskeyVerificationPreferenceCompleted.bind(this);
   }
 
   /**
@@ -90,6 +100,10 @@ class ExtQuickAccess extends React.Component {
   initEventListener() {
     this.props.port.on("passbolt.passphrase.request", this.handleBackgroundPageRequiresPassphraseEvent);
     this.props.port.on("passbolt.metadata-key.trust-confirm", this.handleBackgroundPageConfirmMetadataKeyEvent);
+    this.props.port.on(
+      "passbolt.passkey.request-verification-preference",
+      this.handleBackgroundPageRequiresPasskeyVerificationPreferenceEvent,
+    );
   }
 
   /**
@@ -99,6 +113,7 @@ class ExtQuickAccess extends React.Component {
    */
   componentDidMount() {
     this.handlePassphraseRequest();
+    this.handlePasskeyVerificationPreferenceRequest();
   }
 
   /**
@@ -111,6 +126,11 @@ class ExtQuickAccess extends React.Component {
       // Passphrase
       passphraseRequired: false,
       passphraseRequestId: "",
+      passphrasePasskeyPrompt: null,
+      // Passkey verification preference
+      passkeyVerificationPreferenceRequired: false,
+      passkeyVerificationPreferenceRequestId: null,
+      passkeyVerificationPreferenceRpId: null,
       // Confirm metadata key
       confirmMetadataKeyRequired: false,
       confirmMetadataKeyRequestId: null,
@@ -143,10 +163,28 @@ class ExtQuickAccess extends React.Component {
 
   /**
    * Handle background page require passphrase event
-   * @param requestId
+   * @param {string} requestId
+   * @param {{rpId: string, purpose: string, ceremony: string}} [passkeyPrompt] The passkey variant of the prompt.
    */
-  handleBackgroundPageRequiresPassphraseEvent(requestId) {
-    this.setState({ passphraseRequired: true, passphraseRequestId: requestId });
+  handleBackgroundPageRequiresPassphraseEvent(requestId, passkeyPrompt) {
+    this.setState({
+      passphraseRequired: true,
+      passphraseRequestId: requestId,
+      passphrasePasskeyPrompt: passkeyPrompt ?? null,
+    });
+  }
+
+  /**
+   * Handle background page require passkey verification preference event
+   * @param {string} requestId
+   * @param {{rpId: string}} request The request.
+   */
+  handleBackgroundPageRequiresPasskeyVerificationPreferenceEvent(requestId, { rpId }) {
+    this.setState({
+      passkeyVerificationPreferenceRequired: true,
+      passkeyVerificationPreferenceRequestId: requestId,
+      passkeyVerificationPreferenceRpId: rpId,
+    });
   }
 
   /**
@@ -184,7 +222,7 @@ class ExtQuickAccess extends React.Component {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
       await this.closeWindow();
     } else {
-      this.setState({ passphraseRequired: false, passphraseRequestId: null });
+      this.setState({ passphraseRequired: false, passphraseRequestId: null, passphrasePasskeyPrompt: null });
     }
   }
 
@@ -193,7 +231,39 @@ class ExtQuickAccess extends React.Component {
    */
   handlePassphraseRequest() {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
-      this.handleBackgroundPageRequiresPassphraseEvent(this.props.bootstrapRequestId);
+      this.handleBackgroundPageRequiresPassphraseEvent(
+        this.props.bootstrapRequestId,
+        this.props.bootstrapPasskeyPrompt,
+      );
+    }
+  }
+
+  /**
+   * Handle passkey verification preference request if bootstrap feature equals passkey verification preference
+   */
+  handlePasskeyVerificationPreferenceRequest() {
+    if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.PASSKEY_VERIFICATION_PREFERENCE) {
+      this.handleBackgroundPageRequiresPasskeyVerificationPreferenceEvent(
+        this.props.bootstrapRequestId,
+        this.props.bootstrapPasskeyPrompt,
+      );
+    }
+  }
+
+  /**
+   * Handle passkey verification preference completed
+   * If bootstrap feature equals passkey verification preference, close the window, else hide the page.
+   * @return {Promise<void>}
+   */
+  async handlePasskeyVerificationPreferenceCompleted() {
+    if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.PASSKEY_VERIFICATION_PREFERENCE) {
+      await this.closeWindow();
+    } else {
+      this.setState({
+        passkeyVerificationPreferenceRequired: false,
+        passkeyVerificationPreferenceRequestId: null,
+        passkeyVerificationPreferenceRpId: null,
+      });
     }
   }
 
@@ -234,6 +304,7 @@ class ExtQuickAccess extends React.Component {
             port={this.props.port}
             account={this.state.account}
             openerTabId={this.props.openerTabId}
+            passwordDraftId={this.props.passwordDraftId}
             bootstrapFeature={this.props.bootstrapFeature}
             detached={this.props.detached}
           >
@@ -282,7 +353,15 @@ class ExtQuickAccess extends React.Component {
                       {this.state.passphraseRequired && (
                         <PassphraseDialog
                           requestId={this.state.passphraseRequestId}
+                          passkeyPrompt={this.state.passphrasePasskeyPrompt}
                           onComplete={this.handlePassphraseDialogCompleted}
+                        />
+                      )}
+                      {this.state.passkeyVerificationPreferenceRequired && (
+                        <PasskeyVerificationPreferencePage
+                          requestId={this.state.passkeyVerificationPreferenceRequestId}
+                          rpId={this.state.passkeyVerificationPreferenceRpId}
+                          onComplete={this.handlePasskeyVerificationPreferenceCompleted}
                         />
                       )}
                       {this.state.confirmMetadataKeyRequired && (
@@ -294,7 +373,7 @@ class ExtQuickAccess extends React.Component {
                         />
                       )}
                       <div
-                        className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired ? "visually-hidden" : ""}`}
+                        className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired || this.state.passkeyVerificationPreferenceRequired ? "visually-hidden" : ""}`}
                       >
                         <Route path={SEARCH_VISIBLE_ROUTES} render={() => <Search />} />
                         <ResourceTypesLocalStorageContextProvider>
@@ -358,6 +437,18 @@ class ExtQuickAccess extends React.Component {
                                           component={SaveResource}
                                         />
                                         <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/passkeys/create"
+                                          component={PasskeyCreatePage}
+                                          requestId={this.props.bootstrapRequestId}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/passkeys/get"
+                                          component={PasskeySelectPage}
+                                          requestId={this.props.bootstrapRequestId}
+                                        />
+                                        <PrivateRoute
                                           path="/webAccessibleResources/quickaccess/resources/view/:id"
                                           component={ResourceViewPage}
                                         />
@@ -378,6 +469,11 @@ class ExtQuickAccess extends React.Component {
                                         <PrivateRoute
                                           path="/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys"
                                           component={ActionAbortedMissingMetadataKeysPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/unsaved-passwords"
+                                          component={UnsavedPasswordsPage}
                                         />
                                         <PrivateRoute
                                           exact
@@ -411,7 +507,13 @@ ExtQuickAccess.propTypes = {
   storage: PropTypes.object,
   bootstrapFeature: PropTypes.string,
   bootstrapRequestId: PropTypes.string,
+  bootstrapPasskeyPrompt: PropTypes.shape({
+    rpId: PropTypes.string,
+    purpose: PropTypes.string,
+    ceremony: PropTypes.string,
+  }), // The passkey prompt or choice screen a detached QuickAccess opens on
   openerTabId: PropTypes.string,
+  passwordDraftId: PropTypes.string,
   detached: PropTypes.bool,
 };
 

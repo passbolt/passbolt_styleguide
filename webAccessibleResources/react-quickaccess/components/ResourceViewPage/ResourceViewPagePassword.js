@@ -28,6 +28,7 @@ import {
   SECRET_KEYS,
   TRANSITION_DURATION_IN_MS,
 } from "./secretState";
+import ResourceViewPageUsername from "./ResourceViewPageUsername";
 
 /**
  * The password section of the resource view page: the username row and the password row.
@@ -40,9 +41,6 @@ class ResourceViewPagePassword extends React.Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
-    this.usernameCopyDefaultRef = createRef();
-    this.usernameCopyProcessingRef = createRef();
-    this.usernameCopyDoneRef = createRef();
     this.previewIdleRef = createRef();
     this.previewDecryptingRef = createRef();
     this.previewRevealedRef = createRef();
@@ -127,57 +125,6 @@ class ResourceViewPagePassword extends React.Component {
   }
 
   /**
-   * Render the username row. The username is metadata in clear: no mask, no preview, a permanent copy.
-   * @returns {JSX}
-   */
-  renderUsernameRow() {
-    const { username, onCopyUsername } = this.props;
-    const copyStatus = this.getCopyStatus(SECRET_KEYS.USERNAME);
-    return (
-      <li className="property">
-        <div className="information">
-          <span className="property-name">
-            <Trans>Username</Trans>
-          </span>
-          {username && (
-            <a href="#" role="button" className="property-value" onClick={onCopyUsername}>
-              {username}
-            </a>
-          )}
-          {!username && (
-            <span className="property-value empty">
-              <Trans>no username provided</Trans>
-            </span>
-          )}
-        </div>
-        <a
-          role="button"
-          className={`button button-transparent property-action ${!username ? "disabled" : ""}`}
-          onClick={onCopyUsername}
-          title={this.props.t("Copy to clipboard")}
-        >
-          {this.renderIcon(this.usernameCopyDefaultRef, copyStatus === COPY_STATUSES.DEFAULT, false, <CopySVG />)}
-          {this.renderIcon(
-            this.usernameCopyProcessingRef,
-            copyStatus === COPY_STATUSES.PROCESSING,
-            true,
-            <SpinnerSVG />,
-          )}
-          {this.renderIcon(
-            this.usernameCopyDoneRef,
-            copyStatus === COPY_STATUSES.DONE,
-            true,
-            <HealthCheckSuccessSvg />,
-          )}
-          <span className="visually-hidden">
-            <Trans>Copy to clipboard</Trans>
-          </span>
-        </a>
-      </li>
-    );
-  }
-
-  /**
    * Render the password row.
    * @returns {JSX}
    */
@@ -251,7 +198,12 @@ class ResourceViewPagePassword extends React.Component {
   render() {
     return (
       <>
-        {this.renderUsernameRow()}
+        <ResourceViewPageUsername
+          username={this.props.username}
+          onCopy={this.props.onCopyUsername}
+          copyingSecret={this.props.copyingSecret}
+          copyStatus={this.props.copyStatus}
+        />
         {this.renderPasswordRow()}
       </>
     );

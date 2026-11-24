@@ -32,6 +32,7 @@ import TotpSVG from "../../../../img/svg/totp.svg";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 import NoteSVG from "../../../../img/svg/notes.svg";
 import PinCodeSVG from "../../../../img/svg/pin.svg";
+import FingerprintSVG from "../../../../img/svg/fingerprint.svg";
 
 class DisplayContentTypesAllowedContentTypesAdministration extends Component {
   /** @type {ResourceTypesFormEntity}*/
@@ -80,12 +81,14 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
         totp_v5: false,
         note_v5: false,
         pin_code_v5: false,
+        passkey_v5: false,
         password_v4_count: 0,
         password_v5_count: 0,
         totp_v4_count: 0,
         totp_v5_count: 0,
         note_v5_count: 0,
         pin_code_v5_count: 0,
+        passkey_v5_count: 0,
         has_password_v4: false,
         has_totp_v4: false,
         has_password_v5: false,
@@ -597,6 +600,55 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                               </div>
                             )}
                             {warnings?.hasError("pin_code_v5", "is_creation_not_alowed") && (
+                              <div className="warning-message">
+                                <Trans>Creation of content type v5 is not allowed.</Trans>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </label>
+                    </span>
+                    <span
+                      className={`input checkbox form-element ${errors?.hasError("passkey_v5") && "error"} ${!errors?.hasError("passkey_v5") && warnings?.hasError("passkey_v5") && "warning"}`}
+                    >
+                      <input
+                        type="checkbox"
+                        id="passkeyV5Input"
+                        className="checkbox"
+                        name="passkey_v5"
+                        onChange={this.handleInputChange}
+                        checked={this.state.settings.passkey_v5}
+                        disabled={this.isInputDisabled(
+                          this.state.settings.passkey_v5_count,
+                          this.state.settings.passkey_v5,
+                        )}
+                      />
+                      <label htmlFor="passkeyV5Input">
+                        {this.addTooltipOnDisabledElement(
+                          <div className="allow-content-type-item">
+                            <FingerprintSVG />
+                            <span className="name">
+                              <Trans>Passkey</Trans>
+                            </span>
+                            <span className="info">
+                              {this.props.t(`({{count}} resources)`, { count: this.state.settings.passkey_v5_count })}
+                            </span>
+                          </div>,
+                          this.isInputDisabled(this.state.settings.passkey_v5_count, this.state.settings.passkey_v5),
+                        )}
+                        {errors?.hasError("passkey_v5", "has_content") && (
+                          <div className="error-message">
+                            <Trans>Passkey content type is disabled but there are existing passkey resources.</Trans>
+                          </div>
+                        )}
+                        {!errors?.hasError("passkey_v5") && (
+                          <>
+                            {warnings?.hasError("passkey_v5", "active_metadata_key") && (
+                              <div className="warning-message">
+                                <Trans>No active metadata key defined.</Trans>
+                              </div>
+                            )}
+                            {warnings?.hasError("passkey_v5", "is_creation_not_alowed") && (
                               <div className="warning-message">
                                 <Trans>Creation of content type v5 is not allowed.</Trans>
                               </div>

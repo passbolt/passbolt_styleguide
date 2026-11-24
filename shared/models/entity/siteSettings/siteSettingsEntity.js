@@ -15,6 +15,7 @@ import assertString from "validator/es/lib/util/assertString";
 import EntityV2 from "../abstract/entityV2";
 import getPropValue from "../../../../react-extension/lib/Object/getPropValue";
 import sanitizeUrl from "../../../../react-extension/lib/Sanitize/sanitizeUrl";
+import { PASSKEY_USER_VERIFICATION_POLICY_USER_CHOICE } from "../../../constants/passkey.const";
 
 const ORGANIZATION_ENABLED = "enabled";
 const ORGANIZATION_DISABLED = "disabled";
@@ -173,6 +174,25 @@ class SiteSettingsEntity extends EntityV2 {
   get hasRememberMeUntilILogoutOption() {
     const options = this.getRememberMeOptions() || {};
     return typeof options[-1] !== "undefined";
+  }
+
+  /**
+   * Whether the organisation lets each user choose how passkey requests requiring user verification are verified.
+   * Any other or missing policy is strict.
+   * @returns {boolean}
+   */
+  get canUsersChoosePasskeyVerification() {
+    const policy = getPropValue(this._props, "passbolt.plugins.passkeys.userVerificationPolicy");
+    return policy === PASSKEY_USER_VERIFICATION_POLICY_USER_CHOICE;
+  }
+
+  /**
+   * Whether the organisation lets the browser extension intercept the passkey requests of web pages.
+   * A missing value is off.
+   * @returns {boolean}
+   */
+  get isPasskeyInterceptionEnabled() {
+    return getPropValue(this._props, "passbolt.plugins.passkeys.interceptionEnabled") === true;
   }
 
   /**

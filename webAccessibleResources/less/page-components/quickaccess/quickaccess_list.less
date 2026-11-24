@@ -14,6 +14,30 @@
             position: relative;
             margin-left: .8rem;
         }
+        .unsaved-passwords-banner {
+            a {
+                color: var(--Text-and-icons-Main-text);
+                background: var(--Workspace-Announcement-bar-background);
+                display: flex;
+                align-items: center;
+                padding: 1.6rem;
+                font-size: 1.5rem;
+
+                &:hover, &:active {
+                    color: var(--Text-and-icons-Main-text);
+                    text-decoration: none;
+                }
+            }
+            .attention-required {
+                --icon-exclamation-color: var(--Badges-Bagde-icon);
+                --icon-exclamation-background-color: var(--Badges-Alert-background);
+                --icon-exclamation-border-color: var(--Badges-Alert-background);
+                flex-shrink: 0;
+            }
+            .unsaved-passwords-banner-title {
+                flex: 1;
+            }
+        }
         .empty-entry {
             margin: 1.6rem;
             display: flex;
@@ -82,6 +106,17 @@
 
                   .badge {
                     margin-top: .2rem;
+                  }
+
+                  // A passkey a waiting sign-in of the page accepts.
+                  .url.sign-in {
+                    color: var(--Primary-button-Primary-button-background);
+                    font-weight: 600;
+
+                    svg {
+                      width: 1.3rem;
+                      height: 1.3rem;
+                    }
                   }
                 }
             }

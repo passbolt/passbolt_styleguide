@@ -19,6 +19,7 @@
 import { defaultProps } from "./AddResourceName.test.data";
 import AddResourceNamePage from "./AddResourceName.test.page";
 import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { ResourceEditCreateFormEnumerationTypes } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 beforeEach(() => {
   jest.resetModules();
@@ -58,6 +59,29 @@ describe("AddResourceName", () => {
       expect(props.onChange).toHaveBeenCalledTimes(1);
       expect(name).toEqual("metadata.name");
       expect(value).toEqual("name");
+    });
+  });
+
+  describe("As LU I can open the appearance form from the resource icon.", () => {
+    it("As LU I can click the icon to open the appearance form", async () => {
+      expect.assertions(1);
+
+      const props = defaultProps({ onIconClick: jest.fn() });
+      page = new AddResourceNamePage(props);
+      await page.click(page.iconButton);
+
+      expect(props.onIconClick).toHaveBeenCalledWith(
+        expect.anything(),
+        ResourceEditCreateFormEnumerationTypes.APPEARANCE,
+      );
+    });
+
+    it("As LU I cannot click the icon when no appearance form can be opened", () => {
+      expect.assertions(1);
+
+      page = new AddResourceNamePage(defaultProps());
+
+      expect(page.iconButton).toBeNull();
     });
   });
 

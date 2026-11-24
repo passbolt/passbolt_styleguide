@@ -21,6 +21,7 @@ import {
   TEST_RESOURCE_TYPE_TOTP,
   TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  TEST_RESOURCE_TYPE_V5_PASSKEY,
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../resourceType/resourceTypeEntity.test.data";
 import { defaultUserDto } from "../user/userEntity.test.data";
@@ -240,6 +241,22 @@ export const resourceStandaloneCustomFieldsDto = (data = {}, options = {}) =>
         },
         { withCustomFields: true },
       ),
+      ...data,
+    },
+    options,
+  );
+
+export const resourcePasskeyDto = (data = {}, options = {}) =>
+  defaultResourceDto(
+    {
+      resource_type_id: TEST_RESOURCE_TYPE_V5_PASSKEY,
+      metadata: defaultResourceMetadataDto({
+        resource_type_id: TEST_RESOURCE_TYPE_V5_PASSKEY,
+        name: "Example passkey",
+        username: "ada@example.com",
+        uris: ["https://example.com"],
+        credential_id: "yuDS1TCepE-VXzAgRc2VJw",
+      }),
       ...data,
     },
     options,

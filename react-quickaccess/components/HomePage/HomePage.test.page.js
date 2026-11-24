@@ -38,6 +38,14 @@ export default class HomePagePage {
   }
 
   /**
+   * Returns the unsaved passwords banner link if any
+   * @returns {HTMLElement|null}
+   */
+  get unsavedPasswordsBanner() {
+    return this._page.container.querySelector(".unsaved-passwords-banner a");
+  }
+
+  /**
    * Returns the suggested resources if any
    * @returns {NodeListOf<HTLMElement>}
    */
@@ -50,7 +58,35 @@ export default class HomePagePage {
    * @returns {NodeListOf<HTLMElement>}
    */
   get suggestedResourcesEntries() {
-    return this._page.container.querySelectorAll(".list-section .list-items .suggested-resource-entry");
+    return this._page.container.querySelectorAll(
+      ".list-section .list-items .suggested-resource-entry:not(.suggested-passkey-entry)",
+    );
+  }
+
+  /**
+   * Returns the passkeys of the site of the tab
+   * @returns {NodeListOf<HTMLElement>}
+   */
+  get passkeyEntries() {
+    return this._page.container.querySelectorAll(".list-section .list-items .suggested-passkey-entry");
+  }
+
+  /**
+   * Returns whether the passkey entry at the given index signs in on click
+   * @param {number} index The index of the entry
+   * @returns {boolean}
+   */
+  isPasskeyEntrySigningIn(index) {
+    return Boolean(this.passkeyEntries[index].querySelector("button.resource-details .url.sign-in"));
+  }
+
+  /**
+   * Click on the passkey entry at the given index
+   * @param {number} index The index of the entry
+   */
+  async clickPasskeyEntry(index) {
+    fireEvent.click(this.passkeyEntries[index].querySelector(".resource-details"), { button: 0 });
+    await waitFor(() => {});
   }
 
   /**
@@ -176,6 +212,15 @@ export default class HomePagePage {
   async clickOnBrowsedResource(index) {
     const element = this.getBrowsedResourceItem(index)?.querySelector(".inline-resource-entry");
     fireEvent.click(element, { button: 0 });
+    await waitFor(() => {});
+  }
+
+  /**
+   * Simulates a click on the unsaved passwords banner
+   * @returns {Promise<void>}
+   */
+  async clickOnUnsavedPasswordsBanner() {
+    fireEvent.click(this.unsavedPasswordsBanner, { button: 0 });
     await waitFor(() => {});
   }
 
