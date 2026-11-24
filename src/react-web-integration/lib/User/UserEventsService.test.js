@@ -262,7 +262,10 @@ describe("UserEventsService", () => {
 
       const field = document.createElement("input");
 
-      await expect(UserEventsService.autofill(field, "test")).resolves.toStrictEqual(true);
+      const promise = UserEventsService.autofill(field, "test");
+      await jest.runAllTimersAsync();
+
+      await expect(promise).resolves.toStrictEqual(true);
 
       expect(UserEventsService._autofillSingleField).toHaveBeenCalledWith(field, "test");
       expect(UserEventsService._autofillMultipleField).not.toHaveBeenCalled();
@@ -300,6 +303,128 @@ describe("UserEventsService", () => {
 
       expect(UserEventsService._autofillSingleField).toHaveBeenCalledWith(field, "test");
       expect(UserEventsService._autofillMultipleField).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("fields rewritten by the page on input", () => {
+    const password = "Secret123!";
+    let field;
+    let hiddenField;
+
+    const maskOnInput = (event) => {
+      if (event.inputType === "deleteContentBackward") {
+        hiddenField.value = hiddenField.value.slice(0, field.value.length);
+      } else {
+        hiddenField.value += field.value.slice(-1);
+      }
+      field.value = "*".repeat(hiddenField.value.length);
+    };
+
+    const autofill = async (target, value) => {
+      const promise = UserEventsService.autofill(target, value);
+      await jest.runAllTimersAsync();
+      return promise;
+    };
+
+    beforeEach(() => {
+      field = document.createElement("input");
+      hiddenField = document.createElement("input");
+      jest.spyOn(UserEventsService, "_typeCharacterByCharacter");
+    });
+
+    it("Should not type character by character when the field holds the value", async () => {
+      expect.assertions(3);
+
+      await expect(autofill(field, password)).resolves.toStrictEqual(true);
+
+      expect(field.value).toStrictEqual(password);
+      expect(UserEventsService._typeCharacterByCharacter).not.toHaveBeenCalled();
+    });
+
+    it("Should type character by character when the page rewrites the field", async () => {
+      expect.assertions(4);
+
+      field.addEventListener("input", (event) => maskOnInput(event));
+
+      await expect(autofill(field, password)).resolves.toStrictEqual(true);
+
+      expect(hiddenField.value).toStrictEqual(password);
+      expect(field.value).toStrictEqual("*".repeat(password.length));
+      expect(UserEventsService._typeCharacterByCharacter).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should read the field back after the page next render", async () => {
+      expect.assertions(2);
+
+      field.addEventListener("input", (event) => setTimeout(() => maskOnInput(event), 0));
+
+      await autofill(field, password);
+
+      expect(hiddenField.value).toStrictEqual(password);
+      expect(UserEventsService._typeCharacterByCharacter).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should type character by character only once", async () => {
+      expect.assertions(2);
+
+      field.addEventListener("input", () => {
+        field.value = "";
+      });
+
+      await autofill(field, password);
+
+      expect(field.value).toStrictEqual("");
+      expect(UserEventsService._typeCharacterByCharacter).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should dispatch the events of each typed character and a single change", async () => {
+      expect.assertions(4);
+
+      field.addEventListener("input", (event) => maskOnInput(event));
+      jest.spyOn(field, "dispatchEvent");
+
+      const promise = UserEventsService._typeCharacterByCharacter(field, "ab");
+      await jest.runAllTimersAsync();
+      await promise;
+
+      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => [event.type, event.key ?? event.inputType]);
+      expect(dispatched).toStrictEqual([
+        ["input", "deleteContentBackward"],
+        ["keydown", "a"],
+        ["input", "insertText"],
+        ["keyup", "a"],
+        ["keydown", "b"],
+        ["input", "insertText"],
+        ["keyup", "b"],
+        ["change", undefined],
+      ]);
+      const insertedData = field.dispatchEvent.mock.calls
+        .map(([event]) => event)
+        .filter((event) => event.inputType === "insertText")
+        .map((event) => event.data);
+      expect(insertedData).toStrictEqual(["a", "b"]);
+      expect(hiddenField.value).toStrictEqual("ab");
+      expect(field.value).toStrictEqual("**");
+    });
+
+    it("Should not type character by character a null value", async () => {
+      expect.assertions(2);
+
+      await autofill(field, null);
+
+      expect(field.value).toStrictEqual("");
+      expect(UserEventsService._typeCharacterByCharacter).not.toHaveBeenCalled();
+    });
+
+    it("Should not type character by character into multiple inputs fields", async () => {
+      expect.assertions(1);
+
+      const otpField = document.createElement("div");
+      "123456".split("").forEach(() => otpField.appendChild(document.createElement("input")));
+
+      await autofill(otpField, "123456");
+
+      expect(UserEventsService._typeCharacterByCharacter).not.toHaveBeenCalled();
     });
   });
 
