@@ -95,7 +95,50 @@ class UserEventsService {
     }
 
     // Otherwise, we fill the field itself
-    return UserEventsService._autofillSingleField(field, value);
+    const filled = await UserEventsService._autofillSingleField(field, value);
+    if (!UserEventsService._isFillableInput(field) || typeof value !== "string") {
+      return filled;
+    }
+
+    await UserEventsService._nextTick();
+    if (field.value === value) {
+      return filled;
+    }
+
+    return UserEventsService._typeCharacterByCharacter(field, value);
+  }
+
+  /**
+   * Type the value character by character.
+   * @param {HTMLElement} field the field to type into
+   * @param {string} value the value to type
+   * @returns {Promise<boolean>} true once the value is typed
+   */
+  static async _typeCharacterByCharacter(field, value) {
+    const view = field.ownerDocument.defaultView;
+
+    UserEventsService._setNativeValue(field, "");
+    field.dispatchEvent(new view.InputEvent("input", { inputType: "deleteContentBackward", bubbles: true }));
+    await UserEventsService._nextTick();
+
+    for (const character of value) {
+      field.dispatchEvent(new view.KeyboardEvent("keydown", { key: character, bubbles: true }));
+      UserEventsService._setNativeValue(field, field.value + character);
+      field.dispatchEvent(new view.InputEvent("input", { inputType: "insertText", data: character, bubbles: true }));
+      field.dispatchEvent(new view.KeyboardEvent("keyup", { key: character, bubbles: true }));
+      await UserEventsService._nextTick();
+    }
+    field.dispatchEvent(new view.Event("change", { bubbles: true }));
+
+    return true;
+  }
+
+  /**
+   * Wait for the next event loop tick.
+   * @returns {Promise<void>}
+   */
+  static _nextTick() {
+    return new Promise((resolve) => setTimeout(resolve, 0));
   }
 
   /**
