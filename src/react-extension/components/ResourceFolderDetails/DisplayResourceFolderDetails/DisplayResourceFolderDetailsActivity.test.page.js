@@ -56,6 +56,13 @@ export default class DisplayResourceFolderDetailsActivityPage {
   }
 
   /**
+   * Returns true if the more button shows the processing state
+   */
+  isMoreButtonProcessing() {
+    return this.moreButton.classList.contains("processing");
+  }
+
+  /**
    * Returns true
    */
   isLoading() {
