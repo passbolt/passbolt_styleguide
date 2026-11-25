@@ -52,7 +52,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    * Whenever the component has mounted
    */
   async componentDidMount() {
-    await this.fetch();
+    await this.fetchActivities();
     this.setState({ loading: false });
   }
 
@@ -72,7 +72,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   }
 
   /**
-   * Check if the folder has changed and fetch
+   * Check if the folder has changed and fetchActivities
    * @param previousFolder
    */
   async handleResourceChange(previousFolder) {
@@ -83,7 +83,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
 
     // Reset the component, and fetch activities for the new folder.
     this.setState(this.defaultState);
-    await this.fetch();
+    await this.fetchActivities();
     this.setState({ loading: false });
   }
 
@@ -93,17 +93,17 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   async handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
     this.setState({ activitiesPage, loadingMore: true });
-    await this.fetch();
+    await this.fetchActivities(activitiesPage);
     this.setState({ loadingMore: false });
   }
 
   /**
    * Fetch the folder activities
+   * @param {number} page The page to fetch
    * @returns {Promise<void>}
    */
-  async fetch() {
+  async fetchActivities(page = 1) {
     const limit = LIMIT_ACTIVITIES_PER_PAGE;
-    const page = this.state.activitiesPage;
     const options = { limit, page };
     const newActivities =
       (await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Folder", this.folder.id, options)) ||
