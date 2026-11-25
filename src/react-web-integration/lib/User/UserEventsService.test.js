@@ -54,7 +54,7 @@ describe("UserEventsService", () => {
 
       expect(field.value).toStrictEqual("test");
 
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
       expect(field.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
       expect(field.dispatchEvent).toHaveBeenCalledWith(getInputEvent("test"));
       expect(field.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -70,7 +70,7 @@ describe("UserEventsService", () => {
 
       expect(field.value).toStrictEqual("");
 
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
       expect(field.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
       expect(field.dispatchEvent).toHaveBeenCalledWith(getInputEvent(null));
       expect(field.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -102,7 +102,7 @@ describe("UserEventsService", () => {
 
       expect(field.value).toStrictEqual("");
 
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
       expect(field.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
       expect(field.dispatchEvent).toHaveBeenCalledWith(getInputEvent(""));
       expect(field.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -158,7 +158,7 @@ describe("UserEventsService", () => {
         if (i === 0) {
           expect(input.click).toHaveBeenCalledTimes(1);
 
-          expect(input.dispatchEvent).toHaveBeenCalledTimes(5);
+          expect(input.dispatchEvent).toHaveBeenCalledTimes(7);
           expect(input.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
           expect(input.dispatchEvent).toHaveBeenCalledWith(getInputEvent(value[i]));
           expect(input.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -205,7 +205,7 @@ describe("UserEventsService", () => {
         expect(input.value).toStrictEqual(value[i]);
 
         // The first input also has twice the number of events for the same reason
-        expect(input.dispatchEvent).toHaveBeenCalledTimes(i === 0 ? 8 : 4);
+        expect(input.dispatchEvent).toHaveBeenCalledTimes(i === 0 ? 12 : 6);
         expect(input.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
         expect(input.dispatchEvent).toHaveBeenCalledWith(getInputEvent(value[i]));
         expect(input.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -306,6 +306,94 @@ describe("UserEventsService", () => {
     });
   });
 
+  describe("blur", () => {
+    let field;
+
+    beforeEach(() => {
+      field = document.createElement("input");
+      document.body.appendChild(field);
+      jest.spyOn(field, "dispatchEvent");
+    });
+
+    afterEach(() => {
+      field.remove();
+    });
+
+    it("Should dispatch blur and focusout when the field does not have the focus", async () => {
+      expect.assertions(2);
+
+      await UserEventsService._autofillSingleField(field, "test");
+
+      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => event.type);
+      expect(dispatched).toStrictEqual(["keydown", "input", "keyup", "change", "blur", "focusout"]);
+      expect(document.activeElement).not.toBe(field);
+    });
+
+    it("Should not dispatch blur nor focusout when the field has the focus", async () => {
+      expect.assertions(2);
+
+      field.focus();
+      field.dispatchEvent.mockClear();
+
+      await UserEventsService._autofillSingleField(field, "test");
+
+      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => event.type);
+      expect(dispatched).toStrictEqual(["keydown", "input", "keyup", "change"]);
+      expect(document.activeElement).toBe(field);
+    });
+
+    it("Should dispatch blur and focusout when the field window does not have the focus", async () => {
+      expect.assertions(2);
+
+      field.focus();
+      field.dispatchEvent.mockClear();
+      const hasFocusSpy = jest.spyOn(document, "hasFocus").mockReturnValue(false);
+
+      await UserEventsService._autofillSingleField(field, "test");
+
+      hasFocusSpy.mockRestore();
+
+      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => event.type);
+      expect(dispatched).toStrictEqual(["keydown", "input", "keyup", "change", "blur", "focusout"]);
+      expect(document.activeElement).toBe(field);
+    });
+
+    it("Should bubble focusout but not blur", async () => {
+      expect.assertions(1);
+
+      const onAncestor = jest.fn();
+      const types = ["blur", "focusout"];
+      types.forEach((type) => document.body.addEventListener(type, onAncestor));
+
+      await UserEventsService._autofillSingleField(field, "test");
+
+      types.forEach((type) => document.body.removeEventListener(type, onAncestor));
+      expect(onAncestor.mock.calls.map(([event]) => event.type)).toStrictEqual(["focusout"]);
+    });
+
+    it.each([
+      { scenario: "blur on the field", type: "blur", getListened: () => field },
+      { scenario: "focusout on an ancestor", type: "focusout", getListened: () => document.body },
+    ])("Should keep a value committed by the page on $scenario", async ({ type, getListened }) => {
+      expect.assertions(1);
+
+      let committedValue = "";
+      const commit = () => {
+        committedValue = field.value;
+      };
+      getListened().addEventListener(type, commit);
+      field.addEventListener("focus", () => {
+        field.value = committedValue;
+      });
+
+      await UserEventsService._autofillSingleField(field, "test");
+      field.focus();
+
+      getListened().removeEventListener(type, commit);
+      expect(field.value).toStrictEqual("test");
+    });
+  });
+
   describe("fields rewritten by the page on input", () => {
     const password = "Secret123!";
     let field;
@@ -397,6 +485,8 @@ describe("UserEventsService", () => {
         ["input", "insertText"],
         ["keyup", "b"],
         ["change", undefined],
+        ["blur", undefined],
+        ["focusout", undefined],
       ]);
       const insertedData = field.dispatchEvent.mock.calls
         .map(([event]) => event)
@@ -501,7 +591,7 @@ describe("UserEventsService", () => {
       await UserEventsService._autofillSingleField(field, "test");
 
       expect(field.value).toStrictEqual("test");
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
     });
 
     it("Should build the dispatched events from the field own realm", async () => {
