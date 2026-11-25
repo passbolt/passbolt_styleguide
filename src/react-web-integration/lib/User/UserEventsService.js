@@ -129,8 +129,30 @@ class UserEventsService {
       await UserEventsService._nextTick();
     }
     field.dispatchEvent(new view.Event("change", { bubbles: true }));
+    UserEventsService._dispatchBlurIfUnfocused(field);
 
     return true;
+  }
+
+  /**
+   * Whether the field has the focus, its window included.
+   * @param {HTMLElement} field the field
+   * @returns {boolean}
+   */
+  static _hasFocus(field) {
+    return field.getRootNode().activeElement === field && field.ownerDocument.hasFocus();
+  }
+
+  /**
+   * Dispatch blur and focusout on a field that does not have the focus.
+   * @param {HTMLElement} field the field
+   */
+  static _dispatchBlurIfUnfocused(field) {
+    if (!UserEventsService._hasFocus(field)) {
+      const view = field.ownerDocument.defaultView;
+      field.dispatchEvent(new view.FocusEvent("blur"));
+      field.dispatchEvent(new view.FocusEvent("focusout", { bubbles: true }));
+    }
   }
 
   /**
@@ -187,12 +209,13 @@ class UserEventsService {
     const changeEvent = new view.Event("change", { bubbles: true });
 
     field.click();
-    // Dispatch events, they happen in this order: down, input, up, change, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
+    // Dispatch events, they happen in this order: down, input, up, change, blur, focusout, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
     field.dispatchEvent(keydownEvent);
     UserEventsService._setNativeValue(field, value);
     field.dispatchEvent(inputEvent);
     field.dispatchEvent(keyupEvent);
     field.dispatchEvent(changeEvent);
+    UserEventsService._dispatchBlurIfUnfocused(field);
 
     return changedPromise;
   }
