@@ -224,6 +224,24 @@ cHMfN5HyXDmxUx5lWoxVSw/JE/syEOiCTQY/i0AQxpyUj9sBiBRSNPgB7xgaMyFA
 =KFUt
 -----END PGP PUBLIC KEY BLOCK-----`;
 
+const _pgpSignature = `-----BEGIN PGP SIGNATURE-----
+
+hQIMAwtiNSax40KHAQ/9E0aon1ZgSczY+l9kdAkrITs3efMjEXfb3RIK0pI7pQus
+9CjRkqyfSLFKoFgEtKg5kta7sP9/5GH5lA/7e5nrbOrS8pRbsFEoZ8Duho9PV1x0
+esYbrUD9dGueAxDN+US5Mvo564bodGCSvsI7siGzTouNq0Jq2AP288rIFTfvZnOc
+1mAoz0gfR6tG1PbKkpfP/b8ZhgX7K/DYUuGcrXABqT9ruTTscB4OPtVmONXq3Xaw
+i1WDpJxEnyAsE/0M+Y1RHtL3Y4pTdX04MyCxYCAQM5qBpG18LjEhkbo0z0FxjU5x
+2JTn7p31cYgjDKIseg7l9YR79HaLtUoh2USW+95TcCsnEmdMOf4d6rmXW7inXYfD
+mMIUAD4q3Zf4WeFqwA99bHrthiO4ghIe3omsd9s6UDjTbOtPJgzqQDfmCwZRXQp6
+V7gp8CW0sipw58O2+htv/EHn3wl+RPo7db3reIs7iDBkJXaYTB4S8wR2zxHi9k5y
+arCUU9ZvIP4yffshITQ/hywtf8Y6B2KpqUw3eLg2ZX0LsBcvFR6y/6OatyDQF+nx
+91I+osb9fuHQwFKqFSnY3CXJcV3aQ27lc9E0/Qkq481fKokjvRQ31n23lW4y3hdR
+54lF/WEjQU6nkPlSuDguG3+yrvOEYMEoQHQilFzsQEgqE4NWOjwrEF7FoK4p/GjS
+QQE5UE8bLN548QW6LwqHFmw6e7wwZnbcsJMLa72G/aDolpUslWNuGNRVRvjM+bJ3
+HB8ym/pdDVi7YATf8h90V8qN
+=F1li
+-----END PGP SIGNATURE-----`;
+
 /**
  * Changes the given block according to the given options.
  * @param {string} block a valid PGP block (key or message)
@@ -235,17 +253,20 @@ cHMfN5HyXDmxUx5lWoxVSw/JE/syEOiCTQY/i0AQxpyUj9sBiBRSNPgB7xgaMyFA
  * @returns {string}
  * @private
  */
-function mutatePgpBlockFromOptions(block, options = {withCrc: true, withComments: false, withWrongExtraCharacters: false, withDuplicates: false}) {
+function mutatePgpBlockFromOptions(
+  block,
+  options = { withCrc: true, withComments: false, withWrongExtraCharacters: false, withDuplicates: false },
+) {
   if (options.withComments) {
     block = block.replace("\n\n", "\nVersion: PGP 1.0\nComments: This is a test\n\n");
   }
 
   if (options.withWrongExtraCharacters) {
-    block = block.replace(/\n\n(.{64})\n/, '\n\n$1Wrong Stuff Here\n');
+    block = block.replace(/\n\n(.{64})\n/, "\n\n$1Wrong Stuff Here\n");
   }
 
   if (!options.withCrc) {
-    block = block.replace(/\n=[a-zA-Z0-9/+=]{4}\n-----/, '\n-----');
+    block = block.replace(/\n=[a-zA-Z0-9/+=]{4}\n-----/, "\n-----");
   }
 
   if (options.withDuplicates) {
@@ -264,7 +285,7 @@ function mutatePgpBlockFromOptions(block, options = {withCrc: true, withComments
  * @param {boolean} [options.withDuplicates = false] if true, duplicates the generate message, seperated by carriage return
  * @returns {string}
  */
-export const defaultPgpMessage = options => mutatePgpBlockFromOptions(_pgpMessage, options);
+export const defaultPgpMessage = (options) => mutatePgpBlockFromOptions(_pgpMessage, options);
 
 /**
  * Returns a PGP message suitable for the MetadataPrivateKeyEntity armored_key field
@@ -277,7 +298,7 @@ export const defaultPgpMessage = options => mutatePgpBlockFromOptions(_pgpMessag
  * @returns {string}
  */
 
-export const defaultArmoredPrivateKey = options => mutatePgpBlockFromOptions(_armoredPgpPrivateKey, options);
+export const defaultArmoredPrivateKey = (options) => mutatePgpBlockFromOptions(_armoredPgpPrivateKey, options);
 
 /**
  * Returns a PGP message suitable for the MetadataKeyEntity armored_key field
@@ -290,4 +311,17 @@ export const defaultArmoredPrivateKey = options => mutatePgpBlockFromOptions(_ar
  * @returns {string}
  */
 
-export const defaultArmoredPublicKey = options => mutatePgpBlockFromOptions(_armoredPgpPublicKey, options);
+export const defaultArmoredPublicKey = (options) => mutatePgpBlockFromOptions(_armoredPgpPublicKey, options);
+
+/**
+ * Returns a PGP signature suitable for the LocalStorageMetadataEntity signature field
+ * @param {object} options
+ * @param {boolean} [options.withCrc = true] if true, adds a CRC block at the end of the private key
+ * @param {boolean} [options.withComments = false] if true, adds a 'comments' block right after the private key header
+ * @param {boolean} [options.withWrongExtraCharacters = false] if true, adds extra characters that makes the private key not a valid PGP message
+ * @param {boolean} [options.withWrongExtraCarriageReturn = false] if true, adds an extra carriage extra that makes the private key not a valid PGP message
+ * @param {boolean} [options.withDuplicates = false] if true, duplicates the generate private key, seperated by carriage return
+ * @returns {string}
+ */
+
+export const defaultArmoredSignature = (options) => mutatePgpBlockFromOptions(_pgpSignature, options);
