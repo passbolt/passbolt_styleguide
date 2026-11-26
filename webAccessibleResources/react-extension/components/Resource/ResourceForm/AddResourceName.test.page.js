@@ -59,27 +59,10 @@ export default class AddResourceNamePage {
     return this._page.container.querySelector("#resource-name");
   }
   /**
-   * Returns the resource icon button opening the appearance form
-   */
-  get iconButton() {
-    return this._page.container.querySelector(".resource-icon button");
-  }
-
-  /**
    * Returns true if the page object exists in the container
    */
   exists() {
     return this.title !== null;
-  }
-
-  /**
-   * Click on the element
-   * @param {HTMLElement} element The element to click on
-   */
-  async click(element) {
-    const leftClick = { button: 0 };
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
   }
 
   /**

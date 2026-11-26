@@ -95,7 +95,72 @@ class UserEventsService {
     }
 
     // Otherwise, we fill the field itself
-    return UserEventsService._autofillSingleField(field, value);
+    const filled = await UserEventsService._autofillSingleField(field, value);
+    if (!UserEventsService._isFillableInput(field) || typeof value !== "string") {
+      return filled;
+    }
+
+    await UserEventsService._nextTick();
+    if (field.value === value) {
+      return filled;
+    }
+
+    return UserEventsService._typeCharacterByCharacter(field, value);
+  }
+
+  /**
+   * Type the value character by character.
+   * @param {HTMLElement} field the field to type into
+   * @param {string} value the value to type
+   * @returns {Promise<boolean>} true once the value is typed
+   */
+  static async _typeCharacterByCharacter(field, value) {
+    const view = field.ownerDocument.defaultView;
+
+    UserEventsService._setNativeValue(field, "");
+    field.dispatchEvent(new view.InputEvent("input", { inputType: "deleteContentBackward", bubbles: true }));
+    await UserEventsService._nextTick();
+
+    for (const character of value) {
+      field.dispatchEvent(new view.KeyboardEvent("keydown", { key: character, bubbles: true }));
+      UserEventsService._setNativeValue(field, field.value + character);
+      field.dispatchEvent(new view.InputEvent("input", { inputType: "insertText", data: character, bubbles: true }));
+      field.dispatchEvent(new view.KeyboardEvent("keyup", { key: character, bubbles: true }));
+      await UserEventsService._nextTick();
+    }
+    field.dispatchEvent(new view.Event("change", { bubbles: true }));
+    UserEventsService._dispatchBlurIfUnfocused(field);
+
+    return true;
+  }
+
+  /**
+   * Whether the field has the focus, its window included.
+   * @param {HTMLElement} field the field
+   * @returns {boolean}
+   */
+  static _hasFocus(field) {
+    return field.getRootNode().activeElement === field && field.ownerDocument.hasFocus();
+  }
+
+  /**
+   * Dispatch blur and focusout on a field that does not have the focus.
+   * @param {HTMLElement} field the field
+   */
+  static _dispatchBlurIfUnfocused(field) {
+    if (!UserEventsService._hasFocus(field)) {
+      const view = field.ownerDocument.defaultView;
+      field.dispatchEvent(new view.FocusEvent("blur"));
+      field.dispatchEvent(new view.FocusEvent("focusout", { bubbles: true }));
+    }
+  }
+
+  /**
+   * Wait for the next event loop tick.
+   * @returns {Promise<void>}
+   */
+  static _nextTick() {
+    return new Promise((resolve) => setTimeout(resolve, 0));
   }
 
   /**
@@ -144,12 +209,13 @@ class UserEventsService {
     const changeEvent = new view.Event("change", { bubbles: true });
 
     field.click();
-    // Dispatch events, they happen in this order: down, input, up, change, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
+    // Dispatch events, they happen in this order: down, input, up, change, blur, focusout, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
     field.dispatchEvent(keydownEvent);
     UserEventsService._setNativeValue(field, value);
     field.dispatchEvent(inputEvent);
     field.dispatchEvent(keyupEvent);
     field.dispatchEvent(changeEvent);
+    UserEventsService._dispatchBlurIfUnfocused(field);
 
     return changedPromise;
   }

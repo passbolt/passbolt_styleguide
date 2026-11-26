@@ -12,7 +12,7 @@
  * @since         4.10.0
  */
 
-import { fireEvent, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import DisplayInFormMenu from "./DisplayInFormMenu";
@@ -41,30 +41,5 @@ export default class DisplayInFormMenuTestPage {
    */
   get informMenuItems() {
     return this._page.container.querySelectorAll(".in-form-menu a");
-  }
-
-  /**
-   * Returns the labels of the groups of suggestions
-   * @returns {Array<string>}
-   */
-  get groupLabels() {
-    return [...this._page.container.querySelectorAll(".in-form-menu-group-label")].map((label) => label.textContent);
-  }
-
-  /**
-   * Returns the title of the menu item at the given index
-   * @param {number} index The index of the menu item
-   * @returns {string}
-   */
-  itemTitle(index) {
-    return this.informMenuItems[index].querySelector(".in-form-menu-item-content-header").textContent;
-  }
-
-  /**
-   * Click on the menu item at the given index
-   * @param {number} index The index of the menu item
-   */
-  clickItem(index) {
-    fireEvent.click(this.informMenuItems[index]);
   }
 }

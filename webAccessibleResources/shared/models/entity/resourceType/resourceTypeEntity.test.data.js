@@ -14,7 +14,6 @@
 
 import { v4 as uuidv4 } from "uuid";
 import { ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET } from "../resource/metadata/IconEntity";
-import ResourceTypeSchemasDefinition, { RESOURCE_TYPE_V5_PASSKEY_SLUG } from "./resourceTypeSchemasDefinition";
 export const TEST_RESOURCE_TYPE_PASSWORD_STRING = uuidv4();
 export const TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION = uuidv4();
 export const TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP = uuidv4();
@@ -26,7 +25,6 @@ export const TEST_RESOURCE_TYPE_V5_TOTP = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE = uuidv4();
-export const TEST_RESOURCE_TYPE_V5_PASSKEY = uuidv4();
 
 /**
  * Resource with string password resource type DTO.
@@ -993,18 +991,5 @@ export const resourceTypeV5StandalonePinCodeDto = (data = {}) => ({
       },
     },
   },
-  ...data,
-});
-
-/**
- * Passkey type DTO.
- * @param {object} data The data to override
- * @returns {object}
- */
-export const resourceTypeV5PasskeyDto = (data = {}) => ({
-  id: TEST_RESOURCE_TYPE_V5_PASSKEY,
-  name: "Passkey",
-  slug: RESOURCE_TYPE_V5_PASSKEY_SLUG,
-  definition: ResourceTypeSchemasDefinition.SCHEMAS[RESOURCE_TYPE_V5_PASSKEY_SLUG],
   ...data,
 });

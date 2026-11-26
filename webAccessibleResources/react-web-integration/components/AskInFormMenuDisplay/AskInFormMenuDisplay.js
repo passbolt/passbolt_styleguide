@@ -46,10 +46,6 @@ class AskInFormMenuDisplay extends React.Component {
   componentDidMount() {
     this.props.context.port.on("passbolt.auth.after-logout", this.handleUserLoggedOut.bind(this));
     this.props.context.port.on("passbolt.auth.after-login", this.handleUserLoggedIn.bind(this));
-    this.props.context.port.on(
-      "passbolt.passkey.conditional-request-changed",
-      this.handlePasskeyRequestChanged.bind(this),
-    );
     this.checkAuthenticationStatus();
   }
 
@@ -67,17 +63,6 @@ class AskInFormMenuDisplay extends React.Component {
         suggestedResourcesCount,
       },
     });
-  }
-
-  /**
-   * Handle when the passkey request of the page comes or goes: its passkeys count as suggestions on a username field.
-   * The status is checked again, as the request may come while the first check is still running.
-   */
-  async handlePasskeyRequestChanged() {
-    if (this.props.context.fieldType !== "username") {
-      return;
-    }
-    await this.checkAuthenticationStatus();
   }
 
   /**

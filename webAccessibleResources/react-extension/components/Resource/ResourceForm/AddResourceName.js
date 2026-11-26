@@ -118,14 +118,6 @@ class AddResourceName extends Component {
   get isV5ResourceType() {
     return this.props.resourceType.isV5();
   }
-
-  /**
-   * Can the user open the appearance form from the resource icon
-   * @returns {boolean} - Returns true for a v5 resource type when an icon click handler is given.
-   */
-  get canSelectAppearance() {
-    return this.isV5ResourceType && Boolean(this.props.onIconClick);
-  }
   /*
    * =============================================================
    *  Render view
@@ -135,12 +127,12 @@ class AddResourceName extends Component {
     return (
       <div className="resource-info">
         <div className="resource-icon">
-          {this.canSelectAppearance && (
+          {this.isV5ResourceType && (
             <button className="button-transparent" onClick={this.onResourceIconClick} type="button">
               <ResourceIcon resource={this.props.resource} />
             </button>
           )}
-          {!this.canSelectAppearance && <ResourceIcon resource={this.props.resource} />}
+          {!this.isV5ResourceType && <ResourceIcon resource={this.props.resource} />}
         </div>
         <div className="information">
           <div className={`input text ${this.props.disabled ? "disabled" : ""}`}>
@@ -186,7 +178,7 @@ AddResourceName.propTypes = {
   onChange: PropTypes.func, // The on change function
   disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
-  onIconClick: PropTypes.func, // Optional: the callback to change the current form, the icon is not clickable without it
+  onIconClick: PropTypes.func, // The callback to change the current form
 };
 
 export default withAppContext(withTranslation("common")(AddResourceName));

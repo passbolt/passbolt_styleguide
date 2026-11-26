@@ -1,11 +1,6 @@
 import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
-import {
-  defaultResourceDto,
-  resourcePasskeyDto,
-} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import { readPermissionDto } from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 
 /**
@@ -46,31 +41,6 @@ export function defaultPropsOneResourceLongPassword() {
     resources: [resource],
     onClose: jest.fn(),
     actionFeedbackContext: defaultActionFeedbackContext(),
-  };
-}
-
-/**
- * Props with a passkey and a password resource selected
- * @returns {*}
- */
-export function propsWithPasskeyResource() {
-  return {
-    context: defaultUserAppContext(),
-    resources: [resourcePasskeyDto(), resourcesMock[0]],
-    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    onClose: jest.fn(),
-    actionFeedbackContext: defaultActionFeedbackContext(),
-  };
-}
-
-/**
- * Props with two passkey resources selected
- * @returns {*}
- */
-export function propsWithTwoPasskeyResources() {
-  return {
-    ...propsWithPasskeyResource(),
-    resources: [resourcePasskeyDto(), resourcePasskeyDto()],
   };
 }
 

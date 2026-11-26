@@ -55,7 +55,7 @@ export class ExtQuickAccessContextProvider extends React.Component {
    */
   async initialize() {
     try {
-      await this.props.ActiveSessionSessionStorageContext.updateSessionStorage();
+      await this.props.activeSessionSessionStorageContext.updateSessionStorage();
       await this.getUserSettings();
       await this.getLocale();
       const siteSettings =
@@ -305,12 +305,12 @@ export class ExtQuickAccessContextProvider extends React.Component {
   }
 
   /**
-   * Get the list of user settings from local storage and set it in the state
+   * Get the user settings of the active account and set it in the state
    * Using UserSettings
    */
   async getUserSettings() {
-    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
-    const userSettings = new UserSettings(storageData._passbolt_data.config);
+    const userSettingsDto = await this.state.port.request("passbolt.user-settings.get-legacy-user-settings");
+    const userSettings = new UserSettings(userSettingsDto);
     this.setState({ userSettings });
   }
 
@@ -378,7 +378,7 @@ ExtQuickAccessContextProvider.propTypes = {
   storage: PropTypes.object, // The storage
   account: PropTypes.instanceOf(AccountEntity), // The user account
   activeSession: PropTypes.instanceOf(UserActiveSessionEntity), // The user active session
-  ActiveSessionSessionStorageContext: PropTypes.any, // The active session context
+  activeSessionSessionStorageContext: PropTypes.any, // The active session context
   openerTabId: PropTypes.string, // The opener tab id
   passwordDraftId: PropTypes.string, // The password draft the autosave window offers to save
   bootstrapFeature: PropTypes.string, // The bootstrap feature

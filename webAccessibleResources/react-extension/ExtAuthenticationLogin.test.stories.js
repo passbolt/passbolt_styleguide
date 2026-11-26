@@ -15,6 +15,7 @@ import ExtAuthenticationLogin from "./ExtAuthenticationLogin";
 import MockPort from "./test/mock/MockPort";
 import siteSettingsFixture from "./test/fixture/Settings/siteSettings";
 import mockStorage from "../../test/mocks/mockStorage";
+import userSettingsFixture from "./test/fixture/Settings/userSettings";
 
 export default {
   title: "Components/ExtAuthenticationLogin/ExtAuthenticationLogin",
@@ -27,6 +28,7 @@ export default {
 function getMockedPort() {
   const mockedPort = new MockPort();
   mockedPort.addRequestListener("passbolt.site-settings.find-and-update", () => siteSettingsFixture);
+  mockedPort.addRequestListener("passbolt.user-settings.get-legacy-user-settings", () => userSettingsFixture);
   mockedPort.addRequestListener("passbolt.locale.get", () => ({
     locale: "en-UK",
     label: "English",

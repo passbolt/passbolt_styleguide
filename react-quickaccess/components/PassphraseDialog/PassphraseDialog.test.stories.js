@@ -46,25 +46,6 @@ export const Initial = {
   parameters: parameters,
 };
 
-const passkeyPromptStory = (passkeyPrompt) => ({
-  render: Template,
-
-  args: {
-    context: defaultAppContext(),
-    requestId: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-    passkeyPrompt: { rpId: "github.com", ceremony: "get", ...passkeyPrompt },
-    onComplete: () => {},
-  },
-
-  parameters: parameters,
-});
-
-export const PasskeyVerifyOrganisation = passkeyPromptStory({ purpose: "verify-organisation" });
-export const PasskeyVerify = passkeyPromptStory({ purpose: "verify" });
-export const PasskeyVerifyRegistration = passkeyPromptStory({ purpose: "verify", ceremony: "create" });
-export const PasskeyUnlock = passkeyPromptStory({ purpose: "unlock" });
-export const PasskeyUnlockRegistration = passkeyPromptStory({ purpose: "unlock", ceremony: "create" });
-
 const mockedPort = new MockPort();
 mockedPort.addRequestListener("passbolt.keyring.private.checkpassphrase", () => {
   throw new Error();

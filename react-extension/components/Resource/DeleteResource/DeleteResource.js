@@ -22,8 +22,6 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import { Trans, withTranslation } from "react-i18next";
-import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -142,32 +140,6 @@ class DeleteResource extends Component {
   }
 
   /**
-   * Get the resources to delete that are passkeys
-   * @returns {Array<object>}
-   */
-  get passkeyResources() {
-    return this.resources.filter((resource) =>
-      this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasPasskey(),
-    );
-  }
-
-  /**
-   * Is at least one of the resources to delete a passkey
-   * @returns {boolean}
-   */
-  get hasPasskey() {
-    return this.passkeyResources.length > 0;
-  }
-
-  /**
-   * Are several of the resources to delete passkeys
-   * @returns {boolean}
-   */
-  get hasMultiplePasskeys() {
-    return this.passkeyResources.length > 1;
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -208,30 +180,6 @@ class DeleteResource extends Component {
                 </Trans>
               </p>
             )}
-            {this.hasPasskey && (
-              <p className="delete-passkey-notice">
-                <Trans>
-                  Deleting a passkey in passbolt does not remove it from the website. Remove it from the account
-                  settings of the website as well.
-                </Trans>
-              </p>
-            )}
-            {this.hasPasskey && (
-              <p className="delete-passkey-prf-notice">
-                {!this.hasMultiplePasskeys && (
-                  <Trans>
-                    If the website uses this passkey to encrypt your data, such as end-to-end encrypted messages or
-                    files, that data may no longer be readable once the passkey is deleted.
-                  </Trans>
-                )}
-                {this.hasMultiplePasskeys && (
-                  <Trans>
-                    If a website uses one of these passkeys to encrypt your data, such as end-to-end encrypted messages
-                    or files, that data may no longer be readable once that passkey is deleted.
-                  </Trans>
-                )}
-              </p>
-            )}
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
@@ -255,12 +203,9 @@ DeleteResource.propTypes = {
   dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   resources: PropTypes.array, // The resources to delete
-  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(
-  withResourceWorkspace(
-    withActionFeedback(withDialog(withResourceTypesLocalStorage(withTranslation("common")(DeleteResource)))),
-  ),
+  withResourceWorkspace(withActionFeedback(withDialog(withTranslation("common")(DeleteResource)))),
 );

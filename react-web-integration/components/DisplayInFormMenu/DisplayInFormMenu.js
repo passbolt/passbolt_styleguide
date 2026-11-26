@@ -31,7 +31,6 @@ import DiceSVG from "../../../img/svg/dice.svg";
 import AddSVG from "../../../img/svg/add.svg";
 import SearchSVG from "../../../img/svg/search.svg";
 import ResourceIcon from "../../../shared/components/Icons/ResourceIcon";
-import PasskeyTypeSVG from "../../../img/passbolt-default-resource-type-icons/passkey.svg";
 import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import Logger from "../../../shared/utils/logger";
@@ -70,7 +69,6 @@ class DisplayInFormMenu extends React.Component {
    */
   componentDidMount() {
     this.handleDisplayConfigurationReceivedEvent();
-    this.props.context.port.on("passbolt.passkey.conditional-request-changed", this.handlePasskeyRequestChangedEvent);
     document.addEventListener("click", this.handleInFormMenuClickEvent, { capture: true });
   }
 
@@ -100,8 +98,6 @@ class DisplayInFormMenu extends React.Component {
     this.handleSaveCredentialsRequestedEvent = this.handleSaveCredentialsRequestedEvent.bind(this);
     this.handleBrowseCredentialsRequestedEvent = this.handleBrowseCredentialsRequestedEvent.bind(this);
     this.handleUseSuggestedResourceRequestedEvent = this.handleUseSuggestedResourceRequestedEvent.bind(this);
-    this.handleUsePasskeyRequestedEvent = this.handleUsePasskeyRequestedEvent.bind(this);
-    this.handlePasskeyRequestChangedEvent = this.handlePasskeyRequestChangedEvent.bind(this);
     this.handleGeneratePasswordRequestedEvent = this.handleGeneratePasswordRequestedEvent.bind(this);
   }
 
@@ -114,8 +110,6 @@ class DisplayInFormMenu extends React.Component {
         inputType: null, // Input inputType attached to the menu
         inputValue: null, // Input inputValue attached to the menu
         suggestedResources: null, // Suggested resources to display
-        passkeyRequestId: null, // The id of the passkey request of the page the suggested passkeys answer
-        suggestedPasskeys: [], // Suggested passkeys to display
       }, // The display configuration of the menu
       generatedPassword: null, // Generated password
       resourceIdProcessing: null, // The resource id processing
@@ -213,7 +207,7 @@ class DisplayInFormMenu extends React.Component {
    * @return {JSX.Element[]}
    */
   get filledUsernameMenuItems() {
-    const usernameMenuItems = this.usernameSuggestionsItems;
+    const usernameMenuItems = this.suggestedResourcesItems;
     if (this.canCreateCredentials) {
       usernameMenuItems.push(this.saveAsNewCredentialItem);
     }
@@ -226,7 +220,7 @@ class DisplayInFormMenu extends React.Component {
    * @return {JSX.Element[]}
    */
   get emptyUsernameMenuItems() {
-    const usernameMenuItems = this.usernameSuggestionsItems;
+    const usernameMenuItems = this.suggestedResourcesItems;
     if (this.canCreateCredentials) {
       usernameMenuItems.push(this.createNewCredentialItem);
     }
@@ -340,53 +334,6 @@ class DisplayInFormMenu extends React.Component {
   }
 
   /**
-   * Returns the suggestions of a username field: the passkeys the page asks for, then the suggested resources, each
-   * group under its label when both are offered.
-   * @return {JSX.Element[]}
-   */
-  get usernameSuggestionsItems() {
-    const suggestedPasskeys = this.state.configuration.suggestedPasskeys || [];
-    if (suggestedPasskeys.length === 0) {
-      return this.suggestedResourcesItems;
-    }
-    const suggestedResourcesItems = this.suggestedResourcesItems;
-    const passwordsLabel = (
-      <div key="passwords-label" className="in-form-menu-group-label">
-        {this.props.t("Passwords")}
-      </div>
-    );
-    return [
-      <div key="passkeys-label" className="in-form-menu-group-label">
-        {this.props.t("Passkeys")}
-      </div>,
-      ...this.suggestedPasskeysItems,
-      ...(suggestedResourcesItems.length > 0 ? [passwordsLabel, ...suggestedResourcesItems] : []),
-    ];
-  }
-
-  /**
-   * Returns the list of suggested passkeys menu items
-   * @return {JSX.Element[]}
-   */
-  get suggestedPasskeysItems() {
-    return this.state.configuration.suggestedPasskeys.map((passkey) => (
-      <DisplayInFormMenuItem
-        key={passkey.id}
-        onClick={() => this.handleUsePasskeyRequestedEvent(passkey.id)}
-        processing={this.state.resourceIdProcessing === passkey.id}
-        disabled={this.state.resourceIdProcessing === passkey.id}
-        title={passkey.name}
-        description={passkey.username}
-        icon={
-          <div className="teaser-image">
-            <PasskeyTypeSVG />
-          </div>
-        }
-      />
-    ));
-  }
-
-  /**
    * Returns the list of suggested resources menu items
    */
   get suggestedResourcesItems() {
@@ -419,14 +366,6 @@ class DisplayInFormMenu extends React.Component {
       // Pre-generate the password
       this.generateSecret();
     }
-  }
-
-  /**
-   * Whenever the passkey request of the page comes or goes: show its passkeys, or drop them.
-   */
-  async handlePasskeyRequestChangedEvent() {
-    const configuration = await this.props.context.port.request("passbolt.in-form-menu.init");
-    this.setState({ configuration });
   }
 
   /**
@@ -491,34 +430,6 @@ class DisplayInFormMenu extends React.Component {
       await this.props.context.port.request("passbolt.in-form-menu.use-suggested-resource", resourceId);
     } catch (error) {
       console.error(error);
-    }
-    this.setState({ resourceIdProcessing: null });
-  }
-
-  /**
-   * Whenever the user requests to sign in to the current page with a suggested passkey. A cancelled passphrase prompt
-   * keeps the menu open, so the user can pick again.
-   * @param {string} passkeyId The id of the passkey resource.
-   */
-  async handleUsePasskeyRequestedEvent(passkeyId) {
-    const isApplicationOverlaid = await this.handleApplicationOverlaidRequestedEvent();
-    if (isApplicationOverlaid) {
-      Logger.error("Overlap detected, action interrupted for safety reasons");
-      return;
-    }
-
-    this.setState({ resourceIdProcessing: passkeyId });
-    try {
-      await this.props.context.port.request(
-        "passbolt.in-form-menu.use-passkey",
-        this.state.configuration.passkeyRequestId,
-        passkeyId,
-      );
-      this.props.context.port.request("passbolt.in-form-menu.close");
-    } catch (error) {
-      if (error?.name !== "UserAbortsOperationError") {
-        console.error(error);
-      }
     }
     this.setState({ resourceIdProcessing: null });
   }

@@ -36,7 +36,6 @@ import {
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
   TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-  TEST_RESOURCE_TYPE_V5_PASSKEY,
 } from "./resourceTypeEntity.test.data";
 import ResourceTypeEntity from "./resourceTypeEntity";
 import CollectionValidationError from "../../entity/abstract/collectionValidationError";
@@ -170,11 +169,11 @@ describe("ResourceTypesCollection", () => {
   });
 
   describe("::filterByQuickAccessResourceTypes", () => {
-    it("should keep the password, TOTP, PIN code, note, custom fields and passkey resource types", () => {
-      expect.assertions(13);
+    it("should keep the password, TOTP, PIN code, note and custom fields resource types.", () => {
+      expect.assertions(12);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       resourceTypes.filterByQuickAccessResourceTypes();
-      expect(resourceTypes).toHaveLength(12);
+      expect(resourceTypes).toHaveLength(11);
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP)).toBeTruthy();
@@ -186,7 +185,6 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_PASSKEY)).toBeTruthy();
     });
 
     it("should drop the resource types the quick access does not support.", () => {
@@ -196,7 +194,7 @@ describe("ResourceTypesCollection", () => {
       });
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       resourceTypes.filterByQuickAccessResourceTypes();
-      expect(resourceTypes).toHaveLength(11);
+      expect(resourceTypes).toHaveLength(10);
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE)).toBeUndefined();
       spy.mockRestore();
     });
@@ -221,11 +219,11 @@ describe("ResourceTypesCollection", () => {
     });
 
     it("should filter the collection by resources types by the version 5.", () => {
-      expect.assertions(12);
+      expect.assertions(11);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       resourceTypes.filterByResourceTypeVersion("v5");
 
-      expect(resourceTypes).toHaveLength(8);
+      expect(resourceTypes).toHaveLength(7);
 
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
@@ -237,7 +235,6 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE)).toBeTruthy();
-      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_PASSKEY)).toBeTruthy();
     });
   });
 
@@ -470,19 +467,6 @@ describe("ResourceTypesCollection", () => {
   });
 
   describe("::getResourceTypeMatchingResource", () => {
-    it("should never match the passkey resource type", () => {
-      expect.assertions(1);
-      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
-      const resourceDto = {
-        secret: {
-          rp_id: "",
-          credential_id: "",
-          private_key: "",
-        },
-      };
-      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toBeNull();
-    });
-
     it("should match v4 resource password with encrypted description for a resource with password.", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
@@ -794,7 +778,7 @@ describe("ResourceTypesCollection", () => {
       const start = performance.now();
       const collection = new ResourceTypesCollection(dtos);
       const time = performance.now() - start;
-      expect(collection).toHaveLength(12);
+      expect(collection).toHaveLength(11);
       expect(time).toBeLessThan(5_000);
     });
   });

@@ -18,7 +18,6 @@ import DisplayInFormMenu from "./DisplayInFormMenu";
 import { defaultPasswordPoliciesDto } from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import { defaultAppContext } from "../../../react-extension/contexts/ExtAppContext.test.data";
 import { defaultProps, offlineSessionProps } from "./DisplayInformMenu.test.data";
-import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 
 export default {
   title: "Components/WebIntegration/InFormMenu",
@@ -57,18 +56,6 @@ initMockPort(mockPortUsernameEmpty, { inputType: "username" });
 
 const mockPortUsernameFilled = new MockPort();
 initMockPort(mockPortUsernameFilled, { inputType: "username", inputValue: "john@passbolt.com" });
-
-const mockPortUsernameWithPasskeys = new MockPort();
-initMockPort(mockPortUsernameWithPasskeys, {
-  inputType: "username",
-  inputValue: "",
-  suggestedResources: [defaultResourceDto()],
-  passkeyRequestId: "f3a9d1c4-62b8-4e0f-9b7a-2c5d8e1f4a30",
-  suggestedPasskeys: [
-    { id: "8e3874ae-4b40-590b-968a-418f704b9d9a", name: "GitHub", username: "ada" },
-    { id: "9a1c2f3e-7b6d-4e5a-8c9b-0d1e2f3a4b5c", name: "GitHub (work)", username: "ada-lovelace" },
-  ],
-});
 
 const mockPortPasswordNoSuggestion = new MockPort();
 initMockPort(mockPortPasswordNoSuggestion, { inputType: "password", inputValue: null });
@@ -119,16 +106,6 @@ export const OnUsernameFieldWithValue = {
 
   args: defaultProps({
     context: defaultAppContext({ port: mockPortUsernameFilled }),
-  }),
-
-  parameters: inFormMenuCss,
-};
-
-export const OnUsernameFieldWithPasskeys = {
-  render: Template,
-
-  args: defaultProps({
-    context: defaultAppContext({ port: mockPortUsernameWithPasskeys }),
   }),
 
   parameters: inFormMenuCss,

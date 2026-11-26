@@ -293,28 +293,17 @@ class ExportResources extends React.Component {
       folders_ids: foldersIds,
       resources_ids: resourcesIds,
     };
-    return await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
+    await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
 
   /**
    * Whenever the export has been performed successfully
-   * @param {{skippedPasskeysCount: number}} result The export result
    */
-  async onExportSuccess(result) {
+  async onExportSuccess() {
     this.setState({ actions: { processing: false } });
-    const skippedPasskeysCount = result?.skippedPasskeysCount;
-    if (skippedPasskeysCount > 0) {
-      await this.props.actionFeedbackContext.displayWarning(
-        this.translate(
-          "The passwords have been exported, {{count}} passkey was not exported: the export formats do not support passkeys.",
-          { count: skippedPasskeysCount },
-        ),
-      );
-    } else {
-      await this.props.actionFeedbackContext.displaySuccess(
-        this.translate("The passwords have been exported successfully"),
-      );
-    }
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.translate("The passwords have been exported successfully"),
+    );
     await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds: null, foldersIds: null });
     this.close();
   }

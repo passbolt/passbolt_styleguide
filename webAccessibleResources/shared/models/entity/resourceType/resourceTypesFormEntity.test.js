@@ -24,7 +24,6 @@ import {
   withDeletedResourceTypesHavingResources,
 } from "./resourceTypesFormEntity.test.data";
 import ResourceTypesCollection from "./resourceTypesCollection";
-import { RESOURCE_TYPE_V5_PASSKEY_SLUG } from "./resourceTypeSchemasDefinition";
 import { defaultMetadataKeysDtos } from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
@@ -69,11 +68,6 @@ describe("ResourceTypesFormEntity", () => {
       assertEntityProperty.required(ResourceTypesFormEntity, "pin_code_v5");
     });
 
-    it("validates passkey_v5 property", () => {
-      assertEntityProperty.boolean(ResourceTypesFormEntity, "passkey_v5");
-      assertEntityProperty.required(ResourceTypesFormEntity, "passkey_v5");
-    });
-
     it("validates password_v4_count property", () => {
       assertEntityProperty.integer(ResourceTypesFormEntity, "password_v4_count");
       assertEntityProperty.required(ResourceTypesFormEntity, "password_v4_count");
@@ -102,11 +96,6 @@ describe("ResourceTypesFormEntity", () => {
     it("validates pin_code_v5_count property", () => {
       assertEntityProperty.integer(ResourceTypesFormEntity, "pin_code_v5_count");
       assertEntityProperty.required(ResourceTypesFormEntity, "pin_code_v5_count");
-    });
-
-    it("validates passkey_v5_count property", () => {
-      assertEntityProperty.integer(ResourceTypesFormEntity, "passkey_v5_count");
-      assertEntityProperty.required(ResourceTypesFormEntity, "passkey_v5_count");
     });
 
     it("validates has_v4_resource_types property", () => {
@@ -182,11 +171,6 @@ describe("ResourceTypesFormEntity", () => {
         "has_content",
         "Pin code content type is disabled but there are existing pin code resources.",
       );
-      expectedError.addError(
-        "passkey_v5",
-        "has_content",
-        "Passkey content type is disabled but there are existing passkey resources.",
-      );
 
       expectedError.addError("password_v4", "minimum_requirement", "At least one content type should be allowed");
       expectedError.addError("totp_v4", "minimum_requirement", "At least one content type should be allowed");
@@ -223,14 +207,6 @@ describe("ResourceTypesFormEntity", () => {
         custom_fields_v5_count: 5,
       });
       expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError.message);
-    });
-
-    it("passkey alone should not satisfy the minimum requirement", () => {
-      expect.assertions(1);
-
-      const dto = withDeletedResourceTypes({ passkey_v5: true });
-
-      expect(() => new ResourceTypesFormEntity(dto)).toThrowEntityValidationError("password_v5", "minimum_requirement");
     });
   });
 
@@ -307,7 +283,6 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("custom_fields_v5", "active_metadata_key", "No active metadata key defined.");
       expectedError.addError("note_v5", "active_metadata_key", "No active metadata key defined.");
       expectedError.addError("pin_code_v5", "active_metadata_key", "No active metadata key defined.");
-      expectedError.addError("passkey_v5", "active_metadata_key", "No active metadata key defined.");
 
       const metadataTypesSettings = new MetadataTypesSettingsEntity(
         defaultMetadataTypesSettingsV50FreshDto({ allow_creation_of_v4_resources: true }),
@@ -363,7 +338,6 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("password_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
       expectedError.addError("note_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
       expectedError.addError("pin_code_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
-      expectedError.addError("passkey_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
 
       const metadataTypesSettings = new MetadataTypesSettingsEntity(
         defaultMetadataTypesSettingsV50FreshDto({
@@ -393,31 +367,11 @@ describe("ResourceTypesFormEntity", () => {
       const healthIssues = settings.verifyHealth(metadataTypesSettings, metadataKeysCollection);
       expect(healthIssues).toStrictEqual(expectedError);
     });
-
-    it("passkey should not silence the v5 creation health issues", () => {
-      expect.assertions(2);
-
-      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
-      const metadataKeysCollection = new MetadataKeysCollection(defaultMetadataKeysDtos());
-      const settings = new ResourceTypesFormEntity(
-        withDeletedResourceTypes({
-          password_v4: true,
-          custom_fields_v5: false,
-          custom_fields_v5_count: 0,
-          passkey_v5: true,
-        }),
-      );
-
-      const healthIssues = settings.verifyHealth(metadataTypesSettings, metadataKeysCollection);
-
-      expect(healthIssues.hasError("password_v5", "is_creation_alowed")).toStrictEqual(true);
-      expect(healthIssues.hasError("passkey_v5")).toStrictEqual(false);
-    });
   });
 
   describe("::createFormResourcesTypesCollection", () => {
     it("should create a ResourceTypesFormEntity for a ResourceTypesCollection", () => {
-      expect.assertions(16);
+      expect.assertions(14);
 
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionWithCountDto());
       const resourceTypesFormEntity = ResourceTypesFormEntity.createFormResourcesTypesCollection(resourceTypes);
@@ -436,29 +390,6 @@ describe("ResourceTypesFormEntity", () => {
       expect(resourceTypesFormEntity._props.totp_v5_count).toStrictEqual(3);
       expect(resourceTypesFormEntity._props.note_v5_count).toStrictEqual(1);
       expect(resourceTypesFormEntity._props.pin_code_v5_count).toStrictEqual(2);
-      expect(resourceTypesFormEntity._props.passkey_v5).toStrictEqual(true);
-      expect(resourceTypesFormEntity._props.passkey_v5_count).toStrictEqual(4);
-    });
-  });
-
-  describe("::toResourceTypesCollection", () => {
-    it("should not change the passkey resource type when the passkey content type is allowed", () => {
-      expect.assertions(1);
-
-      const settings = new ResourceTypesFormEntity(defaultResourceTypesFormDto());
-
-      expect(settings.toResourceTypesCollection().getFirstBySlug(RESOURCE_TYPE_V5_PASSKEY_SLUG)).toBeUndefined();
-    });
-
-    it("should delete the passkey resource type when the passkey content type is disallowed", () => {
-      expect.assertions(1);
-
-      const settings = new ResourceTypesFormEntity(
-        defaultResourceTypesFormDto({ passkey_v5: false, passkey_v5_count: 0 }),
-      );
-      const passkeyResourceType = settings.toResourceTypesCollection().getFirstBySlug(RESOURCE_TYPE_V5_PASSKEY_SLUG);
-
-      expect(passkeyResourceType.isDeleted()).toStrictEqual(true);
     });
   });
 });

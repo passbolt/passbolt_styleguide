@@ -20,7 +20,6 @@ import { withAppContext } from "../../../../shared/context/AppContext/AppContext
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
 import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
-import DisplayUserPasskeySettings from "../DisplayUserPasskeySettings/DisplayUserPasskeySettings";
 import DisplayUserSettingsWorkspaceBreadcrumb from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
@@ -75,14 +74,6 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseThemeCapability() {
     return this.props.context.siteSettings && this.props.context.siteSettings.canIUse("accountSettings");
-  }
-
-  /**
-   * Can the user choose how passkey requests requiring user verification are verified.
-   * @returns {boolean}
-   */
-  get canChoosePasskeyVerification() {
-    return Boolean(this.props.context.siteSettings?.canUsersChoosePasskeyVerification);
   }
 
   /**
@@ -209,9 +200,6 @@ class DisplayUserSettingsWorkspace extends React.Component {
                   <Route path={`${path}/passphrase`} component={ChangeUserPassphrase} />
                   <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
                   {this.canIUseThemeCapability && <Route path={`${path}/theme`} component={DisplayUserTheme} />}
-                  {this.canChoosePasskeyVerification && (
-                    <Route path={`${path}/passkeys`} component={DisplayUserPasskeySettings} />
-                  )}
                   {this.canIUseMobileTransferCapability && (
                     <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
                   )}
@@ -227,7 +215,6 @@ class DisplayUserSettingsWorkspace extends React.Component {
               </div>
               <Switch>
                 <Route path={`${path}/theme`} />
-                <Route path={`${path}/passkeys`} />
                 <Route>
                   <div className="help-panel">
                     <div className="sidebar-help">

@@ -30,7 +30,6 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
 import DisplayResourceDetailsPinCode from "./DisplayResourceDetailsPinCode";
-import DisplayResourceDetailsPasskey from "./DisplayResourceDetailsPasskey";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
@@ -310,14 +309,6 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
-   * Is passkey resource
-   * @return {boolean}
-   */
-  get isPasskeyResources() {
-    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasPasskey();
-  }
-
-  /**
    * Has description
    * @return {boolean}
    */
@@ -397,7 +388,6 @@ class DisplayResourceDetails extends React.Component {
         {this.isPasswordResources && <DisplayResourceDetailsPassword />}
         {this.isTotpResources && <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource} />}
         {this.isPinCodeResources && <DisplayResourceDetailsPinCode />}
-        {this.isPasskeyResources && <DisplayResourceDetailsPasskey />}
         {this.hasCustomFields && <DisplayResourceDetailsCustomFields />}
         {this.hasSecureNote && <DisplayResourceDetailsNote />}
         {this.hasMultipleUris && <DisplayResourceDetailsURIs />}

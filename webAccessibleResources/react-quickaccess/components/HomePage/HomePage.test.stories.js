@@ -22,7 +22,6 @@ import {
   passwordDraftsProps,
   searchNoResultProps,
   searchWithResultProps,
-  sitePasskeysProps,
   suggestedResourcesProps,
 } from "./HomePage.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
@@ -87,11 +86,5 @@ export const SuggestedResources = {
 export const UnsavedPasswords = {
   render: Template,
   args: passwordDraftsProps(),
-  parameters: parameters,
-};
-
-export const SitePasskeys = {
-  render: Template,
-  args: sitePasskeysProps(),
   parameters: parameters,
 };

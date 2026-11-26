@@ -76,6 +76,14 @@ export default class ResourceViewPagePasswordPage {
   }
 
   /**
+   * The empty username text.
+   * @returns {Element}
+   */
+  get usernameEmpty() {
+    return this._page.container.querySelector(".property:first-child .property-value.empty");
+  }
+
+  /**
    * The username copy action.
    * @returns {Element}
    */
@@ -153,6 +161,14 @@ export default class ResourceViewPagePasswordPage {
    */
   get copyIconState() {
     return this.iconState(this.copyButton, ["default", "processing", "done"]);
+  }
+
+  /**
+   * The state displayed by the username copy action, read from its visible icon.
+   * @returns {string} "default", "processing" or "done"
+   */
+  get usernameCopyIconState() {
+    return this.iconState(this.usernameCopyButton, ["default", "processing", "done"]);
   }
 
   /**

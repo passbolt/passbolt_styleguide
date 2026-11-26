@@ -14,7 +14,7 @@
  */
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { MemoryRouter as Router } from "react-router-dom";
+import { MemoryRouter as Router, Route } from "react-router-dom";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import SaveResource from "./SaveResource";
 import { waitForTrue } from "../../../../test/utils/waitFor";
@@ -32,13 +32,28 @@ export default class SaveResourcePage {
   constructor(props, locationState) {
     this._page = render(
       <MockTranslationProvider>
-        <Router initialEntries={[{ pathname: "/", state: locationState }]}>
-          <SaveResource {...props} />
+        <Router initialEntries={["/previous", { pathname: "/", state: locationState }]} initialIndex={1}>
+          <Route exact path="/">
+            <SaveResource {...props} />
+          </Route>
+          <Route
+            render={({ location }) => {
+              this.location = location;
+              return null;
+            }}
+          />
         </Router>
       </MockTranslationProvider>,
     );
 
     this.user = userEvent.setup();
+  }
+
+  /**
+   * Returns the current router pathname
+   */
+  get pathname() {
+    return this.location.pathname;
   }
 
   /**
@@ -95,6 +110,13 @@ export default class SaveResourcePage {
    */
   get passwordError() {
     return this._page.container.querySelector(".input-password-wrapper .error-message");
+  }
+
+  /**
+   * Returns the unexpected error message element
+   */
+  get unexpectedError() {
+    return this._page.container.querySelector(".form-container > .error-message");
   }
 
   /**

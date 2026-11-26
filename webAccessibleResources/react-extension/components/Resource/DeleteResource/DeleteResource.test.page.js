@@ -102,14 +102,6 @@ class DeleteResourcePageObject {
     return this._container.querySelector(".form-content p strong");
   }
 
-  get passkeyNotice() {
-    return this._container.querySelector(".form-content .delete-passkey-notice");
-  }
-
-  get passkeyPrfNotice() {
-    return this._container.querySelector(".form-content .delete-passkey-prf-notice");
-  }
-
   get errorDialog() {
     return this._container.querySelector(".error-dialog");
   }

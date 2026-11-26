@@ -29,13 +29,11 @@ import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveS
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import SecretServiceWorkerService from "../../../shared/services/serviceWorker/secret/secretServiceWorkerService";
 import ResourceViewPagePassword from "./ResourceViewPagePassword";
-import ResourceViewPageUsername from "./ResourceViewPageUsername";
 import ResourceViewPageTotp from "./ResourceViewPageTotp";
 import ResourceViewPagePinCode from "./ResourceViewPagePinCode";
 import ResourceViewPageNote from "./ResourceViewPageNote";
 import ResourceViewPageCustomFields from "./ResourceViewPageCustomFields";
 import ResourceViewPageUris from "./ResourceViewPageUris";
-import UsePasskeyOnThisPage from "../UsePasskeyOnThisPage/UsePasskeyOnThisPage";
 import { CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND, COPY_STATUSES, SECRET_KEYS } from "./secretState";
 
 /**
@@ -468,14 +466,6 @@ class ResourceViewPage extends React.Component {
   }
 
   /**
-   * Gate for the passkey section: the username row alone, a passkey secret never leaves the extension.
-   * @returns {boolean}
-   */
-  get isPasskeyResources() {
-    return Boolean(this.resourceType?.hasPasskey());
-  }
-
-  /**
    * Gate for the TOTP section: the type carries a TOTP.
    * @returns {boolean}
    */
@@ -573,14 +563,6 @@ class ResourceViewPage extends React.Component {
               canPreview={canPreviewSecret}
             />
           )}
-          {this.isPasskeyResources && (
-            <ResourceViewPageUsername
-              username={this.state.resource.metadata?.username}
-              onCopy={this.handleCopyLoginClick}
-              copyingSecret={copyingSecret}
-              copyStatus={copyStatus}
-            />
-          )}
           {this.isTotpResources && (
             <ResourceViewPageTotp
               totp={this.getRevealedValue(SECRET_KEYS.TOTP)}
@@ -649,9 +631,6 @@ class ResourceViewPage extends React.Component {
               {this.state.usingOnThisTab && <SpinnerSVG />}
               {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
             </a>
-          )}
-          {this.isPasskeyResources && this.props.context.siteSettings.isPasskeyInterceptionEnabled && (
-            <UsePasskeyOnThisPage resource={this.state.resource} />
           )}
           {this.state.error && <div className="error-message">{this.state.error}</div>}
         </div>

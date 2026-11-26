@@ -116,10 +116,6 @@ const siteSettings = (isProEdition = true) => ({
       passwordGenerator: {
         version: "3.3.0",
       },
-      passkeys: {
-        userVerificationPolicy: "strict",
-        interceptionEnabled: true,
-      },
       locale: {
         options: [
           {

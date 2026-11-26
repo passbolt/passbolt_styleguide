@@ -36,7 +36,6 @@ import {
   TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_V5_TOTP,
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
-  TEST_RESOURCE_TYPE_V5_PASSKEY,
 } from "../resourceType/resourceTypeEntity.test.data";
 import {
   defaultSecretDataV5DefaultTotpEntityDto,
@@ -70,7 +69,6 @@ import {
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
-  RESOURCE_TYPE_V5_PASSKEY_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
@@ -89,8 +87,6 @@ import ResourceTypeEntity from "../resourceType/resourceTypeEntity";
 import CustomFieldEntity from "../customField/customFieldEntity";
 import { emptyCustomFieldDto } from "../customField/customFieldEntity.test.data";
 import { defaultSecretDataV5StandaloneNoteDto } from "../secretData/secretDataV5StandaloneNoteEntity.test.data";
-import { defaultSecretDataV5PasskeyDto } from "../secretData/secretDataV5PasskeyEntity.test.data";
-import SecretDataV5PasskeyEntity from "../secretData/secretDataV5PasskeyEntity";
 import OfflineItemEntity from "../offline/offlineItemEntity";
 
 describe("Resource Form entity", () => {
@@ -220,18 +216,6 @@ describe("Resource Form entity", () => {
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });
 
-    it("works if complete DTO is provided for a resource v5 passkey", () => {
-      expect.assertions(2);
-      const resourceDto = defaultResourceFormDto({
-        resource_type_id: TEST_RESOURCE_TYPE_V5_PASSKEY,
-        secret: defaultSecretDataV5PasskeyDto(),
-      });
-      const resourceTypesCollection = new ResourceTypesCollection(resourceTypesCollectionDto());
-      const resourceFormEntity = new ResourceFormEntity(resourceDto, { resourceTypes: resourceTypesCollection });
-      expect(resourceFormEntity.secret).toBeInstanceOf(SecretDataV5PasskeyEntity);
-      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
-    });
-
     it("works if minimal DTO is provided for a resource v5 password string", () => {
       expect.assertions(1);
       const resourceDto = defaultResourceFormDto({
@@ -345,7 +329,6 @@ describe("Resource Form entity", () => {
         { slug: RESOURCE_TYPE_TOTP_SLUG, expectation: SecretDataV4StandaloneTotpEntity },
         { slug: RESOURCE_TYPE_PASSWORD_STRING_SLUG, expectation: secretDataV4PasswordStringEntity },
         { slug: RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG, expectation: SecretDataV5StandaloneCustomFieldsCollection },
-        { slug: RESOURCE_TYPE_V5_PASSKEY_SLUG, expectation: SecretDataV5PasskeyEntity },
         { slug: "something-else", expectation: null },
       ];
       expect.assertions(scenarios.length);

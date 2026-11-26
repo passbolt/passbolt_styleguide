@@ -179,14 +179,6 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   }
 
   /**
-   * Returns the passkey v5 error element
-   * @returns {HTMLElement}
-   */
-  get passkeyV5Error() {
-    return this.select("#passkeyV5Input + label .error-message");
-  }
-
-  /**
    * Returns the password v4 checkbox element
    * @returns {HTMLElement}
    */
@@ -240,14 +232,6 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    */
   get pinCodeV5Checkbox() {
     return this.select("#pinCodeV5Input");
-  }
-
-  /**
-   * Returns the passkey v5 checkbox element
-   * @returns {HTMLElement}
-   */
-  get passkeyV5Checkbox() {
-    return this.select("#passkeyV5Input");
   }
 
   /**

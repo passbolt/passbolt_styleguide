@@ -15,13 +15,7 @@ import SiteSettingsEntity from "./siteSettingsEntity";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
-import {
-  defaultCeSiteSettings,
-  defaultProSiteSettings,
-  passkeyInterceptionDisabledSiteSettings,
-  passkeyInterceptionEnabledSiteSettings,
-  passkeyUserChoiceSiteSettings,
-} from "./siteSettingsEntity.test.data";
+import { defaultCeSiteSettings, defaultProSiteSettings } from "./siteSettingsEntity.test.data";
 
 describe("SiteSettingsEntity", () => {
   describe("::getSchema", () => {
@@ -231,56 +225,6 @@ describe("SiteSettingsEntity", () => {
       const entity = new SiteSettingsEntity(dto);
       expect(entity.getRememberMeOptions()).toEqual({});
       expect(entity.hasRememberMeUntilILogoutOption).toBe(false);
-    });
-  });
-
-  describe("::canUsersChoosePasskeyVerification", () => {
-    it("returns true when the passkeys policy is user_choice", () => {
-      expect.assertions(1);
-      const entity = new SiteSettingsEntity(passkeyUserChoiceSiteSettings());
-      expect(entity.canUsersChoosePasskeyVerification).toBe(true);
-    });
-
-    it.each([["strict"], ["unknown"]])("returns false when the passkeys policy is %s", (policy) => {
-      expect.assertions(1);
-      const dto = defaultProSiteSettings();
-      dto.passbolt.plugins.passkeys = { userVerificationPolicy: policy };
-      const entity = new SiteSettingsEntity(dto);
-      expect(entity.canUsersChoosePasskeyVerification).toBe(false);
-    });
-
-    it("returns false when the passkeys settings are absent", () => {
-      expect.assertions(1);
-      const entity = new SiteSettingsEntity(defaultProSiteSettings());
-      expect(entity.canUsersChoosePasskeyVerification).toBe(false);
-    });
-  });
-
-  describe("::isPasskeyInterceptionEnabled", () => {
-    it("returns true when the passkeys interception is enabled", () => {
-      expect.assertions(1);
-      const entity = new SiteSettingsEntity(passkeyInterceptionEnabledSiteSettings());
-      expect(entity.isPasskeyInterceptionEnabled).toBe(true);
-    });
-
-    it("returns false when the passkeys interception is disabled", () => {
-      expect.assertions(1);
-      const entity = new SiteSettingsEntity(passkeyInterceptionDisabledSiteSettings());
-      expect(entity.isPasskeyInterceptionEnabled).toBe(false);
-    });
-
-    it("returns false when the passkeys settings are absent", () => {
-      expect.assertions(1);
-      const entity = new SiteSettingsEntity(defaultProSiteSettings());
-      expect(entity.isPasskeyInterceptionEnabled).toBe(false);
-    });
-
-    it.each([["true"], [1]])("returns false when the passkeys interception value is %p, not true", (value) => {
-      expect.assertions(1);
-      const dto = passkeyInterceptionEnabledSiteSettings();
-      dto.passbolt.plugins.passkeys.interceptionEnabled = value;
-      const entity = new SiteSettingsEntity(dto);
-      expect(entity.isPasskeyInterceptionEnabled).toBe(false);
     });
   });
 

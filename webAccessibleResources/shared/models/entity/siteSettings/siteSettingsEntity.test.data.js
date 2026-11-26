@@ -277,33 +277,6 @@ export const offlinePluginEnabledSiteSettings = (siteSettings) => {
   return Object.assign(defaultData, siteSettings);
 };
 
-export const passkeyUserChoiceSiteSettings = (siteSettings) => {
-  const defaultData = defaultProSiteSettings();
-  defaultData.passbolt.plugins.passkeys = {
-    userVerificationPolicy: "user_choice",
-  };
-
-  return { ...defaultData, ...siteSettings };
-};
-
-export const passkeyInterceptionEnabledSiteSettings = (siteSettings) => {
-  const defaultData = defaultProSiteSettings();
-  defaultData.passbolt.plugins.passkeys = {
-    interceptionEnabled: true,
-  };
-
-  return { ...defaultData, ...siteSettings };
-};
-
-export const passkeyInterceptionDisabledSiteSettings = (siteSettings) => {
-  const defaultData = defaultProSiteSettings();
-  defaultData.passbolt.plugins.passkeys = {
-    interceptionEnabled: false,
-  };
-
-  return { ...defaultData, ...siteSettings };
-};
-
 export const customEmailValidationProSiteSettings = (siteSettings) => {
   const defaultData = defaultProSiteSettings();
   defaultData.passbolt.email = {

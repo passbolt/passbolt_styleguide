@@ -28,7 +28,6 @@ import {
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   V4_TO_V5_RESOURCE_TYPE_MAPPING,
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
-  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 } from "../resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
 import SecretDataEntity from "../secretData/secretDataEntity";
@@ -45,7 +44,6 @@ import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
 import { CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH } from "../customField/customFieldEntity";
 import SecretDataV5StandaloneNoteEntity from "../secretData/secretDataV5StandaloneNoteEntity";
 import SecretDataV5StandalonePinCodeEntity from "../secretData/secretDataV5StandalonePinCodeEntity";
-import SecretDataV5PasskeyEntity from "../secretData/secretDataV5PasskeyEntity";
 import OfflineItemEntity from "../offline/offlineItemEntity";
 
 class ResourceFormEntity extends EntityV2 {
@@ -109,7 +107,6 @@ class ResourceFormEntity extends EntityV2 {
             SecretDataV4PasswordStringEntity.getSchema(),
             SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
             SecretDataV5StandalonePinCodeEntity.getSchema(),
-            SecretDataV5PasskeyEntity.getSchema(),
           ],
         },
         offline: {
@@ -201,8 +198,6 @@ class ResourceFormEntity extends EntityV2 {
         return SecretDataV5StandaloneNoteEntity;
       case RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG:
         return SecretDataV5StandalonePinCodeEntity;
-      case RESOURCE_TYPE_V5_PASSKEY_SLUG:
-        return SecretDataV5PasskeyEntity;
       default:
         return null;
     }

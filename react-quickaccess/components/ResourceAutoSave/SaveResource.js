@@ -83,9 +83,18 @@ class SaveResource extends React.Component {
    * @returns {Promise<void>}
    */
   async loadPasswordMetaFromTabForm() {
-    const resourceDto = this.isSavingPasswordDraft
-      ? await this.props.context.port.request("passbolt.quickaccess.get-password-draft-for-save", this.passwordDraftId)
-      : await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
+    let resourceDto;
+    try {
+      resourceDto = this.isSavingPasswordDraft
+        ? await this.props.context.port.request(
+            "passbolt.quickaccess.get-password-draft-for-save",
+            this.passwordDraftId,
+          )
+        : await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
+    } catch (error) {
+      this.handleLoadError(error);
+      return;
+    }
     resourceDto.uri = resourceDto.uris && resourceDto.uris.length > 0 ? resourceDto.uris[0] : "";
     resourceDto.password = resourceDto.secret_clear;
     resourceDto.username =
@@ -104,6 +113,20 @@ class SaveResource extends React.Component {
     );
 
     this.setState({ loaded: true, resourceViewModel: resourceViewModel });
+  }
+
+  /**
+   * Handles an error while loading the resource data.
+   * Aborting the passphrase request of a password draft goes back to the unsaved passwords page.
+   * @param {Error} error
+   */
+  handleLoadError(error) {
+    if (error?.name === "UserAbortsOperationError" && this.isSavingPasswordDraft) {
+      this.props.history.goBack();
+      return;
+    }
+    console.error(error);
+    this.setState({ unexpectedErrorMessage: error?.message });
   }
 
   /**
@@ -131,10 +154,13 @@ class SaveResource extends React.Component {
 
   /**
    * Handles the "no, thanks" event, the user does not want to save the password.
+   * The password draft is kept if it could not be loaded, the user did not see it.
    * @returns {Promise<void>}
    */
   async handleCancel() {
-    await this.removePasswordDraft();
+    if (this.state.loaded) {
+      await this.removePasswordDraft();
+    }
     await this.handleClose();
   }
 
@@ -256,6 +282,14 @@ class SaveResource extends React.Component {
   }
 
   /**
+   * Are the form fields disabled
+   * @returns {boolean}
+   */
+  get isFormDisabled() {
+    return !this.state.loaded || this.state.processing;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -284,7 +318,7 @@ class SaveResource extends React.Component {
                   name="name"
                   value={this.state.resourceViewModel?.name || ""}
                   onChange={this.handleInputChange}
-                  disabled={this.state.processing}
+                  disabled={this.isFormDisabled}
                   className="required fluid"
                   maxLength="255"
                   type="text"
@@ -308,7 +342,7 @@ class SaveResource extends React.Component {
                   name="uri"
                   value={this.state.resourceViewModel?.uri || ""}
                   onChange={this.handleInputChange}
-                  disabled={this.state.processing}
+                  disabled={this.isFormDisabled}
                   className="fluid"
                   maxLength="1024"
                   type="text"
@@ -332,7 +366,7 @@ class SaveResource extends React.Component {
                   name="username"
                   value={this.state.resourceViewModel?.username || ""}
                   onChange={this.handleInputChange}
-                  disabled={this.state.processing}
+                  disabled={this.isFormDisabled}
                   className="fluid"
                   maxLength="255"
                   type="text"
@@ -355,7 +389,7 @@ class SaveResource extends React.Component {
                     value={this.state.resourceViewModel?.password || ""}
                     preview={true}
                     onChange={this.handleInputChange}
-                    disabled={this.state.processing}
+                    disabled={this.isFormDisabled}
                     placeholder={this.translate("Password")}
                     id="password"
                     autoComplete="new-password"
@@ -383,7 +417,7 @@ class SaveResource extends React.Component {
               type="submit"
               className={`button primary big ${this.state.processing ? "processing" : ""}`}
               role="button"
-              disabled={this.state.processing}
+              disabled={this.isFormDisabled}
             >
               <Trans>Save</Trans>
               {this.state.processing && <SpinnerSVG />}

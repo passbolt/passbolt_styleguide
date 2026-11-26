@@ -240,11 +240,14 @@
                 &.secret-note .encrypted-description {
                   display: block;
                   font-family: 'Obfuscation';
-                  color: var(--Text-and-icons-Main-text);
-                  opacity: .25;
+                  color: var(--Text-and-icons-Obfucated-text);
                   text-align: left;
                   white-space: normal;
                   padding-left: .4rem;
+
+                  &:disabled {
+                    opacity: 1;
+                  }
                 }
 
                 &.secret-note .note-previewed {

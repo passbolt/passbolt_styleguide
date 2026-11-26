@@ -16,7 +16,6 @@ import { render } from "@testing-library/react";
 import React from "react";
 import { MemoryRouter, Route } from "react-router-dom";
 import ResourceViewPage from "./ResourceViewPage";
-import AppContext from "../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import userEvent from "@testing-library/user-event";
 
@@ -30,13 +29,11 @@ export default class ResourceViewPagePage {
    */
   constructor(props) {
     this._page = render(
-      <AppContext.Provider value={props.context}>
-        <MockTranslationProvider>
-          <MemoryRouter initialEntries={[props.initialEntries]}>
-            <Route path="/:id" component={(routerProps) => <ResourceViewPage {...props} {...routerProps} />} />
-          </MemoryRouter>
-        </MockTranslationProvider>
-      </AppContext.Provider>,
+      <MockTranslationProvider>
+        <MemoryRouter initialEntries={[props.initialEntries]}>
+          <Route path="/:id" component={(routerProps) => <ResourceViewPage {...props} {...routerProps} />} />
+        </MemoryRouter>
+      </MockTranslationProvider>,
     );
     this.user = userEvent.setup();
   }

@@ -16,12 +16,7 @@
  * Unit tests on DisplayComments in regard of specifications
  */
 
-import {
-  defaultPropsOneResource,
-  defaultPropsMultipleResource,
-  propsWithPasskeyResource,
-  propsWithTwoPasskeyResources,
-} from "./DeleteResource.test.data";
+import { defaultPropsOneResource, defaultPropsMultipleResource } from "./DeleteResource.test.data";
 import DeleteResourcePage from "./DeleteResource.test.page";
 import { fireEvent } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
@@ -147,40 +142,6 @@ describe("See Password Delete Dialog", () => {
         resourceIds,
       );
       expect(propsMultipleResource.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe("As LU I am told to remove a deleted passkey from the website", () => {
-    it("As LU I should see the passkey notice when a passkey is among the resources to delete", () => {
-      expect.assertions(1);
-      page = new DeleteResourcePage(propsWithPasskeyResource());
-      expect(page.deleteResourcePageObject.passkeyNotice.textContent).toContain(
-        "Deleting a passkey in passbolt does not remove it from the website.",
-      );
-    });
-
-    it("As LU I should not see the passkey notice when no passkey is among the resources to delete", () => {
-      expect.assertions(1);
-      page = new DeleteResourcePage(defaultPropsMultipleResource());
-      expect(page.deleteResourcePageObject.passkeyNotice).toBeNull();
-    });
-  });
-
-  describe("As LU I am warned that deleting a passkey may make data encrypted by the website unreadable", () => {
-    it("As LU I should see the single passkey warning when one passkey is among the resources to delete", () => {
-      expect.assertions(1);
-      page = new DeleteResourcePage(propsWithPasskeyResource());
-      expect(page.deleteResourcePageObject.passkeyPrfNotice.textContent).toStrictEqual(
-        "If the website uses this passkey to encrypt your data, such as end-to-end encrypted messages or files, that data may no longer be readable once the passkey is deleted.",
-      );
-    });
-
-    it("As LU I should see the multiple passkeys warning when several passkeys are among the resources to delete", () => {
-      expect.assertions(1);
-      page = new DeleteResourcePage(propsWithTwoPasskeyResources());
-      expect(page.deleteResourcePageObject.passkeyPrfNotice.textContent).toStrictEqual(
-        "If a website uses one of these passkeys to encrypt your data, such as end-to-end encrypted messages or files, that data may no longer be readable once that passkey is deleted.",
-      );
     });
   });
 });

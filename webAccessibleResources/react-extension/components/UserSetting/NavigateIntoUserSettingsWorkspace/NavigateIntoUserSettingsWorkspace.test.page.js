@@ -15,7 +15,7 @@
 import { render } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import { MemoryRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import NavigateIntoUserSettingsWorkspace from "./NavigateIntoUserSettingsWorkspace";
 
@@ -27,15 +27,14 @@ export default class NavigateIntoUserSettingsWorkspacePage {
    * Default constructor
    * @param appContext An app context
    * @param props Props to attach
-   * @param {string} [path] The current route
    */
-  constructor(appContext, props, path = "/") {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <MemoryRouter initialEntries={[path]}>
+          <Router>
             <NavigateIntoUserSettingsWorkspace {...props} />
-          </MemoryRouter>
+          </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
     );
@@ -60,19 +59,5 @@ export default class NavigateIntoUserSettingsWorkspacePage {
    */
   get desktopTransferMenuItem() {
     return this._page.container.querySelector("#navigation-item-desktop-setup");
-  }
-
-  /**
-   * Returns the navigation item element for the passkeys settings
-   */
-  get passkeysMenuItem() {
-    return this._page.container.querySelector("#navigation-item-passkeys");
-  }
-
-  /**
-   * Returns the labels of the selected navigation items
-   */
-  get selectedMenuItemsLabels() {
-    return [...this._page.container.querySelectorAll(".row.selected")].map((row) => row.textContent.trim());
   }
 }

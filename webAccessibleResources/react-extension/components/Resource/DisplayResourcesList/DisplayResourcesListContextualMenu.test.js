@@ -39,10 +39,7 @@ import {
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import { waitForTrue } from "../../../../../test/utils/waitFor";
-import {
-  defaultResourceDto,
-  resourcePasskeyDto,
-} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
   TEST_RESOURCE_TYPE_V5_DEFAULT,
@@ -478,14 +475,6 @@ describe("DisplayResourcesListContextualMenu", () => {
       const props = propsResourceWithUpdatePermission();
       jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation((plugin) => plugin !== "previewPassword");
       page = new DisplayResourcesListContextualMenuPage(props);
-      expect(page.secretHistoryItem).toBeNull();
-    });
-
-    it("when the resource is a passkey", () => {
-      expect.assertions(2);
-      const props = defaultProps({ resource: resourcePasskeyDto() });
-      page = new DisplayResourcesListContextualMenuPage(props);
-      expect(page.editItem).not.toBeNull();
       expect(page.secretHistoryItem).toBeNull();
     });
   });

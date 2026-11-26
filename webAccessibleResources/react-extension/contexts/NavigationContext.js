@@ -59,7 +59,6 @@ const ALLOWED_PATHNAMES = [
   "/app/settings/passphrase",
   "/app/settings/security-token",
   "/app/settings/theme",
-  "/app/settings/passkeys",
   "/app/settings/mfa",
   "/app/settings/keys",
   "/app/settings/mobile",
@@ -101,7 +100,6 @@ export const NavigationContext = React.createContext({
   onGoToUserSettingsPassphraseRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace passphrase section.
   onGoToUserSettingsSecurityTokenRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace security token section.
   onGoToUserSettingsThemeRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace theme section.
-  onGoToUserSettingsPasskeysRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace passkeys section.
   onGoToUserSettingsMfaRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mfa section.
   onGoToUserSettingsKeysRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace keys section.
   onGoToUserSettingsMobileRequested: () => {}, // Whenever the user wants to navigate to the users settings workspace mobile section.
@@ -183,7 +181,6 @@ export class NavigationContextProvider extends React.Component {
       onGoToUserSettingsPassphraseRequested: this.onGoToUserSettingsPassphraseRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace pasphrase section.
       onGoToUserSettingsSecurityTokenRequested: this.onGoToUserSettingsSecurityTokenRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace security token section.
       onGoToUserSettingsThemeRequested: this.onGoToUserSettingsThemeRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace theme section.
-      onGoToUserSettingsPasskeysRequested: this.onGoToUserSettingsPasskeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace passkeys section.
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
@@ -693,14 +690,6 @@ export class NavigationContextProvider extends React.Component {
    */
   async onGoToUserSettingsThemeRequested() {
     await this.goTo("browser-extension", "/app/settings/theme");
-  }
-
-  /**
-   * Whenever the user wants to navigate to the users settings workspace passkeys section.
-   * @returns {Promise<void>}
-   */
-  async onGoToUserSettingsPasskeysRequested() {
-    await this.goTo("browser-extension", "/app/settings/passkeys");
   }
 
   /**

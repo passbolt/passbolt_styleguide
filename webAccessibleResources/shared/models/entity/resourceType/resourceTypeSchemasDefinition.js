@@ -24,11 +24,6 @@ export const RESOURCE_TYPE_V5_TOTP_SLUG = "v5-totp-standalone";
 export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields";
 export const RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG = "v5-note";
 export const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG = "v5-pin-code";
-export const RESOURCE_TYPE_V5_PASSKEY_SLUG = "v5-passkey";
-
-// Patterns of the v5-passkey definition, as in the API SlugDefinition.
-const BASE64URL_PATTERN = "^(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,3})?$";
-const RP_ID_HOST_PATTERN = "(?:[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9_])?\\.)*[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?";
 
 // Plaintext secret schema for slug: "password-string"
 export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
@@ -711,146 +706,6 @@ const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA = {
   },
 };
 
-// Plaintext secret schema for slug: "v5-passkey"
-const RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA = {
-  resource: {
-    type: "object",
-    required: ["name", "username", "uris", "credential_id"],
-    properties: {
-      name: {
-        type: "string",
-        maxLength: 255,
-      },
-      username: {
-        type: "string",
-        maxLength: 255,
-      },
-      uris: {
-        type: "array",
-        items: {
-          type: "string",
-          maxLength: 261,
-          pattern: `^https://${RP_ID_HOST_PATTERN}$`,
-        },
-        minItems: 1,
-        maxItems: 1,
-      },
-      description: {
-        type: "string",
-        maxLength: 10000,
-        nullable: true,
-      },
-      icon: {
-        type: "object",
-        required: [],
-        properties: {
-          type: {
-            type: "string",
-            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
-          },
-          value: {
-            type: "number",
-            minimum: 0,
-            nullable: true,
-          },
-          background_color: {
-            type: "string",
-            nullable: true,
-          },
-        },
-      },
-      credential_id: {
-        type: "string",
-        minLength: 22,
-        maxLength: 1364,
-        pattern: BASE64URL_PATTERN,
-      },
-    },
-  },
-  secret: {
-    type: "object",
-    required: [
-      "object_type",
-      "resource_type_slug",
-      "rp_id",
-      "credential_id",
-      "user_handle",
-      "username",
-      "algorithm",
-      "private_key",
-    ],
-    properties: {
-      object_type: {
-        type: "string",
-        enum: ["PASSBOLT_SECRET_DATA"],
-      },
-      resource_type_slug: {
-        type: "string",
-        enum: [RESOURCE_TYPE_V5_PASSKEY_SLUG],
-      },
-      rp_id: {
-        type: "string",
-        minLength: 1,
-        maxLength: 253,
-        pattern: `^${RP_ID_HOST_PATTERN}$`,
-      },
-      credential_id: {
-        type: "string",
-        minLength: 22,
-        maxLength: 1364,
-        pattern: BASE64URL_PATTERN,
-      },
-      user_handle: {
-        type: "string",
-        minLength: 2,
-        maxLength: 86,
-        pattern: BASE64URL_PATTERN,
-      },
-      username: {
-        type: "string",
-        maxLength: 255,
-      },
-      user_display_name: {
-        type: "string",
-        maxLength: 255,
-        nullable: true,
-      },
-      algorithm: {
-        type: "integer",
-        enum: [-7],
-      },
-      private_key: {
-        type: "string",
-        minLength: 90,
-        maxLength: 256,
-        pattern: BASE64URL_PATTERN,
-      },
-      hmac_credentials: {
-        type: "object",
-        required: ["algorithm", "cred_with_uv", "cred_without_uv"],
-        properties: {
-          algorithm: {
-            type: "string",
-            enum: ["hmac-sha256"],
-          },
-          cred_with_uv: {
-            type: "string",
-            minLength: 43,
-            maxLength: 43,
-            pattern: BASE64URL_PATTERN,
-          },
-          cred_without_uv: {
-            type: "string",
-            minLength: 43,
-            maxLength: 43,
-            pattern: BASE64URL_PATTERN,
-          },
-        },
-      },
-    },
-  },
-};
-
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
   [RESOURCE_TYPE_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: RESOURCE_TYPE_V5_DEFAULT_SLUG,
@@ -872,7 +727,6 @@ class ResourceTypeSchemasDefinition {
       [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA,
-      [RESOURCE_TYPE_V5_PASSKEY_SLUG]: RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA,
     };
   }
 }

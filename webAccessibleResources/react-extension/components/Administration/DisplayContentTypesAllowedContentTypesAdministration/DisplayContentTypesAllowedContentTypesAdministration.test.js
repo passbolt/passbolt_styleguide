@@ -131,7 +131,7 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
 
   describe("As a signed-in administrator, I should see errors", () => {
     it("displays error on fields if no resource types is selected and admin tries to save", async () => {
-      expect.assertions(14);
+      expect.assertions(12);
 
       let page;
       await act(async () => (page = new DisplayContentTypesAllowedContentTypesAdministration(defaultProps())));
@@ -157,9 +157,6 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.customFieldsV5Error.textContent).toStrictEqual("At least one content type should be allowed");
       expect(page.noteV5Error.textContent).toStrictEqual("At least one content type should be allowed");
       expect(page.pinCodeV5Error.textContent).toStrictEqual("At least one content type should be allowed");
-      // Passkeys alone do not satisfy the minimum requirement.
-      expect(page.passkeyV5Checkbox.checked).toStrictEqual(true);
-      expect(page.passkeyV5Error).toBeNull();
     });
   });
 });

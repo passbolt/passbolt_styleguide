@@ -6,7 +6,6 @@ import {
   deniedRbacProps,
   disabledApiFlagsProps,
   multipleUrisResourceProps,
-  passkeyResourceProps,
   standaloneCustomFieldsResourceProps,
   standaloneNoteResourceProps,
   standalonePinCodeResourceProps,
@@ -83,8 +82,4 @@ export const V5DefaultResourceView = {
 
 export const V5DefaultTotpResourceView = {
   args: v5DefaultTotpResourceProps(),
-};
-
-export const PasskeyResourceView = {
-  args: passkeyResourceProps(),
 };

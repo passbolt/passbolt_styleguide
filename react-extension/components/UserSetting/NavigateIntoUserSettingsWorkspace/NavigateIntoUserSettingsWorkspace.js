@@ -42,14 +42,6 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
-   * Can the user choose how passkey requests requiring user verification are verified.
-   * @returns {boolean}
-   */
-  get canChoosePasskeyVerification() {
-    return Boolean(this.props.context.siteSettings?.canUsersChoosePasskeyVerification);
-  }
-
-  /**
    * Can the user access the mobile capability.
    * @returns {bool}
    */
@@ -88,8 +80,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * Render the component
    */
   render() {
-    // Match the whole last segment: "/app/settings/passkeys" must not select "keys".
-    const isSelected = (pathSuffix) => this.props.location.pathname.endsWith(`/${pathSuffix}`);
+    const isSelected = (pathSuffix) => this.props.location.pathname.endsWith(pathSuffix);
     return (
       <div className="navigation-secondary navigation-profile">
         <ul>
@@ -173,25 +164,6 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                     >
                       <span>
                         <Trans>Theme</Trans>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          )}
-          {this.canChoosePasskeyVerification && (
-            <li id="navigation-item-passkeys">
-              <div className={`row ${isSelected("passkeys") ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button
-                      className="link no-border"
-                      type="button"
-                      onClick={this.props.navigationContext.onGoToUserSettingsPasskeysRequested}
-                    >
-                      <span>
-                        <Trans>Passkeys</Trans>
                       </span>
                     </button>
                   </div>

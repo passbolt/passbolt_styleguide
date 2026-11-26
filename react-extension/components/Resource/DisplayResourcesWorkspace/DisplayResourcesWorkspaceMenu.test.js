@@ -46,8 +46,6 @@ import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity
 import { v4 as uuidv4 } from "uuid";
 import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
-import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
-import { resourcePasskeyDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import OfflineModeServiceWorkerService from "../../../../shared/services/serviceWorker/offline/offlineModeServiceWorkerService";
 import PassboltApiFetchError from "../../../../shared/error/passboltApiFetchError";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
@@ -292,22 +290,6 @@ describe("See Workspace Menu", () => {
 
       const propsOneResourceOwned = defaultPropsOneResourceOwned({ context: context }); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuSecretHistory).toBeNull();
-    });
-
-    it("As LU I cannot start to display a resource secret history if the resource is a passkey", () => {
-      expect.assertions(3);
-      const context = defaultAppContext(); // The applicative context
-      const propsOnePasskey = defaultPropsOneResourceOwned({
-        resourceWorkspaceContext: defaultResourceWorkspaceContext({
-          selectedResources: [resourcePasskeyDto()],
-          lockDisplayDetail: true,
-        }),
-      }); // The props to pass
-      const page = new DisplayResourcesWorkspaceMenuPage(context, propsOnePasskey);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenu).not.toBeNull();
       page.displayMenu.clickOnMoreMenu();

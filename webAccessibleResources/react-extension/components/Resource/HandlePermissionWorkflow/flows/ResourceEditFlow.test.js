@@ -19,10 +19,6 @@ import { defaultProps } from "./ResourceEditFlow.test.data";
 import ResourceEditFlowTestPage from "./ResourceEditFlow.test.page";
 import { RESOURCE_EDIT_FLOW_STATUS } from "./ResourceEditFlow";
 import EditResource from "../../EditResource/EditResource";
-import EditPasskeyResource from "../../EditPasskeyResource/EditPasskeyResource";
-import ResourceTypesCollection from "../../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import { resourceTypesCollectionDto } from "../../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import { resourcePasskeyDto } from "../../../../../shared/models/entity/resource/resourceEntity.test.data";
 import ShareDialog from "../../../Share/ShareDialog";
 import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 import PermissionEntity from "../../../../../shared/models/entity/permission/permissionEntity";
@@ -293,38 +289,6 @@ describe("ResourceEditFlow", () => {
         "passbolt.resources.update",
         expect.anything(),
         expect.anything(),
-        null,
-      );
-      expect(props.dialogContext.open).not.toHaveBeenCalledWith(ShareDialog, expect.anything());
-      expect(props.onStop).toHaveBeenCalled();
-    });
-  });
-
-  describe("As LU editing a shared passkey", () => {
-    it("As LU I should rename the passkey with a metadata-only update and without a share-dialog step", async () => {
-      expect.assertions(4);
-      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
-      const props = defaultProps({ resource: resourcePasskeyDto(), resourceTypes });
-      const operatorId = props.context.loggedInUser.id;
-      wireSnapshotListeners(props.context.port, {
-        permissions: [
-          resourcePermissionDto(operatorId, props.resource.id),
-          resourcePermissionDto(uuidv4(), props.resource.id, PermissionEntity.PERMISSION_READ),
-        ],
-      });
-
-      await mountUntilEditOpen(props);
-      const editProps = dialogPropsFor(props.dialogContext, EditPasskeyResource);
-      props.context.port.addRequestListener("passbolt.resources.update", () => ({ id: props.resource.id }));
-      jest.spyOn(props.context.port, "request");
-      const resourceDto = { id: props.resource.id, metadata: { name: "Renamed passkey" } };
-      await act(() => editProps.onSubmit(resourceDto));
-
-      expect(props.dialogContext.open).not.toHaveBeenCalledWith(EditResource, expect.anything());
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.resources.update",
-        { ...resourceDto, personal: false },
-        null,
         null,
       );
       expect(props.dialogContext.open).not.toHaveBeenCalledWith(ShareDialog, expect.anything());
