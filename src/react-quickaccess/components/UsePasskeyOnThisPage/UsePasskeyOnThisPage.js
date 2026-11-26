@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
-import { isRpIdOfUrl, parseRpIdFromUris } from "../../../shared/utils/passkeyRpIdUtils";
+import { isRpIdOfUrl } from "../../../shared/utils/passkeyRpIdUtils";
 
 /**
  * The "Use on this page" action of a passkey: signs in with it when a waiting sign-in of the page accepts it. On the
@@ -67,7 +67,7 @@ class UsePasskeyOnThisPage extends React.Component {
    * @returns {boolean}
    */
   get isOnPasskeySite() {
-    return isRpIdOfUrl(parseRpIdFromUris(this.props.resource.metadata?.uris), this.state.activeTabUrl);
+    return isRpIdOfUrl(this.props.resource.metadata?.passkey?.rp_id, this.state.activeTabUrl);
   }
 
   /**

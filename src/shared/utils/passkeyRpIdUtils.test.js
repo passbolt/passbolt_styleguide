@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.18.0
  */
-import { isRpIdOfUrl, isValidPasskeyRpId, parseRpIdFromUris } from "./passkeyRpIdUtils";
+import { isRpIdOfUrl, isValidPasskeyRpId } from "./passkeyRpIdUtils";
 
 const LABEL_63 = "a".repeat(63);
 
@@ -60,42 +60,6 @@ describe("passkeyRpIdUtils", () => {
       expect(isValidPasskeyRpId(null)).toStrictEqual(false);
       expect(isValidPasskeyRpId(undefined)).toStrictEqual(false);
       expect(isValidPasskeyRpId(["example.com"])).toStrictEqual(false);
-    });
-  });
-
-  describe("::parseRpIdFromUris", () => {
-    it("should return the relying party id of a single https uri", () => {
-      expect.assertions(2);
-      expect(parseRpIdFromUris(["https://example.com"])).toStrictEqual("example.com");
-      expect(parseRpIdFromUris(["https://localhost"])).toStrictEqual("localhost");
-    });
-
-    it.each([
-      ["http", ["http://example.com"]],
-      ["a port", ["https://example.com:8443"]],
-      ["a path", ["https://example.com/login"]],
-      ["a root path", ["https://example.com/"]],
-      ["a query", ["https://example.com?a=b"]],
-      ["a fragment", ["https://example.com#a"]],
-      ["user info", ["https://user@example.com"]],
-      ["an uppercase host", ["https://Example.com"]],
-      ["an uppercase scheme", ["HTTPS://example.com"]],
-      ["an ip address", ["https://127.0.0.1"]],
-      ["no scheme", ["example.com"]],
-      ["two entries", ["https://example.com", "https://example.com"]],
-      ["no entry", []],
-      ["a null entry", [null]],
-      ["a too long host", [`https://${[LABEL_63, LABEL_63, LABEL_63, "a".repeat(58)].join(".")}.com`]],
-    ])("should return null for %s", (_, uris) => {
-      expect.assertions(1);
-      expect(parseRpIdFromUris(uris)).toBeNull();
-    });
-
-    it("should return null when the uris are not an array", () => {
-      expect.assertions(3);
-      expect(parseRpIdFromUris(undefined)).toBeNull();
-      expect(parseRpIdFromUris(null)).toBeNull();
-      expect(parseRpIdFromUris("https://example.com")).toBeNull();
     });
   });
 

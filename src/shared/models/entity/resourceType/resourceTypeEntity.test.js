@@ -239,19 +239,14 @@ describe("ResourceTypeEntity", () => {
       expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
     });
 
-    it("should set the passkey definition requiring the metadata username and credential id", () => {
+    it("should set the passkey definition requiring the metadata username and passkey", () => {
       expect.assertions(1);
 
       const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "v5-passkey" });
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
 
-      expect(resourceTypeEntity.definition.resource.required).toStrictEqual([
-        "name",
-        "username",
-        "uris",
-        "credential_id",
-      ]);
+      expect(resourceTypeEntity.definition.resource.required).toStrictEqual(["name", "username", "passkey"]);
     });
   });
 

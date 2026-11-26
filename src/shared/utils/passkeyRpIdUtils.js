@@ -20,7 +20,6 @@
 const PASSKEY_RP_ID_HOST_PATTERN = "(?:[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9_])?\\.)*[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?";
 export const PASSKEY_RP_ID_MAX_LENGTH = 253;
 export const PASSKEY_RP_ID_REGEXP = new RegExp(`^${PASSKEY_RP_ID_HOST_PATTERN}$`);
-export const PASSKEY_URI_REGEXP = new RegExp(`^https://(${PASSKEY_RP_ID_HOST_PATTERN})$`);
 
 /**
  * Check that a relying party id can be stored in a passkey resource.
@@ -29,20 +28,6 @@ export const PASSKEY_URI_REGEXP = new RegExp(`^https://(${PASSKEY_RP_ID_HOST_PAT
  */
 export const isValidPasskeyRpId = (rpId) =>
   typeof rpId === "string" && rpId.length <= PASSKEY_RP_ID_MAX_LENGTH && PASSKEY_RP_ID_REGEXP.test(rpId);
-
-/**
- * Get the relying party id of a passkey resource from its metadata uris, which must be exactly ["https://<rp id>"]:
- * no port, path, query, fragment or user info.
- * @param {Array<string>} uris The metadata uris.
- * @returns {string|null} null when the uris do not name a relying party id.
- */
-export const parseRpIdFromUris = (uris) => {
-  if (!Array.isArray(uris) || uris.length !== 1 || typeof uris[0] !== "string") {
-    return null;
-  }
-  const match = PASSKEY_URI_REGEXP.exec(uris[0]);
-  return match && isValidPasskeyRpId(match[1]) ? match[1] : null;
-};
 
 /**
  * Check that a passkey of the relying party id belongs to the site of a page: the host of the page is the relying

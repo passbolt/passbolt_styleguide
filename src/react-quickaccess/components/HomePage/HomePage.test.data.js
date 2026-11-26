@@ -25,6 +25,7 @@ import { resourceTypesCollectionDto } from "../../../shared/models/entity/resour
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultPasskeyMetadataDto } from "../../../shared/models/entity/passkey/passkeyMetadataEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
@@ -135,7 +136,7 @@ export function sitePasskeysProps() {
       name: "Example",
       username: "ada@example.com",
       uris: ["https://example.com"],
-      credential_id: "AAECAwQFBgcICQoLDA0ODw",
+      passkey: defaultPasskeyMetadataDto({ credential_id: "AAECAwQFBgcICQoLDA0ODw" }),
     }),
   });
   const port = new MockPort();
@@ -151,7 +152,7 @@ export function sitePasskeysProps() {
           name: "Example work",
           username: "ada@work.example.com",
           uris: ["https://example.com"],
-          credential_id: "yuDS1TCepE-VXzAgRc2VJw",
+          passkey: defaultPasskeyMetadataDto({ credential_id: "yuDS1TCepE-VXzAgRc2VJw" }),
         }),
       }),
       waitingPasskey,

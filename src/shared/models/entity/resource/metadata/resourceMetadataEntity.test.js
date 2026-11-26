@@ -21,6 +21,8 @@ import IconEntity from "./IconEntity";
 import CustomFieldsCollection from "../../customField/customFieldsCollection";
 import { defaultCustomField } from "../../customField/customFieldEntity.test.data";
 import { defaultCustomFieldsCollection } from "../../customField/customFieldsCollection.test.data";
+import PasskeyMetadataEntity from "../../passkey/passkeyMetadataEntity";
+import { defaultPasskeyMetadataDto } from "../../passkey/passkeyMetadataEntity.test.data";
 
 describe("ResourceMetadataEntity", () => {
   describe("::getSchema", () => {
@@ -61,18 +63,15 @@ describe("ResourceMetadataEntity", () => {
       assertEntityProperty.arrayStringMaxLength(ResourceMetadataEntity, "uris", ResourceMetadataEntity.URI_MAX_LENGTH);
     });
 
-    it("validates credential_id property", () => {
-      assertEntityProperty.string(ResourceMetadataEntity, "credential_id");
-      assertEntityProperty.minLength(ResourceMetadataEntity, "credential_id", 22);
-      assertEntityProperty.maxLength(ResourceMetadataEntity, "credential_id", 1364);
-      assertEntityProperty.notRequired(ResourceMetadataEntity, "credential_id");
-      assertEntityProperty.assert(
-        ResourceMetadataEntity,
-        "credential_id",
-        [{ scenario: "base64url", value: "yuDS1TCepE-VXzAgRc2VJw" }],
-        [{ scenario: "base64", value: "yuDS1TCepE+VXzAgRc2VJw==" }],
-        "pattern",
-      );
+    it("validates passkey property", () => {
+      const dto = minimalResourceMetadataDto();
+      const successScenarios = [{ scenario: "valid passkey", value: defaultPasskeyMetadataDto() }];
+      const failScenarios = [
+        { scenario: "missing user handle", value: defaultPasskeyMetadataDto({ user_handle: undefined }) },
+        { scenario: "invalid relying party id", value: defaultPasskeyMetadataDto({ rp_id: "https://example.com" }) },
+      ];
+      assertEntityProperty.assertAssociation(ResourceMetadataEntity, "passkey", dto, successScenarios, failScenarios);
+      assertEntityProperty.notRequired(ResourceMetadataEntity, "passkey");
     });
 
     it("validates description property", () => {
@@ -127,12 +126,27 @@ describe("ResourceMetadataEntity", () => {
       }
     });
 
-    it("keeps the passkey credential id", () => {
+    it("keeps the passkey", () => {
       expect.assertions(2);
-      const metadataDto = minimalResourceMetadataDto({ credential_id: "yuDS1TCepE-VXzAgRc2VJw" });
+      const metadataDto = minimalResourceMetadataDto({ passkey: defaultPasskeyMetadataDto() });
       const metadataEntity = new ResourceMetadataEntity(metadataDto);
-      expect(metadataEntity.credentialId).toStrictEqual("yuDS1TCepE-VXzAgRc2VJw");
-      expect(metadataEntity.toDto()).toStrictEqual(metadataDto);
+      expect(metadataEntity.passkey).toBeInstanceOf(PasskeyMetadataEntity);
+      expect(metadataEntity.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN)).toStrictEqual(metadataDto);
+    });
+
+    it("throws if the passkey is null", () => {
+      expect.assertions(1);
+      const metadataDto = minimalResourceMetadataDto({ passkey: null });
+      expect(() => new ResourceMetadataEntity(metadataDto)).toThrow(EntityValidationError);
+    });
+
+    it("drops the unknown properties of the passkey", () => {
+      expect.assertions(1);
+      const metadataDto = minimalResourceMetadataDto({ passkey: defaultPasskeyMetadataDto({ unknown: "value" }) });
+      const metadataEntity = new ResourceMetadataEntity(metadataDto);
+      expect(metadataEntity.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN).passkey).toStrictEqual(
+        defaultPasskeyMetadataDto(),
+      );
     });
 
     it("works if minimal DTO is provided", () => {

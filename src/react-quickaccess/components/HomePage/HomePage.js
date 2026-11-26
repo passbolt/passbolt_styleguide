@@ -43,7 +43,7 @@ import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/Me
 import { sortResourcesByUriMatchingScore } from "../../../shared/utils/sortUtils";
 import { withActiveSessionSessionStorage } from "../../../shared/context/ActiveSession/ActiveSessionSessionStorageContext";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
-import { isRpIdOfUrl, parseRpIdFromUris } from "../../../shared/utils/passkeyRpIdUtils";
+import { isRpIdOfUrl } from "../../../shared/utils/passkeyRpIdUtils";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -174,7 +174,7 @@ class HomePage extends React.Component {
       if (!this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasPasskey()) {
         continue;
       }
-      const rpId = parseRpIdFromUris(resource.metadata.uris);
+      const rpId = resource.metadata.passkey?.rp_id;
       if (!isRpIdOfUrl(rpId, activeTabUrl)) {
         continue;
       }

@@ -22,6 +22,7 @@ import DisplayResourceDetailsPasskeyPage from "./DisplayResourceDetailsPasskey.t
 import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import { resourcePasskeyDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultResourceMetadataDto } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultPasskeyMetadataDto } from "../../../../shared/models/entity/passkey/passkeyMetadataEntity.test.data";
 
 describe("DisplayResourceDetailsPasskey", () => {
   let props;
@@ -44,11 +45,11 @@ describe("DisplayResourceDetailsPasskey", () => {
       expect(page.username.textContent).toEqual("ada@example.com");
     });
 
-    it("I should not see a website link if the uris do not name a relying party", async () => {
-      expect.assertions(1);
+    it("I should see the website of the passkey without a link if it has no uris", async () => {
+      expect.assertions(2);
 
       const resource = resourcePasskeyDto({
-        metadata: defaultResourceMetadataDto({ uris: ["https://example.com/path"] }),
+        metadata: defaultResourceMetadataDto({ uris: [], passkey: defaultPasskeyMetadataDto() }),
       });
       props = defaultProps({
         resourceWorkspaceContext: defaultResourceWorkspaceContext({ details: { resource } }),
@@ -56,6 +57,25 @@ describe("DisplayResourceDetailsPasskey", () => {
       const page = new DisplayResourceDetailsPasskeyPage(props);
 
       expect(page.website).toBeNull();
+      expect(page.websiteValue.textContent).toEqual("example.com");
+    });
+
+    it("I should see the website of the passkey without a link if its first uri is on another site", async () => {
+      expect.assertions(2);
+
+      const resource = resourcePasskeyDto({
+        metadata: defaultResourceMetadataDto({
+          uris: ["https://other.com/login"],
+          passkey: defaultPasskeyMetadataDto(),
+        }),
+      });
+      props = defaultProps({
+        resourceWorkspaceContext: defaultResourceWorkspaceContext({ details: { resource } }),
+      });
+      const page = new DisplayResourceDetailsPasskeyPage(props);
+
+      expect(page.website).toBeNull();
+      expect(page.websiteValue.textContent).toEqual("example.com");
     });
 
     it("I should be able to close the passkey section", async () => {

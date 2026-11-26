@@ -37,6 +37,7 @@ import { defaultProps, denyUiActionProps, passwordDraftsProps } from "./HomePage
 import HomePagePage from "./HomePage.test.page";
 import { createMemoryHistory } from "history";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultPasskeyMetadataDto } from "../../../shared/models/entity/passkey/passkeyMetadataEntity.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
@@ -526,7 +527,7 @@ describe("HomePage", () => {
         metadata: defaultResourceMetadataDto({
           name: "Other site passkey",
           uris: ["https://other.com"],
-          credential_id: "AAECAwQFBgcICQoLDA0ODw",
+          passkey: defaultPasskeyMetadataDto({ rp_id: "other.com", credential_id: "AAECAwQFBgcICQoLDA0ODw" }),
         }),
       });
 
@@ -564,7 +565,7 @@ describe("HomePage", () => {
         metadata: defaultResourceMetadataDto({
           name: "Waiting passkey",
           uris: ["https://example.com"],
-          credential_id: "AAECAwQFBgcICQoLDA0ODw",
+          passkey: defaultPasskeyMetadataDto({ credential_id: "AAECAwQFBgcICQoLDA0ODw" }),
         }),
       });
       const pendingRequest = { id: uuidv4(), rp_id: "example.com", passkey_ids: [waitingPasskey.id] };
