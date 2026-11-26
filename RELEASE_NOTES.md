@@ -1,4 +1,4 @@
-# v5.19.0-alpha.3
+# v5.19.0-alpha.5
 
-Release version of the Styleguide package that includes:
-- Passkey alpha suport 
+Provides the new data structure for the passkey metadata and secret
+
