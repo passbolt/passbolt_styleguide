@@ -190,6 +190,61 @@ describe("AskInFormMenuDisplay", () => {
     });
   });
 
+  describe("Passkey request changes", () => {
+    it("As a logged in user, I should see the count updated when the page's passkey request comes or goes", async () => {
+      const context = getContextWithAuthenticatedUserAndResources();
+      jest.spyOn(context.port, "request");
+
+      const page = new AskInFormMenuDisplayTestPage(context);
+
+      await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(2));
+      expect(page.iconCount).toEqual("4");
+
+      context.port.addRequestListener("passbolt.in-form-cta.suggested-resources", () => 2);
+      await context.port.emit("passbolt.passkey.conditional-request-changed");
+
+      await waitFor(() => expect(page.iconCount).toEqual("2"));
+    });
+
+    it("As a logged out user, I should not ask for the count when the page's passkey request changes", async () => {
+      const context = getContextWithUnauthenticatedUser();
+      jest.spyOn(context.port, "request");
+
+      new AskInFormMenuDisplayTestPage(context);
+
+      await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(1));
+      await context.port.emit("passbolt.passkey.conditional-request-changed");
+
+      await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(2));
+      expect(context.port.request).not.toHaveBeenCalledWith("passbolt.in-form-cta.suggested-resources", "username");
+    });
+
+    it("As a logged in user, I should see the count updated when the passkey request comes while the icon still loads", async () => {
+      const context = getContextWithAuthenticatedUser();
+      // The first count is computed before the page's passkey request is held, the second after.
+      const counts = [4, 6];
+      context.port.addRequestListener("passbolt.in-form-cta.suggested-resources", () => counts.shift());
+
+      const page = new AskInFormMenuDisplayTestPage(context);
+      await context.port.emit("passbolt.passkey.conditional-request-changed");
+
+      await waitFor(() => expect(page.iconCount).toEqual("5+"));
+    });
+
+    it("As a logged in user on a password field, I should not ask for the count when the page's passkey request changes", async () => {
+      const context = getContextWithAuthenticatedUserAndResources();
+      context.fieldType = "password";
+      jest.spyOn(context.port, "request");
+
+      new AskInFormMenuDisplayTestPage(context);
+
+      await waitFor(() => expect(context.port.request).toHaveBeenCalledTimes(2));
+      await context.port.emit("passbolt.passkey.conditional-request-changed");
+
+      expect(context.port.request).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe("As a user whose session cannot perform the passbolt actions", () => {
     it("I should see an active icon in an offline session, whether or not the server is reachable", async () => {
       const context = getContextWithUnauthenticatedUser();

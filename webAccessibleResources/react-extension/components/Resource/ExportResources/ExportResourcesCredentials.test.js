@@ -144,5 +144,28 @@ describe("As LU I should see the export resources credentials dialog", () => {
         expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
       });
     });
+
+    it("As LU I see a warning when passkeys were left out of the export", async () => {
+      expect.assertions(2);
+      await page.fillPassword("test");
+
+      mockContextRequest(jest.fn(() => ({ customFieldsConflicts: [], skippedPasskeysCount: 1 })));
+      jest
+        .spyOn(ActionFeedbackContext._currentValue, "displaySuccess")
+        .mockClear()
+        .mockImplementation(() => {});
+      jest
+        .spyOn(ActionFeedbackContext._currentValue, "displayWarning")
+        .mockClear()
+        .mockImplementation(() => {});
+
+      await page.selectExport();
+      await waitForTrue(() => ActionFeedbackContext._currentValue.displayWarning.mock.calls.length > 0);
+
+      expect(ActionFeedbackContext._currentValue.displayWarning).toHaveBeenCalledWith(
+        "The passwords have been exported, 1 passkey was not exported: the export formats do not support passkeys.",
+      );
+      expect(ActionFeedbackContext._currentValue.displaySuccess).not.toHaveBeenCalled();
+    });
   });
 });

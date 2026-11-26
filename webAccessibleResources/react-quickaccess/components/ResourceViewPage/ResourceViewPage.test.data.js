@@ -10,6 +10,7 @@ import {
   defaultResourceDto,
   resourceStandaloneTotpDto,
   resourceWithTotpDto,
+  resourcePasskeyDto,
   resourceStandalonePinCodeDto,
   resourceStandaloneNoteDto,
   resourceStandaloneCustomFieldsDto,
@@ -134,6 +135,23 @@ export function standaloneTotpResourceProps(props = {}) {
 export function standalonePinCodeResourceProps(props = {}) {
   const storage = new MockStorage();
   const resources = [resourceStandalonePinCodeDto(), defaultResourceDto()];
+  storage.local.set({ resources });
+
+  return defaultProps({
+    context: defaultAppContext({ storage }),
+    initialEntries: `/${resources[0].id}`,
+    ...props,
+  });
+}
+
+/**
+ * Props with a passkey resource selected
+ * @param {Object} props The props to override
+ * @returns {object}
+ */
+export function passkeyResourceProps(props = {}) {
+  const storage = new MockStorage();
+  const resources = [resourcePasskeyDto(), defaultResourceDto()];
   storage.local.set({ resources });
 
   return defaultProps({

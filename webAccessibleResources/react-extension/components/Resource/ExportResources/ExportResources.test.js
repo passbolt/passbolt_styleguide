@@ -174,6 +174,30 @@ describe("As LU I should see the password export dialog", () => {
       // Throw dialog general error message
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
+
+    it("As LU I see a warning when passkeys were left out of the export", async () => {
+      expect.assertions(2);
+      await page.selectFormat(3);
+      await page.clickCsvWarningCheckbox();
+
+      mockContextRequest(jest.fn(() => ({ customFieldsConflicts: [], skippedPasskeysCount: 2 })));
+      jest
+        .spyOn(ActionFeedbackContext._currentValue, "displaySuccess")
+        .mockClear()
+        .mockImplementation(() => {});
+      jest
+        .spyOn(ActionFeedbackContext._currentValue, "displayWarning")
+        .mockClear()
+        .mockImplementation(() => {});
+
+      await page.submitExport();
+      await waitFor(() => {});
+
+      expect(ActionFeedbackContext._currentValue.displayWarning).toHaveBeenCalledWith(
+        "The passwords have been exported, 2 passkeys were not exported: the export formats do not support passkeys.",
+      );
+      expect(ActionFeedbackContext._currentValue.displaySuccess).not.toHaveBeenCalled();
+    });
   });
 
   describe("CSV warning checkbox", () => {

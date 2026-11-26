@@ -25,6 +25,7 @@ import {
   RESOURCE_TYPE_V5_TOTP_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 } from "./resourceTypeSchemasDefinition";
 import ResourceTypeEntity, { PASSWORD_RESOURCE_TYPES, TOTP_RESOURCE_TYPES } from "./resourceTypeEntity";
 import assertString from "validator/es/lib/util/assertString";
@@ -41,6 +42,7 @@ const SUPPORTED_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_SLUG,
+  RESOURCE_TYPE_V5_PASSKEY_SLUG,
 ];
 
 class ResourceTypesCollection extends EntityV2Collection {
@@ -239,6 +241,7 @@ class ResourceTypesCollection extends EntityV2Collection {
    * Note: This function returns only resource type that match in a specific version. Not supported:
    *   - password string v4;
    *   - password string v5;
+   *   - passkey, which only a passkey registration creates;
    *   - several resource type having the same number of properties that match the resource DTO
    *
    * How the match is done:
@@ -276,8 +279,8 @@ class ResourceTypesCollection extends EntityV2Collection {
 
     // Loop on all resource types
     for (const resourceType of this.items) {
-      // Do not check for resource type that not match version or password string
-      if (resourceType.version !== version || resourceType.isPasswordString()) {
+      // Do not check for resource type that not match version, password string or passkey
+      if (resourceType.version !== version || resourceType.isPasswordString() || resourceType.hasPasskey()) {
         continue;
       }
 

@@ -15,13 +15,17 @@
 import { defaultAppContext } from "../../contexts/AppContext.test.data";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import { defaultAdministratorRbacContext, denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
-import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  defaultResourceDto,
+  resourcePasskeyDto,
+} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultResourceLocalStorageContext } from "../../contexts/ResourceLocalStorageContext.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import { resourceTypesCollectionDto } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultPasskeyMetadataDto } from "../../../shared/models/entity/passkey/passkeyMetadataEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
@@ -118,6 +122,43 @@ export function suggestedResourcesProps() {
         }),
       }),
       defaultResourceDto(),
+    ],
+  });
+}
+
+/**
+ * Props of a tab whose site has passkeys, one of which a sign-in of the page waits for.
+ * @return {Object}
+ */
+export function sitePasskeysProps() {
+  const waitingPasskey = resourcePasskeyDto({
+    metadata: defaultResourceMetadataDto({
+      name: "Example",
+      username: "ada@example.com",
+      uris: ["https://example.com"],
+      passkey: defaultPasskeyMetadataDto({ credential_id: "AAECAwQFBgcICQoLDA0ODw" }),
+    }),
+  });
+  const port = new MockPort();
+  port.addRequestListener("passbolt.active-tab.get-url", () => "https://www.example.com/login");
+  port.addRequestListener("passbolt.passkey.get-tab-pending-requests", () => [
+    { id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856", rp_id: "example.com", passkey_ids: [waitingPasskey.id] },
+  ]);
+  return defaultProps({
+    context: defaultAppContext({ port }),
+    resources: [
+      resourcePasskeyDto({
+        metadata: defaultResourceMetadataDto({
+          name: "Example work",
+          username: "ada@work.example.com",
+          uris: ["https://example.com"],
+          passkey: defaultPasskeyMetadataDto({ credential_id: "yuDS1TCepE-VXzAgRc2VJw" }),
+        }),
+      }),
+      waitingPasskey,
+      defaultResourceDto({
+        metadata: defaultResourceMetadataDto({ name: "example password", uris: ["https://www.example.com"] }),
+      }),
     ],
   });
 }

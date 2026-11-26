@@ -21,12 +21,14 @@ import {
   TEST_RESOURCE_TYPE_TOTP,
   TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
   TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  TEST_RESOURCE_TYPE_V5_PASSKEY,
   TEST_RESOURCE_TYPE_V5_STANDALONE_PIN_CODE,
 } from "../resourceType/resourceTypeEntity.test.data";
 import { defaultUserDto } from "../user/userEntity.test.data";
 import { defaultPermissionsDtos } from "../permission/permissionCollection.test.data";
 import { defaultTagsDtos } from "../tag/tagCollection.test.data";
 import { defaultResourceMetadataDto } from "./metadata/resourceMetadataEntity.test.data";
+import { defaultPasskeyMetadataDto } from "../passkey/passkeyMetadataEntity.test.data";
 import { defaultOfflineItemDto } from "../offline/offlineItemEntity.test.data";
 import { metadata } from "../../../../../test/fixture/encryptedMetadata/metadata";
 
@@ -240,6 +242,22 @@ export const resourceStandaloneCustomFieldsDto = (data = {}, options = {}) =>
         },
         { withCustomFields: true },
       ),
+      ...data,
+    },
+    options,
+  );
+
+export const resourcePasskeyDto = (data = {}, options = {}) =>
+  defaultResourceDto(
+    {
+      resource_type_id: TEST_RESOURCE_TYPE_V5_PASSKEY,
+      metadata: defaultResourceMetadataDto({
+        resource_type_id: TEST_RESOURCE_TYPE_V5_PASSKEY,
+        name: "Example passkey",
+        username: "ada@example.com",
+        uris: ["https://example.com"],
+        passkey: defaultPasskeyMetadataDto(),
+      }),
       ...data,
     },
     options,

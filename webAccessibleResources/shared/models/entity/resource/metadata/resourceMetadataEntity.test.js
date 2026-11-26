@@ -21,6 +21,8 @@ import IconEntity from "./IconEntity";
 import CustomFieldsCollection from "../../customField/customFieldsCollection";
 import { defaultCustomField } from "../../customField/customFieldEntity.test.data";
 import { defaultCustomFieldsCollection } from "../../customField/customFieldsCollection.test.data";
+import PasskeyMetadataEntity from "../../passkey/passkeyMetadataEntity";
+import { defaultPasskeyMetadataDto } from "../../passkey/passkeyMetadataEntity.test.data";
 
 describe("ResourceMetadataEntity", () => {
   describe("::getSchema", () => {
@@ -59,6 +61,17 @@ describe("ResourceMetadataEntity", () => {
       assertEntityProperty.array(ResourceMetadataEntity, "uris");
       assertEntityProperty.assertArrayItemString(ResourceMetadataEntity, "uris");
       assertEntityProperty.arrayStringMaxLength(ResourceMetadataEntity, "uris", ResourceMetadataEntity.URI_MAX_LENGTH);
+    });
+
+    it("validates passkey property", () => {
+      const dto = minimalResourceMetadataDto();
+      const successScenarios = [{ scenario: "valid passkey", value: defaultPasskeyMetadataDto() }];
+      const failScenarios = [
+        { scenario: "missing user handle", value: defaultPasskeyMetadataDto({ user_handle: undefined }) },
+        { scenario: "invalid relying party id", value: defaultPasskeyMetadataDto({ rp_id: "https://example.com" }) },
+      ];
+      assertEntityProperty.assertAssociation(ResourceMetadataEntity, "passkey", dto, successScenarios, failScenarios);
+      assertEntityProperty.notRequired(ResourceMetadataEntity, "passkey");
     });
 
     it("validates description property", () => {
@@ -111,6 +124,29 @@ describe("ResourceMetadataEntity", () => {
           resource_type_id: { required: "The resource_type_id is required." },
         });
       }
+    });
+
+    it("keeps the passkey", () => {
+      expect.assertions(2);
+      const metadataDto = minimalResourceMetadataDto({ passkey: defaultPasskeyMetadataDto() });
+      const metadataEntity = new ResourceMetadataEntity(metadataDto);
+      expect(metadataEntity.passkey).toBeInstanceOf(PasskeyMetadataEntity);
+      expect(metadataEntity.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN)).toStrictEqual(metadataDto);
+    });
+
+    it("throws if the passkey is null", () => {
+      expect.assertions(1);
+      const metadataDto = minimalResourceMetadataDto({ passkey: null });
+      expect(() => new ResourceMetadataEntity(metadataDto)).toThrow(EntityValidationError);
+    });
+
+    it("drops the unknown properties of the passkey", () => {
+      expect.assertions(1);
+      const metadataDto = minimalResourceMetadataDto({ passkey: defaultPasskeyMetadataDto({ unknown: "value" }) });
+      const metadataEntity = new ResourceMetadataEntity(metadataDto);
+      expect(metadataEntity.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN).passkey).toStrictEqual(
+        defaultPasskeyMetadataDto(),
+      );
     });
 
     it("works if minimal DTO is provided", () => {

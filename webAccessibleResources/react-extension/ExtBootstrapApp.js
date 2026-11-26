@@ -64,12 +64,12 @@ class ExtBootstrapApp extends Component {
   }
 
   /**
-   * Get the user settings of the active account and set it in the state
+   * Get the list of user settings from local storage and set it in the state
    * Using UserSettings
    */
   async getUserSettings() {
-    const userSettingsDto = await this.props.port.request("passbolt.user-settings.get-legacy-user-settings");
-    const userSettings = new UserSettings(userSettingsDto);
+    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
+    const userSettings = new UserSettings(storageData._passbolt_data.config);
     this.setState({ userSettings });
   }
 
@@ -148,6 +148,7 @@ class ExtBootstrapApp extends Component {
                   "/app/settings/account-recovery",
                   "/app/settings/account-recovery/edit",
                   "/app/settings/theme",
+                  "/app/settings/passkeys",
                   "/app/users/view/:selectedUserId",
                   "/app/users",
                   "/app",

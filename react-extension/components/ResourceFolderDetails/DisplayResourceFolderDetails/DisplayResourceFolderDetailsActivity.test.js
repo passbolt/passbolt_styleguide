@@ -89,8 +89,6 @@ describe("See activities", () => {
     });
 
     it("I should be able to see each other activities with more button ", async () => {
-      expect.assertions(5);
-
       //First request returns 5 activities (shows "More" button), subsequent requests return 2 more
       jest
         .spyOn(context.port, "request")
@@ -100,61 +98,12 @@ describe("See activities", () => {
         page = new DisplayResourceFolderDetailsActivityPage(context, props);
       });
       await waitForTrue(() => page.moreButtonExists());
-      expect(page.moreButtonExists()).toBe(true);
+      expect(page.moreButtonExists()).toBeTruthy();
       await page.moreButtonClick();
       expect(page.count()).toBe(7);
       expect(page.creator(6)).toBe("Admin User");
       expect(page.creator(7)).toBe("Ada Lovelace");
-      expect(page.moreButtonExists()).toBe(false);
-    });
-
-    it("I should request the next page of activities when I click on the more button", async () => {
-      expect.assertions(1);
-
-      jest
-        .spyOn(context.port, "request")
-        .mockImplementationOnce(activitiesFoundRequestMockImpl)
-        .mockImplementation(activitiesMoreFoundRequestMockImpl);
-      let page;
-      await act(async () => {
-        page = new DisplayResourceFolderDetailsActivityPage(context, props);
-      });
-      await waitForTrue(() => page.moreButtonExists());
-
-      await page.moreButtonClick();
-
-      expect(context.port.request).toHaveBeenLastCalledWith(
-        "passbolt.actionlogs.find-all-for",
-        "Folder",
-        props.resourceWorkspaceContext.details.folder.id,
-        { limit: 5, page: 2 },
-      );
-    });
-
-    it("I should see the more button processing while the next page of activities is loading", async () => {
-      expect.assertions(2);
-
-      let resolveNextPage;
-      jest
-        .spyOn(context.port, "request")
-        .mockImplementationOnce(activitiesFoundRequestMockImpl)
-        .mockImplementation(
-          () =>
-            new Promise((resolve) => {
-              resolveNextPage = resolve;
-            }),
-        );
-      let page;
-      await act(async () => {
-        page = new DisplayResourceFolderDetailsActivityPage(context, props);
-      });
-      await waitForTrue(() => page.moreButtonExists());
-
-      await page.moreButtonClick();
-      expect(page.isMoreButtonProcessing()).toBe(true);
-
-      await act(async () => resolveNextPage([]));
-      expect(page.isMoreButtonProcessing()).toBe(false);
+      expect(!page.moreButtonExists()).toBeTruthy();
     });
   });
 

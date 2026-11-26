@@ -15,6 +15,8 @@ import EntityV2 from "../../abstract/entityV2";
 import IconEntity from "./IconEntity";
 import CustomFieldsCollection from "../../customField/customFieldsCollection";
 import assertString from "validator/es/lib/util/assertString";
+import PasskeyMetadataEntity from "../../passkey/passkeyMetadataEntity";
+import EntityValidationError from "../../abstract/entityValidationError";
 
 const ENTITY_NAME = "ResourceMetadataEntity";
 const RESOURCE_NAME_MAX_LENGTH = 255;
@@ -66,19 +68,35 @@ class ResourceMetadataEntity extends EntityV2 {
         },
         icon: IconEntity.getSchema(),
         custom_fields: CustomFieldsCollection.getSchema(),
+        // Passkey only, required by the passkey definition.
+        passkey: PasskeyMetadataEntity.getSchema(),
       },
     };
   }
 
   /**
    * @inheritDoc
-   * @returns {{icon: IconEntity, custom_fields: CustomFieldsCollection}}
+   * @returns {{icon: IconEntity, custom_fields: CustomFieldsCollection, passkey: PasskeyMetadataEntity}}
    */
   static get associations() {
     return {
       icon: IconEntity,
       custom_fields: CustomFieldsCollection,
+      passkey: PasskeyMetadataEntity,
     };
+  }
+
+  /**
+   * @inheritDoc
+   * The schema object type lets null through.
+   * @throws {EntityValidationError} If the passkey is null.
+   */
+  validateBuildRules() {
+    if (this._props.passkey === null) {
+      const error = new EntityValidationError();
+      error.addError("passkey", "type", "The passkey is not a valid object.");
+      throw error;
+    }
   }
 
   /*
@@ -104,6 +122,10 @@ class ResourceMetadataEntity extends EntityV2 {
 
     if (this._customFields && contain.custom_fields) {
       result.custom_fields = this._customFields.toDto();
+    }
+
+    if (this._passkey && contain.passkey) {
+      result.passkey = this._passkey.toDto();
     }
     return result;
   }
@@ -179,6 +201,14 @@ class ResourceMetadataEntity extends EntityV2 {
   }
 
   /**
+   * Returns the passkey associated entity
+   * @returns {PasskeyMetadataEntity|null}
+   */
+  get passkey() {
+    return this._passkey || null;
+  }
+
+  /**
    * Returns the icon associated entity
    * @returns {IconEntity|null}
    */
@@ -245,6 +275,7 @@ class ResourceMetadataEntity extends EntityV2 {
     return {
       icon: true,
       custom_fields: true,
+      passkey: true,
     };
   }
 }

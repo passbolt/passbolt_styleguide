@@ -13,7 +13,7 @@
  */
 
 import ResourceViewPagePasswordPage from "./ResourceViewPagePassword.test.page";
-import { defaultProps, noUsernameProps, revealedPasswordProps } from "./ResourceViewPagePassword.test.data";
+import { defaultProps, revealedPasswordProps } from "./ResourceViewPagePassword.test.data";
 import { copiedSecretState, copyingSecretState, decryptingSecretState } from "./secretState.test.data";
 
 beforeEach(() => {
@@ -21,43 +21,14 @@ beforeEach(() => {
 });
 
 describe("ResourceViewPagePassword", () => {
-  describe("As LU, I should see the username row", () => {
-    it("As LU, I should see the username and copy it from its value or its action", async () => {
-      expect.assertions(6);
-      const props = defaultProps();
-      const page = new ResourceViewPagePasswordPage(props);
+  it("As LU, I should see the username row before the password row", () => {
+    expect.assertions(4);
+    const page = new ResourceViewPagePasswordPage(defaultProps());
 
-      expect(page.rows.length).toStrictEqual(2);
-      expect(page.usernameLabel.textContent).toStrictEqual("Username");
-      expect(page.usernameLink.textContent).toStrictEqual("admin@passbolt.com");
-      expect(page.usernameCopyButton.classList.contains("disabled")).toBeFalsy();
-
-      await page.click(page.usernameLink);
-      await page.click(page.usernameCopyButton);
-      expect(props.onCopyUsername).toHaveBeenCalledTimes(2);
-      expect(page.hasTimer(page.usernameCopyButton)).toBeFalsy();
-    });
-
-    it("As LU, I should see the username copy status icons", () => {
-      expect.assertions(3);
-      const page = new ResourceViewPagePasswordPage(defaultProps());
-      expect(page.usernameCopyIconState).toStrictEqual("default");
-
-      page.rerender(defaultProps(copyingSecretState("username")));
-      expect(page.usernameCopyIconState).toStrictEqual("processing");
-
-      page.rerender(defaultProps(copiedSecretState("username")));
-      expect(page.usernameCopyIconState).toStrictEqual("done");
-    });
-
-    it("As LU, I should be told when the resource has no username", () => {
-      expect.assertions(3);
-      const page = new ResourceViewPagePasswordPage(noUsernameProps());
-
-      expect(page.usernameLink).toBeNull();
-      expect(page.usernameEmpty.textContent).toStrictEqual("no username provided");
-      expect(page.usernameCopyButton.classList.contains("disabled")).toBeTruthy();
-    });
+    expect(page.rows.length).toStrictEqual(2);
+    expect(page.usernameLabel.textContent).toStrictEqual("Username");
+    expect(page.usernameLink.textContent).toStrictEqual("admin@passbolt.com");
+    expect(page.passwordLabel.textContent).toStrictEqual("Password");
   });
 
   describe("As LU, I should see the password row", () => {

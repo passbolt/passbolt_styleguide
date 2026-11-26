@@ -184,13 +184,23 @@ class ExportResourcesCredentials extends Component {
 
   /**
    * Whenever the export has been performed succesfully
-   * @param {{customFieldsConflicts: Array}} result The export result
+   * @param {{customFieldsConflicts: Array, skippedPasskeysCount: number}} result The export result
    */
   async onExportSuccess(result) {
     await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds: null, foldersIds: null });
-    await this.props.actionFeedbackContext.displaySuccess(
-      this.translate("The passwords have been exported successfully"),
-    );
+    const skippedPasskeysCount = result?.skippedPasskeysCount;
+    if (skippedPasskeysCount > 0) {
+      await this.props.actionFeedbackContext.displayWarning(
+        this.translate(
+          "The passwords have been exported, {{count}} passkey was not exported: the export formats do not support passkeys.",
+          { count: skippedPasskeysCount },
+        ),
+      );
+    } else {
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.translate("The passwords have been exported successfully"),
+      );
+    }
     const customFieldsConflicts = result?.customFieldsConflicts;
     if (customFieldsConflicts?.length > 0) {
       console.warn(

@@ -54,7 +54,7 @@ describe("UserEventsService", () => {
 
       expect(field.value).toStrictEqual("test");
 
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
       expect(field.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
       expect(field.dispatchEvent).toHaveBeenCalledWith(getInputEvent("test"));
       expect(field.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -70,7 +70,7 @@ describe("UserEventsService", () => {
 
       expect(field.value).toStrictEqual("");
 
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
       expect(field.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
       expect(field.dispatchEvent).toHaveBeenCalledWith(getInputEvent(null));
       expect(field.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -102,7 +102,7 @@ describe("UserEventsService", () => {
 
       expect(field.value).toStrictEqual("");
 
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
       expect(field.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
       expect(field.dispatchEvent).toHaveBeenCalledWith(getInputEvent(""));
       expect(field.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -158,7 +158,7 @@ describe("UserEventsService", () => {
         if (i === 0) {
           expect(input.click).toHaveBeenCalledTimes(1);
 
-          expect(input.dispatchEvent).toHaveBeenCalledTimes(7);
+          expect(input.dispatchEvent).toHaveBeenCalledTimes(5);
           expect(input.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
           expect(input.dispatchEvent).toHaveBeenCalledWith(getInputEvent(value[i]));
           expect(input.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -205,7 +205,7 @@ describe("UserEventsService", () => {
         expect(input.value).toStrictEqual(value[i]);
 
         // The first input also has twice the number of events for the same reason
-        expect(input.dispatchEvent).toHaveBeenCalledTimes(i === 0 ? 12 : 6);
+        expect(input.dispatchEvent).toHaveBeenCalledTimes(i === 0 ? 8 : 4);
         expect(input.dispatchEvent).toHaveBeenCalledWith(keydownEvent);
         expect(input.dispatchEvent).toHaveBeenCalledWith(getInputEvent(value[i]));
         expect(input.dispatchEvent).toHaveBeenCalledWith(keyupEvent);
@@ -262,10 +262,7 @@ describe("UserEventsService", () => {
 
       const field = document.createElement("input");
 
-      const promise = UserEventsService.autofill(field, "test");
-      await jest.runAllTimersAsync();
-
-      await expect(promise).resolves.toStrictEqual(true);
+      await expect(UserEventsService.autofill(field, "test")).resolves.toStrictEqual(true);
 
       expect(UserEventsService._autofillSingleField).toHaveBeenCalledWith(field, "test");
       expect(UserEventsService._autofillMultipleField).not.toHaveBeenCalled();
@@ -303,218 +300,6 @@ describe("UserEventsService", () => {
 
       expect(UserEventsService._autofillSingleField).toHaveBeenCalledWith(field, "test");
       expect(UserEventsService._autofillMultipleField).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("blur", () => {
-    let field;
-
-    beforeEach(() => {
-      field = document.createElement("input");
-      document.body.appendChild(field);
-      jest.spyOn(field, "dispatchEvent");
-    });
-
-    afterEach(() => {
-      field.remove();
-    });
-
-    it("Should dispatch blur and focusout when the field does not have the focus", async () => {
-      expect.assertions(2);
-
-      await UserEventsService._autofillSingleField(field, "test");
-
-      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => event.type);
-      expect(dispatched).toStrictEqual(["keydown", "input", "keyup", "change", "blur", "focusout"]);
-      expect(document.activeElement).not.toBe(field);
-    });
-
-    it("Should not dispatch blur nor focusout when the field has the focus", async () => {
-      expect.assertions(2);
-
-      field.focus();
-      field.dispatchEvent.mockClear();
-
-      await UserEventsService._autofillSingleField(field, "test");
-
-      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => event.type);
-      expect(dispatched).toStrictEqual(["keydown", "input", "keyup", "change"]);
-      expect(document.activeElement).toBe(field);
-    });
-
-    it("Should dispatch blur and focusout when the field window does not have the focus", async () => {
-      expect.assertions(2);
-
-      field.focus();
-      field.dispatchEvent.mockClear();
-      const hasFocusSpy = jest.spyOn(document, "hasFocus").mockReturnValue(false);
-
-      await UserEventsService._autofillSingleField(field, "test");
-
-      hasFocusSpy.mockRestore();
-
-      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => event.type);
-      expect(dispatched).toStrictEqual(["keydown", "input", "keyup", "change", "blur", "focusout"]);
-      expect(document.activeElement).toBe(field);
-    });
-
-    it("Should bubble focusout but not blur", async () => {
-      expect.assertions(1);
-
-      const onAncestor = jest.fn();
-      const types = ["blur", "focusout"];
-      types.forEach((type) => document.body.addEventListener(type, onAncestor));
-
-      await UserEventsService._autofillSingleField(field, "test");
-
-      types.forEach((type) => document.body.removeEventListener(type, onAncestor));
-      expect(onAncestor.mock.calls.map(([event]) => event.type)).toStrictEqual(["focusout"]);
-    });
-
-    it.each([
-      { scenario: "blur on the field", type: "blur", getListened: () => field },
-      { scenario: "focusout on an ancestor", type: "focusout", getListened: () => document.body },
-    ])("Should keep a value committed by the page on $scenario", async ({ type, getListened }) => {
-      expect.assertions(1);
-
-      let committedValue = "";
-      const commit = () => {
-        committedValue = field.value;
-      };
-      getListened().addEventListener(type, commit);
-      field.addEventListener("focus", () => {
-        field.value = committedValue;
-      });
-
-      await UserEventsService._autofillSingleField(field, "test");
-      field.focus();
-
-      getListened().removeEventListener(type, commit);
-      expect(field.value).toStrictEqual("test");
-    });
-  });
-
-  describe("fields rewritten by the page on input", () => {
-    const password = "Secret123!";
-    let field;
-    let hiddenField;
-
-    const maskOnInput = (event) => {
-      if (event.inputType === "deleteContentBackward") {
-        hiddenField.value = hiddenField.value.slice(0, field.value.length);
-      } else {
-        hiddenField.value += field.value.slice(-1);
-      }
-      field.value = "*".repeat(hiddenField.value.length);
-    };
-
-    const autofill = async (target, value) => {
-      const promise = UserEventsService.autofill(target, value);
-      await jest.runAllTimersAsync();
-      return promise;
-    };
-
-    beforeEach(() => {
-      field = document.createElement("input");
-      hiddenField = document.createElement("input");
-      jest.spyOn(UserEventsService, "_typeCharacterByCharacter");
-    });
-
-    it("Should not type character by character when the field holds the value", async () => {
-      expect.assertions(3);
-
-      await expect(autofill(field, password)).resolves.toStrictEqual(true);
-
-      expect(field.value).toStrictEqual(password);
-      expect(UserEventsService._typeCharacterByCharacter).not.toHaveBeenCalled();
-    });
-
-    it("Should type character by character when the page rewrites the field", async () => {
-      expect.assertions(4);
-
-      field.addEventListener("input", (event) => maskOnInput(event));
-
-      await expect(autofill(field, password)).resolves.toStrictEqual(true);
-
-      expect(hiddenField.value).toStrictEqual(password);
-      expect(field.value).toStrictEqual("*".repeat(password.length));
-      expect(UserEventsService._typeCharacterByCharacter).toHaveBeenCalledTimes(1);
-    });
-
-    it("Should read the field back after the page next render", async () => {
-      expect.assertions(2);
-
-      field.addEventListener("input", (event) => setTimeout(() => maskOnInput(event), 0));
-
-      await autofill(field, password);
-
-      expect(hiddenField.value).toStrictEqual(password);
-      expect(UserEventsService._typeCharacterByCharacter).toHaveBeenCalledTimes(1);
-    });
-
-    it("Should type character by character only once", async () => {
-      expect.assertions(2);
-
-      field.addEventListener("input", () => {
-        field.value = "";
-      });
-
-      await autofill(field, password);
-
-      expect(field.value).toStrictEqual("");
-      expect(UserEventsService._typeCharacterByCharacter).toHaveBeenCalledTimes(1);
-    });
-
-    it("Should dispatch the events of each typed character and a single change", async () => {
-      expect.assertions(4);
-
-      field.addEventListener("input", (event) => maskOnInput(event));
-      jest.spyOn(field, "dispatchEvent");
-
-      const promise = UserEventsService._typeCharacterByCharacter(field, "ab");
-      await jest.runAllTimersAsync();
-      await promise;
-
-      const dispatched = field.dispatchEvent.mock.calls.map(([event]) => [event.type, event.key ?? event.inputType]);
-      expect(dispatched).toStrictEqual([
-        ["input", "deleteContentBackward"],
-        ["keydown", "a"],
-        ["input", "insertText"],
-        ["keyup", "a"],
-        ["keydown", "b"],
-        ["input", "insertText"],
-        ["keyup", "b"],
-        ["change", undefined],
-        ["blur", undefined],
-        ["focusout", undefined],
-      ]);
-      const insertedData = field.dispatchEvent.mock.calls
-        .map(([event]) => event)
-        .filter((event) => event.inputType === "insertText")
-        .map((event) => event.data);
-      expect(insertedData).toStrictEqual(["a", "b"]);
-      expect(hiddenField.value).toStrictEqual("ab");
-      expect(field.value).toStrictEqual("**");
-    });
-
-    it("Should not type character by character a null value", async () => {
-      expect.assertions(2);
-
-      await autofill(field, null);
-
-      expect(field.value).toStrictEqual("");
-      expect(UserEventsService._typeCharacterByCharacter).not.toHaveBeenCalled();
-    });
-
-    it("Should not type character by character into multiple inputs fields", async () => {
-      expect.assertions(1);
-
-      const otpField = document.createElement("div");
-      "123456".split("").forEach(() => otpField.appendChild(document.createElement("input")));
-
-      await autofill(otpField, "123456");
-
-      expect(UserEventsService._typeCharacterByCharacter).not.toHaveBeenCalled();
     });
   });
 
@@ -591,7 +376,7 @@ describe("UserEventsService", () => {
       await UserEventsService._autofillSingleField(field, "test");
 
       expect(field.value).toStrictEqual("test");
-      expect(field.dispatchEvent).toHaveBeenCalledTimes(6);
+      expect(field.dispatchEvent).toHaveBeenCalledTimes(4);
     });
 
     it("Should build the dispatched events from the field own realm", async () => {

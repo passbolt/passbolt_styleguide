@@ -5,6 +5,12 @@ import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import CloseSVG from "../../../img/svg/close.svg";
+import {
+  PASSKEY_CEREMONY_CREATE,
+  PASSKEY_PROMPT_PURPOSE_UNLOCK,
+  PASSKEY_PROMPT_PURPOSE_VERIFY,
+  PASSKEY_PROMPT_PURPOSE_VERIFY_ORGANISATION,
+} from "../../../shared/constants/passkey.const";
 
 class PassphraseDialog extends React.Component {
   constructor(props) {
@@ -142,14 +148,110 @@ class PassphraseDialog extends React.Component {
     return options != null && typeof options[-1] !== "undefined";
   }
 
+  /**
+   * Whether the prompt unlocks a passkey for an unlocked-session preference, rather than verifying the user.
+   * @returns {boolean}
+   */
+  get isPasskeyUnlock() {
+    return this.props.passkeyPrompt?.purpose === PASSKEY_PROMPT_PURPOSE_UNLOCK;
+  }
+
+  /**
+   * Whether the passkey prompt is for a registration.
+   * @returns {boolean}
+   */
+  get isPasskeyCreate() {
+    return this.props.passkeyPrompt?.ceremony === PASSKEY_CEREMONY_CREATE;
+  }
+
+  /**
+   * Render the title.
+   * @returns {JSX.Element}
+   */
+  renderTitle() {
+    if (!this.props.passkeyPrompt) {
+      return <Trans>Passphrase required</Trans>;
+    }
+    if (this.isPasskeyUnlock) {
+      return this.isPasskeyCreate ? (
+        <Trans>Unlock Passbolt to save your passkey</Trans>
+      ) : (
+        <Trans>Unlock your passkey</Trans>
+      );
+    }
+    return this.isPasskeyCreate ? (
+      <Trans>Verify your passkey registration</Trans>
+    ) : (
+      <Trans>Verify your passkey sign-in</Trans>
+    );
+  }
+
+  /**
+   * Render the explanation of a passkey prompt.
+   * @returns {JSX.Element}
+   */
+  renderPasskeyMessages() {
+    const rpId = this.props.passkeyPrompt.rpId;
+    return (
+      <div className="passkey-messages">
+        <p>
+          <Trans>
+            <bdi id="rp-id">{{ rpId }}</bdi> requires user verification as part of the passkey protocol.
+          </Trans>
+        </p>
+        {this.props.passkeyPrompt.purpose === PASSKEY_PROMPT_PURPOSE_VERIFY_ORGANISATION && (
+          <p>
+            <Trans>Your organisation requires your Passbolt passphrase for this request.</Trans>
+          </p>
+        )}
+        {this.props.passkeyPrompt.purpose === PASSKEY_PROMPT_PURPOSE_VERIFY && (
+          <p>
+            <Trans>Your passkey setting requires your Passbolt passphrase for this request.</Trans>
+          </p>
+        )}
+        {this.isPasskeyUnlock && (
+          <p>
+            {this.isPasskeyCreate ? (
+              <Trans>
+                Your setting allows Passbolt to use an unlocked session. Enter your passphrase to save this passkey and
+                continue.
+              </Trans>
+            ) : (
+              <Trans>
+                Your setting allows Passbolt to use an unlocked session. Enter your passphrase to unlock this passkey
+                and continue.
+              </Trans>
+            )}
+          </p>
+        )}
+        <p className="hint">
+          {this.isPasskeyUnlock ? (
+            <Trans>Your Passbolt “remember me” preference stays the same.</Trans>
+          ) : (
+            <Trans>“Remember me” still applies to your Passbolt session.</Trans>
+          )}
+        </p>
+      </div>
+    );
+  }
+
+  /**
+   * Render the submit button label.
+   * @returns {JSX.Element}
+   */
+  renderSubmitLabel() {
+    if (!this.props.passkeyPrompt) {
+      return <Trans>Submit</Trans>;
+    }
+    return this.isPasskeyUnlock ? <Trans>Unlock and continue</Trans> : <Trans>Verify and continue</Trans>;
+  }
+
   render() {
     return (
       <div className="passphrase" onKeyDown={this.handleKeyDown}>
         <div className="back-link">
           <a className="primary-action">
-            <span className="primary-action-title">
-              <Trans>Passphrase required</Trans>
-            </span>
+            <span className="primary-action-title">{this.renderTitle()}</span>
           </a>
           <a
             onClick={this.handleCloseButtonClick}
@@ -165,9 +267,10 @@ class PassphraseDialog extends React.Component {
         {this.state.attempt < 3 && (
           <form onSubmit={this.handleFormSubmit}>
             <div className="form-container">
+              {this.props.passkeyPrompt && this.renderPasskeyMessages()}
               <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""}`}>
                 <label htmlFor="passphrase">
-                  <Trans>Please enter your passphrase</Trans>
+                  {this.props.passkeyPrompt ? <Trans>Passphrase</Trans> : <Trans>Please enter your passphrase</Trans>}
                 </label>
                 <Password
                   name="passphrase"
@@ -182,7 +285,8 @@ class PassphraseDialog extends React.Component {
                 />
                 {this.state.passphraseError && <div className="error-message">{this.state.passphraseError}</div>}
               </div>
-              {this.canRememberMe && (
+              {/* A passkey prompt never changes what is remembered: without the checkbox it answers rememberMe false. */}
+              {!this.props.passkeyPrompt && this.canRememberMe && (
                 <div className="input checkbox">
                   <input
                     type="checkbox"
@@ -205,7 +309,7 @@ class PassphraseDialog extends React.Component {
                 role="button"
                 disabled={this.state.processing}
               >
-                <Trans>Submit</Trans>
+                {this.renderSubmitLabel()}
                 {this.state.processing && <SpinnerSVG />}
               </button>
             </div>
@@ -232,6 +336,15 @@ PassphraseDialog.propTypes = {
   context: PropTypes.any, // The application context
   className: PropTypes.string,
   requestId: PropTypes.string,
+  passkeyPrompt: PropTypes.shape({
+    rpId: PropTypes.string,
+    purpose: PropTypes.oneOf([
+      PASSKEY_PROMPT_PURPOSE_VERIFY,
+      PASSKEY_PROMPT_PURPOSE_VERIFY_ORGANISATION,
+      PASSKEY_PROMPT_PURPOSE_UNLOCK,
+    ]),
+    ceremony: PropTypes.string,
+  }), // The passkey variant of the prompt, for a request requiring user verification
   onComplete: PropTypes.func,
   t: PropTypes.func, // The translation function
 };

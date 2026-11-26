@@ -19,6 +19,11 @@ import NavigateIntoUserSettingsWorkspacePage from "./NavigateIntoUserSettingsWor
 import { defaultProps } from "./NavigateIntoUserSettingsWorkspace.test.data";
 import { defaultUserRbacContext, denyRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import SiteSettingsEntity from "../../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import {
+  defaultProSiteSettings,
+  passkeyUserChoiceSiteSettings,
+} from "../../../../shared/models/entity/siteSettings/siteSettingsEntity.test.data";
 
 describe("NavigateIntoUserSettingsWorkspace", () => {
   let page; // The page to test against
@@ -65,6 +70,39 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
     await waitFor(() => {});
 
     expect(page.attentionRequired.length === 2).toBeTruthy();
+  });
+
+  it.each([
+    ["shows", passkeyUserChoiceSiteSettings(), false],
+    ["hides", defaultProSiteSettings(), true],
+  ])(
+    "%s the passkeys entry depending on whether the organisation lets users choose",
+    async (_, siteSettingsDto, isHidden) => {
+      expect.assertions(1);
+      const props = defaultProps({
+        context: { onLogoutRequested: () => {}, siteSettings: new SiteSettingsEntity(siteSettingsDto) },
+      });
+
+      page = new NavigateIntoUserSettingsWorkspacePage(context, props);
+      await waitFor(() => {});
+
+      expect(page.passkeysMenuItem === null).toBe(isHidden);
+    },
+  );
+
+  it.each([
+    ["/app/settings/passkeys", "Passkeys"],
+    ["/app/settings/keys", "Keys inspector"],
+  ])("selects only the matching entry on %s", async (path, label) => {
+    expect.assertions(1);
+    const props = defaultProps({
+      context: { onLogoutRequested: () => {}, siteSettings: new SiteSettingsEntity(passkeyUserChoiceSiteSettings()) },
+    });
+
+    page = new NavigateIntoUserSettingsWorkspacePage(context, props, path);
+    await waitFor(() => {});
+
+    expect(page.selectedMenuItemsLabels).toEqual([label]);
   });
 
   describe.each([

@@ -29,6 +29,7 @@ import {
   v5DefaultResourceProps,
   v5DefaultTotpResourceProps,
   v5DefaultSecretDto,
+  passkeyResourceProps,
 } from "./ResourceViewPage.test.data";
 import UserActiveSessionEntity from "../../../shared/models/entity/session/userActiveSessionEntity";
 import { offlineUserActiveSessionDto } from "../../../shared/models/entity/session/userActiveSessionEntity.test.data";
@@ -36,6 +37,8 @@ import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeG
 import { denyRbacContext } from "../../../shared/context/Rbac/RbacContext.test.data";
 import { defaultTotpViewModelDto } from "../../../shared/models/entity/totp/totpDto.test.data";
 import { act } from "react";
+import SiteSettingsEntity from "../../../shared/models/entity/siteSettings/siteSettingsEntity";
+import { passkeyInterceptionDisabledSiteSettings } from "../../../shared/models/entity/siteSettings/siteSettingsEntity.test.data";
 import { fireEvent } from "@testing-library/react";
 import { waitForTrue } from "../../../../test/utils/waitFor";
 
@@ -314,6 +317,77 @@ describe("ResourceViewPage", () => {
       expect(page.listUris.length).toStrictEqual(4);
     });
   });
+  describe("As LU, I should see a passkey resource.", () => {
+    it("As LU, I should be able to use a passkey on its site when a sign-in of the page waits for it", async () => {
+      expect.assertions(1);
+      const props = passkeyResourceProps();
+      const passkeyId = (await props.context.storage.local.get(["resources"])).resources[0].id;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", () => "https://example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", () => [
+        { id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856", rp_id: "example.com", passkey_ids: [passkeyId] },
+      ]);
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      await waitForTrue(() => page.useOnThisPageButton);
+      expect(page.useOnThisPageButton.classList.contains("disabled")).toBe(false);
+    });
+
+    it("As LU, I should not be able to use a passkey on its site when the organisation disabled the passkey interception", async () => {
+      expect.assertions(2);
+      const props = passkeyResourceProps();
+      props.context.siteSettings = new SiteSettingsEntity(passkeyInterceptionDisabledSiteSettings());
+      const passkeyId = (await props.context.storage.local.get(["resources"])).resources[0].id;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", () => "https://example.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", () => [
+        { id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856", rp_id: "example.com", passkey_ids: [passkeyId] },
+      ]);
+      jest.spyOn(props.context.port, "request");
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      await act(async () => {
+        await Promise.all(props.context.port.request.mock.results.map((result) => result.value));
+      });
+
+      expect(page.useOnThisPageButton).toBeNull();
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.passkey.get-tab-pending-requests",
+        expect.anything(),
+      );
+    });
+
+    it("As LU, I should see the username and uri of a passkey, and no password, totp or use on this page off its site", async () => {
+      expect.assertions(5);
+      const props = passkeyResourceProps();
+      const passkeyId = (await props.context.storage.local.get(["resources"])).resources[0].id;
+      props.context.port.addRequestListener("passbolt.active-tab.get-url", () => "https://other.com/login");
+      props.context.port.addRequestListener("passbolt.passkey.get-tab-pending-requests", () => [
+        { id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856", rp_id: "example.com", passkey_ids: [passkeyId] },
+      ]);
+      jest.spyOn(props.context.port, "request");
+      let page;
+      await act(async () => {
+        page = new ResourceViewPagePage(props);
+      });
+      // Let the tab url and the waiting sign-ins reach the page before asserting the action is absent.
+      await act(async () => {
+        await Promise.all(props.context.port.request.mock.results.map((result) => result.value));
+      });
+
+      expect(page.propertyNames).toStrictEqual(["Username", "URI"]);
+      expect(page.password).toBeNull();
+      expect(page.totp).toBeNull();
+      expect(page.useOnThisPageButton).toBeNull();
+      expect(props.context.port.request).not.toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        expect.anything(),
+      );
+    });
+  });
+
   describe("As LU, I should see and copy a PIN code resource.", () => {
     const pinCodeSecret = () => ({ object_type: "PASSBOLT_SECRET_DATA", pin_code: "482913" });
 

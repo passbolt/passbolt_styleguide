@@ -58,7 +58,35 @@ export default class HomePagePage {
    * @returns {NodeListOf<HTLMElement>}
    */
   get suggestedResourcesEntries() {
-    return this._page.container.querySelectorAll(".list-section .list-items .suggested-resource-entry");
+    return this._page.container.querySelectorAll(
+      ".list-section .list-items .suggested-resource-entry:not(.suggested-passkey-entry)",
+    );
+  }
+
+  /**
+   * Returns the passkeys of the site of the tab
+   * @returns {NodeListOf<HTMLElement>}
+   */
+  get passkeyEntries() {
+    return this._page.container.querySelectorAll(".list-section .list-items .suggested-passkey-entry");
+  }
+
+  /**
+   * Returns whether the passkey entry at the given index signs in on click
+   * @param {number} index The index of the entry
+   * @returns {boolean}
+   */
+  isPasskeyEntrySigningIn(index) {
+    return Boolean(this.passkeyEntries[index].querySelector("button.resource-details .url.sign-in"));
+  }
+
+  /**
+   * Click on the passkey entry at the given index
+   * @param {number} index The index of the entry
+   */
+  async clickPasskeyEntry(index) {
+    fireEvent.click(this.passkeyEntries[index].querySelector(".resource-details"), { button: 0 });
+    await waitFor(() => {});
   }
 
   /**
