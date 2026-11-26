@@ -66,6 +66,13 @@ export default class DisplayResourceDetailsPasskeyPage {
   }
 
   /**
+   * Returns the website value
+   */
+  get websiteValue() {
+    return this._page.container.querySelector(".information-value .website.value");
+  }
+
+  /**
    * Returns the username label
    */
   get usernameLabel() {

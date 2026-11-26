@@ -82,7 +82,7 @@ class EditPasskeyResource extends Component {
 
   /**
    * The resource DTO to update: the resource properties with the metadata carrying the new name, "no name" when
-   * empty. The other metadata properties, such as the credential id, are kept as is.
+   * empty. The other metadata properties, such as the passkey, are kept as is.
    * @returns {object}
    */
   toResourceDto() {

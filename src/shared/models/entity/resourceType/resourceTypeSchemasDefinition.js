@@ -715,7 +715,7 @@ const RESOURCE_TYPE_V5_STANDALONE_PIN_CODE_DEFINITION_SCHEMA = {
 const RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
-    required: ["name", "username", "uris", "credential_id"],
+    required: ["name", "username", "passkey"],
     properties: {
       name: {
         type: "string",
@@ -725,15 +725,41 @@ const RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA = {
         type: "string",
         maxLength: 255,
       },
+      passkey: {
+        type: "object",
+        required: ["rp_id", "credential_id", "user_handle", "prf_support"],
+        properties: {
+          rp_id: {
+            type: "string",
+            minLength: 1,
+            maxLength: 253,
+            pattern: `^${RP_ID_HOST_PATTERN}$`,
+          },
+          credential_id: {
+            type: "string",
+            minLength: 22,
+            maxLength: 1364,
+            pattern: BASE64URL_PATTERN,
+          },
+          user_handle: {
+            type: "string",
+            minLength: 2,
+            maxLength: 86,
+            pattern: BASE64URL_PATTERN,
+          },
+          prf_support: {
+            type: "boolean",
+          },
+        },
+      },
       uris: {
         type: "array",
         items: {
           type: "string",
-          maxLength: 261,
-          pattern: `^https://${RP_ID_HOST_PATTERN}$`,
+          maxLength: 1024,
+          nullable: true,
         },
-        minItems: 1,
-        maxItems: 1,
+        maxItems: 32,
       },
       description: {
         type: "string",
@@ -759,26 +785,11 @@ const RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA = {
           },
         },
       },
-      credential_id: {
-        type: "string",
-        minLength: 22,
-        maxLength: 1364,
-        pattern: BASE64URL_PATTERN,
-      },
     },
   },
   secret: {
     type: "object",
-    required: [
-      "object_type",
-      "resource_type_slug",
-      "rp_id",
-      "credential_id",
-      "user_handle",
-      "username",
-      "algorithm",
-      "private_key",
-    ],
+    required: ["object_type", "resource_type_slug", "username", "passkey"],
     properties: {
       object_type: {
         type: "string",
@@ -788,62 +799,62 @@ const RESOURCE_TYPE_V5_PASSKEY_DEFINITION_SCHEMA = {
         type: "string",
         enum: [RESOURCE_TYPE_V5_PASSKEY_SLUG],
       },
-      rp_id: {
-        type: "string",
-        minLength: 1,
-        maxLength: 253,
-        pattern: `^${RP_ID_HOST_PATTERN}$`,
-      },
-      credential_id: {
-        type: "string",
-        minLength: 22,
-        maxLength: 1364,
-        pattern: BASE64URL_PATTERN,
-      },
-      user_handle: {
-        type: "string",
-        minLength: 2,
-        maxLength: 86,
-        pattern: BASE64URL_PATTERN,
-      },
       username: {
         type: "string",
         maxLength: 255,
       },
-      user_display_name: {
-        type: "string",
-        maxLength: 255,
-        nullable: true,
-      },
-      algorithm: {
-        type: "integer",
-        enum: [-7],
-      },
-      private_key: {
-        type: "string",
-        minLength: 90,
-        maxLength: 256,
-        pattern: BASE64URL_PATTERN,
-      },
-      hmac_credentials: {
+      passkey: {
         type: "object",
-        required: ["algorithm", "cred_with_uv", "cred_without_uv"],
+        required: ["rp_id", "credential_id", "algorithm", "private_key"],
         properties: {
+          rp_id: {
+            type: "string",
+            minLength: 1,
+            maxLength: 253,
+            pattern: `^${RP_ID_HOST_PATTERN}$`,
+          },
+          credential_id: {
+            type: "string",
+            minLength: 22,
+            maxLength: 1364,
+            pattern: BASE64URL_PATTERN,
+          },
           algorithm: {
-            type: "string",
-            enum: ["hmac-sha256"],
+            type: "integer",
+            enum: [-7],
           },
-          cred_with_uv: {
+          private_key: {
             type: "string",
-            minLength: 43,
-            maxLength: 43,
+            minLength: 90,
+            maxLength: 256,
             pattern: BASE64URL_PATTERN,
           },
-          cred_without_uv: {
+          user_display_name: {
             type: "string",
-            minLength: 43,
-            maxLength: 43,
-            pattern: BASE64URL_PATTERN,
+            maxLength: 255,
+            nullable: true,
+          },
+          hmac_credentials: {
+            type: "object",
+            required: ["algorithm", "cred_with_uv", "cred_without_uv"],
+            properties: {
+              algorithm: {
+                type: "string",
+                enum: ["hmac-sha256"],
+              },
+              cred_with_uv: {
+                type: "string",
+                minLength: 43,
+                maxLength: 43,
+                pattern: BASE64URL_PATTERN,
+              },
+              cred_without_uv: {
+                type: "string",
+                minLength: 43,
+                maxLength: 43,
+                pattern: BASE64URL_PATTERN,
+              },
+            },
           },
         },
       },

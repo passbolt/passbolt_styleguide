@@ -28,6 +28,7 @@ import { defaultUserDto } from "../user/userEntity.test.data";
 import { defaultPermissionsDtos } from "../permission/permissionCollection.test.data";
 import { defaultTagsDtos } from "../tag/tagCollection.test.data";
 import { defaultResourceMetadataDto } from "./metadata/resourceMetadataEntity.test.data";
+import { defaultPasskeyMetadataDto } from "../passkey/passkeyMetadataEntity.test.data";
 import { defaultOfflineItemDto } from "../offline/offlineItemEntity.test.data";
 import { metadata } from "../../../../../test/fixture/encryptedMetadata/metadata";
 
@@ -255,7 +256,7 @@ export const resourcePasskeyDto = (data = {}, options = {}) =>
         name: "Example passkey",
         username: "ada@example.com",
         uris: ["https://example.com"],
-        credential_id: "yuDS1TCepE-VXzAgRc2VJw",
+        passkey: defaultPasskeyMetadataDto(),
       }),
       ...data,
     },

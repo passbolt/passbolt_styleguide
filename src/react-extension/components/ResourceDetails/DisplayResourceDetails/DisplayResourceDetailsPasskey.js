@@ -18,7 +18,7 @@ import { Trans, withTranslation } from "react-i18next";
 
 import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
-import { parseRpIdFromUris } from "../../../../shared/utils/passkeyRpIdUtils";
+import { isRpIdOfUrl } from "../../../../shared/utils/passkeyRpIdUtils";
 
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
@@ -50,14 +50,6 @@ class DisplayResourceDetailsPasskey extends React.Component {
    */
   get resource() {
     return this.props.resourceWorkspaceContext.details.resource;
-  }
-
-  /**
-   * The relying party id the passkey is bound to, null if the metadata uris do not name one.
-   * @returns {string|null}
-   */
-  get rpId() {
-    return parseRpIdFromUris(this.resource.metadata.uris);
   }
 
   /**
@@ -98,7 +90,9 @@ class DisplayResourceDetailsPasskey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const rpId = this.rpId;
+    const rpId = this.resource.metadata.passkey?.rp_id;
+    // The link opens the first uri, so it is shown only when that uri belongs to the domain it is labelled with.
+    const isLink = isRpIdOfUrl(rpId, this.resource.metadata.uris?.[0]);
 
     return (
       <div className="detailed-passkey accordion sidebar-section">
@@ -125,10 +119,12 @@ class DisplayResourceDetailsPasskey extends React.Component {
             </div>
             <div className="information-value">
               <span className="website value">
-                {rpId && (
+                {isLink ? (
                   <button type="button" className="link no-border" onClick={this.handleWebsiteClick}>
                     <span>{rpId}</span>
                   </button>
+                ) : (
+                  <span>{rpId}</span>
                 )}
               </span>
               <span className="username value">

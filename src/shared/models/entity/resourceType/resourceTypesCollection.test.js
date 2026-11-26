@@ -475,9 +475,8 @@ describe("ResourceTypesCollection", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       const resourceDto = {
         secret: {
-          rp_id: "",
-          credential_id: "",
-          private_key: "",
+          username: "",
+          passkey: {},
         },
       };
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toBeNull();

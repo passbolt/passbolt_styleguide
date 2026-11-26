@@ -13,28 +13,12 @@
  */
 import SecretDataEntity, { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import { RESOURCE_TYPE_V5_PASSKEY_SLUG } from "../resourceType/resourceTypeSchemasDefinition";
-import PasskeyHmacCredentialsEntity from "../passkey/passkeyHmacCredentialsEntity";
-import { PASSKEY_RP_ID_MAX_LENGTH, PASSKEY_RP_ID_REGEXP } from "../../../utils/passkeyRpIdUtils";
+import PasskeySecretEntity from "../passkey/passkeySecretEntity";
 import assertString from "validator/es/lib/util/assertString";
 import EntityValidationError from "../abstract/entityValidationError";
-import {
-  PASSKEY_BASE64URL_REGEXP,
-  PASSKEY_CREDENTIAL_ID_MAX_LENGTH,
-  PASSKEY_CREDENTIAL_ID_MIN_LENGTH,
-  PASSKEY_ES256_ALGORITHM,
-} from "../../../constants/passkey.const";
 
 const PASSKEY_USERNAME_MAX_LENGTH = 255;
-const PASSKEY_USER_DISPLAY_NAME_MAX_LENGTH = 255;
-const SECRET_PROPERTIES = [
-  "rp_id",
-  "credential_id",
-  "user_handle",
-  "username",
-  "user_display_name",
-  "algorithm",
-  "private_key",
-];
+const PASSKEY_PROPERTIES = ["rp_id", "credential_id", "algorithm", "private_key", "user_display_name"];
 const HMAC_CREDENTIALS_PROPERTIES = ["algorithm", "cred_with_uv", "cred_without_uv"];
 
 class SecretDataV5PasskeyEntity extends SecretDataEntity {
@@ -45,16 +29,7 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
   static getSchema() {
     return {
       type: "object",
-      required: [
-        "object_type",
-        "resource_type_slug",
-        "rp_id",
-        "credential_id",
-        "user_handle",
-        "username",
-        "algorithm",
-        "private_key",
-      ],
+      required: ["object_type", "resource_type_slug", "username", "passkey"],
       properties: {
         ...SecretDataEntity.getSchema().properties,
         // The type the secret was written for, whatever resource type the server labels it with.
@@ -62,48 +37,12 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
           type: "string",
           enum: [RESOURCE_TYPE_V5_PASSKEY_SLUG],
         },
-        rp_id: {
-          type: "string",
-          minLength: 1,
-          maxLength: PASSKEY_RP_ID_MAX_LENGTH,
-          pattern: PASSKEY_RP_ID_REGEXP,
-        },
-        credential_id: {
-          type: "string",
-          minLength: PASSKEY_CREDENTIAL_ID_MIN_LENGTH,
-          maxLength: PASSKEY_CREDENTIAL_ID_MAX_LENGTH,
-          pattern: PASSKEY_BASE64URL_REGEXP,
-        },
-        // WebAuthn user.id: 1 to 64 bytes.
-        user_handle: {
-          type: "string",
-          minLength: 2,
-          maxLength: 86,
-          pattern: PASSKEY_BASE64URL_REGEXP,
-        },
         // WebAuthn user.name, equal to the metadata username.
         username: {
           type: "string",
           maxLength: PASSKEY_USERNAME_MAX_LENGTH,
         },
-        user_display_name: {
-          type: "string",
-          maxLength: PASSKEY_USER_DISPLAY_NAME_MAX_LENGTH,
-          nullable: true,
-        },
-        // COSE algorithm identifier of the credential.
-        algorithm: {
-          type: "integer",
-          enum: [PASSKEY_ES256_ALGORITHM],
-        },
-        // PKCS#8 DER of an ECDSA P-256 key, with or without its public key.
-        private_key: {
-          type: "string",
-          minLength: 90,
-          maxLength: 256,
-          pattern: PASSKEY_BASE64URL_REGEXP,
-        },
-        hmac_credentials: PasskeyHmacCredentialsEntity.getSchema(),
+        passkey: PasskeySecretEntity.getSchema(),
       },
     };
   }
@@ -113,19 +52,19 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
    */
   static get associations() {
     return {
-      hmac_credentials: PasskeyHmacCredentialsEntity,
+      passkey: PasskeySecretEntity,
     };
   }
 
   /**
    * @inheritDoc
-   * The schema object type lets null through: the PRF secrets are either absent or valid.
-   * @throws {EntityValidationError} If the PRF secrets are null.
+   * The schema object type lets null through.
+   * @throws {EntityValidationError} If the passkey is null.
    */
   validateBuildRules() {
-    if (this._props.hmac_credentials === null) {
+    if (this._props.passkey === null) {
       const error = new EntityValidationError();
-      error.addError("hmac_credentials", "type", "The hmac_credentials is not a valid object.");
+      error.addError("passkey", "type", "The passkey is not a valid object.");
       throw error;
     }
   }
@@ -161,10 +100,14 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
    * @returns {boolean}
    */
   areSecretsDifferent(secretDto) {
-    const hmacCredentials = this.hmacCredentials?.toDto();
+    const passkey = this._passkey.toDto();
+    const otherPasskey = secretDto?.passkey;
     return (
-      SECRET_PROPERTIES.some((prop) => this._props[prop] !== secretDto?.[prop]) ||
-      HMAC_CREDENTIALS_PROPERTIES.some((prop) => hmacCredentials?.[prop] !== secretDto?.hmac_credentials?.[prop])
+      this._props.username !== secretDto?.username ||
+      PASSKEY_PROPERTIES.some((prop) => passkey[prop] !== otherPasskey?.[prop]) ||
+      HMAC_CREDENTIALS_PROPERTIES.some(
+        (prop) => passkey.hmac_credentials?.[prop] !== otherPasskey?.hmac_credentials?.[prop],
+      )
     );
   }
 
@@ -173,8 +116,8 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
    */
   toDto() {
     const result = { ...this._props };
-    if (this._hmacCredentials) {
-      result.hmac_credentials = this._hmacCredentials.toDto();
+    if (this._passkey) {
+      result.passkey = this._passkey.toDto();
     }
     return result;
   }
@@ -186,30 +129,6 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
    */
 
   /**
-   * Get the relying party id
-   * @returns {string}
-   */
-  get rpId() {
-    return this._props.rp_id;
-  }
-
-  /**
-   * Get the credential id
-   * @returns {string} base64url
-   */
-  get credentialId() {
-    return this._props.credential_id;
-  }
-
-  /**
-   * Get the user handle
-   * @returns {string} base64url
-   */
-  get userHandle() {
-    return this._props.user_handle;
-  }
-
-  /**
    * Get the username
    * @returns {string}
    */
@@ -218,11 +137,35 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
   }
 
   /**
+   * Get the passkey properties
+   * @returns {PasskeySecretEntity|null}
+   */
+  get passkey() {
+    return this._passkey ?? null;
+  }
+
+  /**
+   * Get the relying party id
+   * @returns {string}
+   */
+  get rpId() {
+    return this._passkey.rpId;
+  }
+
+  /**
+   * Get the credential id
+   * @returns {string} base64url
+   */
+  get credentialId() {
+    return this._passkey.credentialId;
+  }
+
+  /**
    * Get the user display name
    * @returns {string|null}
    */
   get userDisplayName() {
-    return this._props.user_display_name ?? null;
+    return this._passkey.userDisplayName;
   }
 
   /**
@@ -230,7 +173,7 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
    * @returns {number}
    */
   get algorithm() {
-    return this._props.algorithm;
+    return this._passkey.algorithm;
   }
 
   /**
@@ -238,7 +181,7 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
    * @returns {string} base64url PKCS#8
    */
   get privateKey() {
-    return this._props.private_key;
+    return this._passkey.privateKey;
   }
 
   /**
@@ -246,7 +189,7 @@ class SecretDataV5PasskeyEntity extends SecretDataEntity {
    * @returns {PasskeyHmacCredentialsEntity|null}
    */
   get hmacCredentials() {
-    return this._hmacCredentials ?? null;
+    return this._passkey.hmacCredentials;
   }
 }
 
