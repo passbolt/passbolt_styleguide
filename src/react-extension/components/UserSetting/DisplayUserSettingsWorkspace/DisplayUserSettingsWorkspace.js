@@ -20,6 +20,7 @@ import { withAppContext } from "../../../../shared/context/AppContext/AppContext
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
 import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
+import DisplayInFormIntegrationSettings from "../DisplayInFormIntegrationSettings/DisplayInFormIntegrationSettings";
 import DisplayUserSettingsWorkspaceBreadcrumb from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
@@ -74,6 +75,14 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseThemeCapability() {
     return this.props.context.siteSettings && this.props.context.siteSettings.canIUse("accountSettings");
+  }
+
+  /**
+   * Can the user access the in-form integration (autofill) capability.
+   * @returns {bool}
+   */
+  get canIUseInFormIntegrationCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse("inFormIntegration");
   }
 
   /**
@@ -200,6 +209,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
                   <Route path={`${path}/passphrase`} component={ChangeUserPassphrase} />
                   <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
                   {this.canIUseThemeCapability && <Route path={`${path}/theme`} component={DisplayUserTheme} />}
+                  {this.canIUseInFormIntegrationCapability && (
+                    <Route path={`${path}/in-form-integration`} component={DisplayInFormIntegrationSettings} />
+                  )}
                   {this.canIUseMobileTransferCapability && (
                     <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
                   )}
